@@ -1,0 +1,6 @@
+# Use the following lines if motorSmarAct was built inside motor
+MOTOR=
+-include $(MOTOR)/configure/RELEASE
+# Use the following lines if motorSmarAct was built outside motor
+#!MOTOR_SMARACT=
+#!-include $(MOTOR_SMARACT)/configure/RELEASE.local
