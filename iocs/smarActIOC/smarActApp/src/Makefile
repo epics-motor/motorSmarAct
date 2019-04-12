@@ -1,0 +1,42 @@
+TOP=../..
+
+include $(TOP)/configure/CONFIG
+#----------------------------------------
+#  ADD MACRO DEFINITIONS AFTER THIS LINE
+#=============================
+
+#=============================
+# Build the IOC application
+
+PROD_IOC = smarAct
+# smarAct.dbd will be created and installed
+DBD += smarAct.dbd
+
+# smarAct.dbd will be made up from these files:
+smarAct_DBD += base.dbd
+
+# Include dbd files from all support applications:
+#smarAct_DBD += xxx.dbd
+
+# Add all the support libraries needed by this IOC
+#smarAct_LIBS += xxx
+
+# smarAct_registerRecordDeviceDriver.cpp derives from smarAct.dbd
+smarAct_SRCS += smarAct_registerRecordDeviceDriver.cpp
+
+# Build the main IOC entry point on workstation OSs.
+smarAct_SRCS_DEFAULT += smarActMain.cpp
+smarAct_SRCS_vxWorks += -nil-
+
+# Add support from base/src/vxWorks if needed
+#smarAct_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
+
+# Finally link to the EPICS Base libraries
+smarAct_LIBS += $(EPICS_BASE_IOC_LIBS)
+
+#===========================
+
+include $(TOP)/configure/RULES
+#----------------------------------------
+#  ADD RULES AFTER THIS LINE
+
