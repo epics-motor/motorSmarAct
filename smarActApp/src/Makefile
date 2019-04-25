@@ -15,9 +15,11 @@ LIBRARY_IOC  = smarActMCSMotor
 DBD += devSmarActMCSMotor.dbd
 
 INC += smarActMCSMotorDriver.h
+INC += smarActMCS2MotorDriver.h
 
 # The following are compiled and added to the Support library
 smarActMCSMotor_SRCS += smarActMCSMotorDriver.cpp
+smarActMCSMotor_SRCS += smarActMCS2MotorDriver.cpp
 
 smarActMCSMotor_LIBS += motor
 smarActMCSMotor_LIBS += asyn
