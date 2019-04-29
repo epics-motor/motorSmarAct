@@ -13,6 +13,7 @@ LIBRARY_IOC  = smarActMCSMotor
 # motorRecord.h will be created from motorRecord.dbd
 # install devMotorSoft.dbd into <top>/dbd
 DBD += devSmarActMCSMotor.dbd
+DBD += devSmarActMCS2.dbd
 
 INC += smarActMCSMotorDriver.h
 INC += smarActMCS2MotorDriver.h
