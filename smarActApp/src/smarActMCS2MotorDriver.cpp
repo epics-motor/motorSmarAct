@@ -429,7 +429,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   sprintf(pC_->outString_, ":CHAN%d:POS?", channel_);
   comStatus = pC_->writeReadController();
   if (comStatus) goto skip;
-  encoderPosition = (double)std::stol(pC_->inString_);
+  encoderPosition = (double)strtod(pC_->inString_, NULL);
   encoderPosition /= PULSES_PER_STEP;
   setDoubleParam(pC_->motorEncoderPosition_, encoderPosition);
 
@@ -437,7 +437,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   sprintf(pC_->outString_, ":CHAN%d:POS:TARG?", channel_);
   comStatus = pC_->writeReadController();
   if (comStatus) goto skip;
-  theoryPosition = (double)std::stol(pC_->inString_);
+  theoryPosition = (double)strtod(pC_->inString_, NULL);
   theoryPosition /= PULSES_PER_STEP;
   setDoubleParam(pC_->motorPosition_, theoryPosition);
 
