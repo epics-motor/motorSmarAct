@@ -8,23 +8,23 @@ include $(TOP)/configure/CONFIG
 
 #==================================================
 # Build an IOC support library
-LIBRARY_IOC  = smarActMCSMotor
+LIBRARY_IOC  = smarActMotor
 
 # motorRecord.h will be created from motorRecord.dbd
 # install devMotorSoft.dbd into <top>/dbd
 DBD += devSmarActMCSMotor.dbd
-DBD += devSmarActMCS2.dbd
+DBD += devSmarActMCS2Motor.dbd
 
 INC += smarActMCSMotorDriver.h
 INC += smarActMCS2MotorDriver.h
 
 # The following are compiled and added to the Support library
-smarActMCSMotor_SRCS += smarActMCSMotorDriver.cpp
-smarActMCSMotor_SRCS += smarActMCS2MotorDriver.cpp
+smarActMotor_SRCS += smarActMCSMotorDriver.cpp
+smarActMotor_SRCS += smarActMCS2MotorDriver.cpp
 
-smarActMCSMotor_LIBS += motor
-smarActMCSMotor_LIBS += asyn
-smarActMCSMotor_LIBS += $(EPICS_BASE_IOC_LIBS)
+smarActMotor_LIBS += motor
+smarActMotor_LIBS += asyn
+smarActMotor_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES
 #----------------------------------------

@@ -472,7 +472,7 @@ static void MCS2CreateContollerCallFunc(const iocshArgBuf *args)
   MCS2CreateController(args[0].sval, args[1].sval, args[2].ival, args[3].ival, args[4].ival);
 }
 
-extern "C" void MCS2MotorRegister(void)
+static void MCS2MotorRegister(void)
 {
   iocshRegister(&MCS2CreateControllerDef, MCS2CreateContollerCallFunc);
 }
