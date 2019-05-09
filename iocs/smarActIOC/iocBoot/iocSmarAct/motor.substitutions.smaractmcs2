@@ -1,0 +1,8 @@
+file "$(MOTOR)/db/basic_asyn_motor.db"
+{
+pattern
+{P,     N,  M,        DTYP,         PORT,  ADDR,  DESC,          EGU,  DIR,  VELO,  VBAS,  ACCL,  BDST,  BVEL,  BACC,  MRES,         PREC,  DHLM,  DLLM,  INIT}
+{IOC:,  1,  "m$(N)",  "asynMotor",  MCS2,  0,     "motor $(N)",  mm,   Pos,  .0,   .0,    .0,    0,     1,    .2,    1.e-6,       6,     0,    0,    ""}
+{IOC:,  2,  "m$(N)",  "asynMotor",  MCS2,  1,     "motor $(N)",  mm,   Pos,  .0,   .0,    .0,    0,     1,    .2,    1.e-6,       6,     0,    0,    ""}
+{IOC:,  3,  "m$(N)",  "asynMotor",  MCS2,  2,     "motor $(N)",  mm,   Pos,  .0,   .0,    .0,    0,     1,    .2,    1.e-6,       6,     0,    0,    ""}
+}

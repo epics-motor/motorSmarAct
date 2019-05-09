@@ -1,9 +1,3 @@
-< envPaths
-
-# Tell EPICS all about the record types, device-support modules, drivers, etc.
-dbLoadDatabase("../../dbd/smarAct.dbd")
-smarAct_registerRecordDeviceDriver(pdbbase)
-
 ### Motors
 # Motors substitutions, customize this for your motor
 dbLoadTemplate "motor.substitutions.smaractmcs"
@@ -18,6 +12,3 @@ smarActMCSCreateController("MCS", "MCS_ETH", 1, 0.020, 1.0)
 # Controller port, axis number, controller channel
 # smarActMCSCreateAxis(const char *motorPortName, int axisNumber, int channel)
 smarActMCSCreateAxis("MCS", 0, 0);
-
-iocInit()
-

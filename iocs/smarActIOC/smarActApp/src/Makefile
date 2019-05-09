@@ -26,9 +26,10 @@ smarAct_DBD += drvAsynIPPort.dbd
 #endif
 smarAct_DBD += motorSupport.dbd
 smarAct_DBD += devSmarActMCSMotor.dbd
+smarAct_DBD += devSmarActMCS2Motor.dbd
 
 # Add all the support libraries needed by this IOC
-smarAct_LIBS += smarActMCSMotor
+smarAct_LIBS += smarActMotor
 smarAct_LIBS += motor
 #ifdef ASYN
 smarAct_LIBS += asyn

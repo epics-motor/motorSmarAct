@@ -1,0 +1,12 @@
+### Motors
+dbLoadTemplate "motor.substitutions.smaractmcs2"
+
+drvAsynIPPortConfigure("MCS2_ETH", "10.0.1.200:55551", 0, 0, 0)
+
+dbLoadRecords("$(ASYN)/db/asynRecord.db", "P=IOC:, R=asyn1, PORT=MCS2_ETH, ADDR=0, OMAX=256, IMAX=256")
+
+# PORT, MCS_PORT, number of axes, active poll period (ms), idle poll period (ms)
+MCS2CreateController("MCS2", "MCS2_ETH", 1, 100, 100)
+
+#asynSetTraceMask("MCS2", 0, 255)
+asynSetTraceIOMask("MCS2", -1, 0x8)

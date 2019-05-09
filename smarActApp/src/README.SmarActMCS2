@@ -1,0 +1,49 @@
+Driver for SmarAct MCS2 Controller
+==================================
+
+David Vine <dvine@sigray.com> April 2019
+
+Introduction
+------------
+
+THis driver supports the smarAct MCS2 controller. Communication with the
+hardware is established using an asyn port and utilizes the ASCII
+command/response and not the C++ library.
+
+Step Size
+---------
+
+MCS2 uses 1 step = 1pm. The motor record RMP field is limited to a 32bit int
+which then restricts the travel range to +/- 2.1mm. Until the 32-bit RMP
+restriction is lifted the easiest approach that doesn't require custom version
+of the motor record is to redefine the resolution so that 1 step=1 nm. That's
+the approach I use here.
+
+Velocity and acceleration
+-------------------------
+I suggest to use zero (0) for both unless you really
+need to set it. Set these to zero drive and the MCS2 will drive at the default values.
+
+Positioner types
+----------------
+This driver does not attempt to set the positioner type. I
+have only type 300 stages and it works without configuration on my part. I'm
+not sure if that's true for every positioner/sensor combination.
+
+Rotary not tested
+-----------------
+Only linear stages are supported right now (I have no rotary to test).
+
+Restrictions
+------------
+
+This driver does not support all features of the MCS2 controller (many of which
+are outside the scope of the motor record).
+
+The most important unsupported features are the ability to send TTL triggers
+based on position, and the ability to "scan" the piezo stick-slip stages. If
+the requested position is less than 1.6um the piezo can flex to achieve the
+desired position.
+
+These aren't currently supported but if people need them I would be happy to
+spend the time to implement them.
