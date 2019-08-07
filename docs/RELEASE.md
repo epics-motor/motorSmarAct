@@ -1,5 +1,13 @@
 # motorSmarAct Releases
 
+## __R1-1 (2019-08-08)__
+R1-1 is a release based on the master branch.  
+
+### Changes since R1-0
+
+#### New features
+* Commit [bfbb28d](https://github.com/epics-motor/motorSmarAct/commit/bfbb28dc871cc978dbbc20cba09760ac08651ba0): Added support for the MCS2 controller from [David Vine](https://github.com/djvine)
+
 ## __R1-0 (2019-04-18)__
 R1-0 is a release based on the master branch.  
 
