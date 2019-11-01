@@ -46,6 +46,10 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   static const char *functionName = "MCS2Controller";
   asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Controller::MCS2Controller: Creating controller\n");
 
+  // Create controller-specific parameters
+  createParam(MCS2MclfString, asynParamInt32, &this->mclf_);
+  createParam(MCS2CalString, asynParamInt32, &this->cal_);
+
   /* Connect to MCS2 controller */
   status = pasynOctetSyncIO->connect(MCS2PortName, 0, &pasynUserController_, NULL);
   pasynOctetSyncIO->setInputEos (pasynUserController_, "\r\n", 2);
@@ -180,6 +184,52 @@ MCS2Axis* MCS2Controller::getAxis(asynUser *pasynUser)
 MCS2Axis* MCS2Controller::getAxis(int axisNo)
 {
   return static_cast<MCS2Axis*>(asynMotorController::getAxis(axisNo));
+}
+
+/** Called when asyn clients call pasynInt32->write().
+  * Extracts the function and axis number from pasynUser.
+  * Sets the value in the parameter library.
+  * For all other functions it calls asynMotorController::writeInt32.
+  * Calls any registered callbacks for this pasynUser->reason and address.
+  * \param[in] pasynUser asynUser structure that encodes the reason and address.
+  * \param[in] value     Value to write. */
+asynStatus MCS2Controller::writeInt32(asynUser *pasynUser, epicsInt32 value)
+{
+  int function = pasynUser->reason;
+  asynStatus status = asynSuccess;
+  MCS2Axis *pAxis = getAxis(pasynUser);
+  static const char *functionName = "writeInt32";
+
+  /* Set the parameter and readback in the parameter library.  This may be overwritten when we read back the
+   * status at the end, but that's OK */
+  status = setIntegerParam(pAxis->axisNo_, function, value);
+
+  if (function == mclf_) {
+    /* set MCLF */
+    sprintf(pAxis->pC_->outString_, ":CHAN%d:MCLF:CURR %d", pAxis->axisNo_, value);
+    status = pAxis->pC_->writeController();
+  }
+  else if (function == cal_) {
+    /* send calibration command */
+    sprintf(pAxis->pC_->outString_, ":CAL%d", pAxis->axisNo_);
+    status = pAxis->pC_->writeController();
+  }
+  else {
+    /* Call base class method */
+    status = asynMotorController::writeInt32(pasynUser, value);
+  }
+
+  /* Do callbacks so higher layers see any changes */
+  callParamCallbacks(pAxis->axisNo_);
+  if (status)
+    asynPrint(pasynUser, ASYN_TRACE_ERROR,
+        "%s:%s: error, status=%d function=%d, value=%d\n",
+        driverName, functionName, status, function, value);
+  else
+    asynPrint(pasynUser, ASYN_TRACEIO_DRIVER,
+        "%s:%s: function=%d, value=%d\n",
+        driverName, functionName, function, value);
+  return status;
 }
 
 // These are the MCS2Axis methods
@@ -480,3 +530,4 @@ static void MCS2MotorRegister(void)
 extern "C" {
 epicsExportRegistrar(MCS2MotorRegister);
 }
+

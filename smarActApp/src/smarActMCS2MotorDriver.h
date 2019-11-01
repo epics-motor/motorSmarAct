@@ -62,6 +62,10 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 /** MCS2 Axis constants **/
 #define HOLD_FOREVER 0xffffffff
 
+/** drvInfo strings for extra parameters that the MCS2 controller supports */
+#define MCS2MclfString "MCLF"
+#define MCS2CalString "CAL"
+
 class epicsShareClass MCS2Axis : public asynMotorAxis
 {
 public:
@@ -90,14 +94,20 @@ public:
   virtual asynStatus clearErrors();
 
   /* These are the methods that we override from asynMotorDriver */
+  asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value);
+
+  /* These are the methods that we override from asynMotorDriver */
   void report(FILE *fp, int level);
   MCS2Axis* getAxis(asynUser *pasynUser);
   MCS2Axis* getAxis(int axisNo);
 
-#define NUM_MCS2_PARAMS 0
-
 protected:
-  int holdTime_;
+  int mclf_; /**< MCL frequency */
+#define FIRST_MCS2_PARAM mclf_
+  int cal_;  /**< calibration command */
+#define LAST_MCS2_PARAM cal_
+#define NUM_MCS2_PARAMS (&LAST_MCS2_PARAM - &FIRST_MCS2_PARAM + 1)
   
 friend class MCS2Axis;
 };
+
