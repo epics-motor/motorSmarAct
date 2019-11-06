@@ -1,0 +1,16 @@
+record(bo, "$(P)$(M)cmdCal") {
+    field(DESC,"cmd calibration")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))CAL")
+}
+
+record(longout, "$(P)$(M)setMclFreq") {
+    field(DESC,"MCL Frequency")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MCLF")
+    field(VAL, "5000")
+    field(HOPR,"20000")
+    field(LOPR,"50")
+    field(EGU, "Hz")
+    field(PINI,"YES")
+}
