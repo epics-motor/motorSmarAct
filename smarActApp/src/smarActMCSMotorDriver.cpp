@@ -292,26 +292,25 @@ SmarActMCSAxis::SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int 
 		holdTime_ = getClosedLoop() ? HOLD_FOREVER : 0;
 	}
 
+	// Attempt to check linear position, if we receive
+	// an error, we're a rotary motor. 
+	isRot_ = 0;
+	
+	if ( (comStatus_ = getVal("GP", &val)) ) {
+		isRot_ = 1;
+	}
+
         // Query the sensor type
 	if ( (comStatus_ = getVal("GST", &sensorType_)) )
 		goto bail;
 
-        // Determine if stage is a rotation stage
-	if (sensorType_ == 2 || sensorType_ == 8 || sensorType_ == 14 || sensorType_ == 20 || sensorType_ == 22 || sensorType_ == 23 || (sensorType_ >= 25 && sensorType_ <= 29)) {
-		isRot_ = 1;
-		
-		if ( asynSuccess == getAngle(&angle, &rev) ) {
-			setIntegerParam(c_p_->motorStatusHasEncoder_, 1);
-			setIntegerParam(c_p_->motorStatusGainSupport_, 1);
-		}
+	if (isRot_ == 1 && asynSuccess == getAngle(&angle, &rev) ) {
+		setIntegerParam(c_p_->motorStatusHasEncoder_, 1);
+		setIntegerParam(c_p_->motorStatusGainSupport_, 1);
 	}
-	else {
-		isRot_ = 0;
-		
-		if ( asynSuccess == getVal("GP",&val) ) {
-			setIntegerParam(c_p_->motorStatusHasEncoder_, 1);
-			setIntegerParam(c_p_->motorStatusGainSupport_, 1);
-		}
+	else if (isRot_ == 0 &&  asynSuccess == getVal("GP",&val) ) {
+		setIntegerParam(c_p_->motorStatusHasEncoder_, 1);
+		setIntegerParam(c_p_->motorStatusGainSupport_, 1);
 	}
 
 
