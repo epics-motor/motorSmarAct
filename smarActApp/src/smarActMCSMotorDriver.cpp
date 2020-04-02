@@ -38,7 +38,7 @@
 // Windows and vxWorks do not have rint(), but minGW does
 #if defined __MINGW32__ || defined __MINGW64__
 #elif defined _WIN32 || defined vxWorks
-double rint(double x)
+static double rint(double x)
 {
   //middle value point test
   if (ceil(x+0.5) == floor(x+0.5))
