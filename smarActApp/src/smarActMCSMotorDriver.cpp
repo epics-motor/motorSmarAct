@@ -197,7 +197,8 @@ pAxes_ = (SmarActMCSAxis **)(asynMotorController::pAxes_);
 
 	// FIXME the 'forcedFastPolls' may need to be set if the 'sleep/wakeup' feature
 	//       of the sensor/readback is used.
-	startPoller( movingPollPeriod, idlePollPeriod, 0 );
+	// It actually needs to be set to force initial poll before iocInit.
+	startPoller( movingPollPeriod, idlePollPeriod, 2 );
 
 }
 
