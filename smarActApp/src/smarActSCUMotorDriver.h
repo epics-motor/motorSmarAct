@@ -43,7 +43,7 @@ protected:
 class SmarActSCUAxis : public asynMotorAxis
 {
 public:
-  SmarActSCUAxis(class SmarActSCUController *cnt_p, int axis, int channel, double homeDown, double homeUp);
+  SmarActSCUAxis(class SmarActSCUController *cnt_p, int axis, int channel);
   asynStatus  poll(bool *moving_p);
   asynStatus  move(double position, int relative, double min_vel, double max_vel, double accel);
   asynStatus  home(double min_vel, double max_vel, double accel, int forwards);
@@ -71,8 +71,6 @@ private:
   int                    positionerType_;
   int                    isRot_;
   double                 positionOffset_;
-  double                 homeDown_;
-  double                 homeUp_;
   asynStatus             sendCmd();
   char toController_[MAX_CONTROLLER_STRING_SIZE];
   char fromController_[MAX_CONTROLLER_STRING_SIZE];
