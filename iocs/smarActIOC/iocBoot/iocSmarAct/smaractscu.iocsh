@@ -18,14 +18,16 @@ asynSetTraceIOMask("serial2",0,2)
 # smarActSCUCreateController(const char *motorPortName, const char *ioPortName, int numAxes, double movingPollPeriod, double idlePollPeriod);
 smarActSCUCreateController("SCU1", "serial1", 3, .05, 1.0)
 smarActSCUCreateController("SCU2", "serial2", 3, .05, 1.0)
-#asynSetTraceMask("SCU1",-1,9)
+asynSetTraceMask("SCU1", 0,9)
+asynSetTraceMask("SCU1", 1,9)
+asynSetTraceMask("SCU1", 2,9)
 #asynSetTraceMask("SCU2",-1,9)
 
 # Controller port, axis number, controller channel
-# smarActSCUCreateAxis(const char *motorPortName, int axisNumber, int channel, double homeDown, double homeUp)
-smarActSCUCreateAxis("SCU1", 0, 0, -15000, 15000);
-smarActSCUCreateAxis("SCU1", 1, 1, -15000, 15000);
-smarActSCUCreateAxis("SCU1", 2, 2, -15000, 15000);
-smarActSCUCreateAxis("SCU2", 0, 0, -15000, 15000);
-smarActSCUCreateAxis("SCU2", 1, 1, -15000, 15000);
-smarActSCUCreateAxis("SCU2", 2, 2, -15000, 15000);
+# smarActSCUCreateAxis(const char *motorPortName, int axisNumber, int channel)
+smarActSCUCreateAxis("SCU1", 0, 0);
+smarActSCUCreateAxis("SCU1", 1, 1);
+smarActSCUCreateAxis("SCU1", 2, 2);
+smarActSCUCreateAxis("SCU2", 0, 0);
+smarActSCUCreateAxis("SCU2", 1, 1);
+smarActSCUCreateAxis("SCU2", 2, 2);
