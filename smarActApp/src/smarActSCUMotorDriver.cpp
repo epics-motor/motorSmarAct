@@ -127,7 +127,7 @@ pAxes_ = (SmarActSCUAxis **)(asynMotorController::pAxes_);
     THROW_(SmarActSCUException(SCUConnectionError, "SmarActSCUController: unable to connect serial channel"));
   }
 
-  startPoller(movingPollPeriod, idlePollPeriod, 2);
+  startPoller( movingPollPeriod, idlePollPeriod, 0 );
 
 }
 
