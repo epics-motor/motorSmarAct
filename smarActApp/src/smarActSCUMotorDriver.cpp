@@ -142,10 +142,8 @@ int val;
   return val;
 }
 
-SmarActSCUAxis::SmarActSCUAxis(class SmarActSCUController *cnt_p, int axis, int channel, double homeDown, double homeUp)
-  : asynMotorAxis(cnt_p, axis), pC_(cnt_p),
-  homeDown_(homeDown),
-  homeUp_(homeUp)
+SmarActSCUAxis::SmarActSCUAxis(class SmarActSCUController *cnt_p, int axis, int channel)
+  : asynMotorAxis(cnt_p, axis), pC_(cnt_p)
 {
   char moveStatus;
   double currentPosition;
@@ -299,7 +297,6 @@ asynStatus
 SmarActSCUAxis::getCharVal(const char *parm_cmd, char *val_p)
 {
   char       cmd[REP_LEN];
-  char       param[REP_LEN];
   int        axis;
   asynStatus status;
 
@@ -307,7 +304,7 @@ SmarActSCUAxis::getCharVal(const char *parm_cmd, char *val_p)
   status = sendCmd();
   if (status)
     return status;
-  if (3 != sscanf(fromController_, ":%10[A-Z]%i%10[A-Z]%c", cmd, &axis, param, val_p)) {
+  if (3 != sscanf(fromController_, ":%10[A-Z]%i%c", cmd, &axis, val_p)) {
     asynPrint(pasynUser_, ASYN_TRACE_ERROR, "getCharVal:ERROR parsing response %s\n", fromController_);
     return asynError;
   }
@@ -595,22 +592,18 @@ static void cc_fn(const iocshArgBuf *args)
 static const iocshArg ca_a0 = {"Controller Port name [string]",    iocshArgString};
 static const iocshArg ca_a1 = {"Axis number [int]",                iocshArgInt};
 static const iocshArg ca_a2 = {"Channel [int]",                    iocshArgInt};
-static const iocshArg ca_a3 = {"Home down [double]",               iocshArgDouble};
-static const iocshArg ca_a4 = {"Home up [double]",                 iocshArgDouble};
 
-static const iocshArg * const ca_as[] = {&ca_a0, &ca_a1, &ca_a2, &ca_a3, &ca_a4};
+static const iocshArg * const ca_as[] = {&ca_a0, &ca_a1, &ca_a2};
 
 /* iocsh wrapping and registration business (stolen from ACRMotorDriver.cpp) */
 /* smarActSCUCreateAxis called to create each axis of the smarActSCU controller*/
-static const iocshFuncDef ca_def = {"smarActSCUCreateAxis", 5, ca_as};
+static const iocshFuncDef ca_def = {"smarActSCUCreateAxis", 3, ca_as};
 
 extern "C" void *
 smarActSCUCreateAxis(
   const char *controllerPortName,
   int        axisNumber,
-  int        channel,
-  double     homeDown,
-  double     homeUp)
+  int        channel)
 {
 void *rval = 0;
 
@@ -641,7 +634,7 @@ asynMotorAxis *pAsynAxis;
       return rval;
     }
     pC->lock();
-    new SmarActSCUAxis(pC, axisNumber, channel, homeDown, homeUp);
+    new SmarActSCUAxis(pC, axisNumber, channel);
     pC->unlock();
 
 #ifdef ASYN_CANDO_EXCEPTIONS
@@ -659,9 +652,7 @@ static void ca_fn(const iocshArgBuf *args)
   smarActSCUCreateAxis(
     args[0].sval,
     args[1].ival,
-    args[2].ival,
-    args[3].dval,
-    args[4].dval);
+    args[2].ival);
 }
 
 static void smarActSCUMotorRegister(void)
