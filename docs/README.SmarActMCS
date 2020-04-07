@@ -153,7 +153,7 @@ c) the application must be linked against
    the 'smarActMCSMotor', 'motor' and 'asyn'
    libraries, e.g.,
 
-    <app>_LIBS += smarActMCSMotor motor asyn
+    <app>_LIBS += smarActMotor motor asyn
 
 Driver Run-Time Configuration
 - - - - - - - - - - - - - - -
