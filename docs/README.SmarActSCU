@@ -1,0 +1,244 @@
+Driver for smarAct SCU Positioners
+==================================
+
+Mark Ruvers <rivers@cars.uchicago.edu>, 4/2020
+
+Introduction
+------------
+
+This driver supports the smarAct SCU Positioners
+by implementing subclasses of the 'asynMotorController'
+and 'asynMotorAxis' objects.
+
+Communication with the hardware is established via
+a 'asyn port' driver layer using the drvAsynSerialPort
+driver with the FTDI USB serial port. 
+
+Note: the reader is assumed to be familiar with the
+motor record. Please consult relevant documentation.
+
+Restrictions
+------------
+
+The driver does not support all features of the SCU
+firmware (some of which are outside of the scope of
+the motor record). Neither are all features of the
+motor record supported.
+
+The driver currently relies on the presence of a
+position sensor and uses a command set specific
+to such sensors. Rotary sensors and the associated
+command set are supported but have not been tested.
+Closed-loop mode is used exclusively for all motion commands.
+
+Limit switches are not supported (the SCU command
+set defines no interface to hardware limit switches).
+
+The SCU controller always communicates in units of
+microns for linear actuators and millidegrees for
+rotary actuators.  The driver converts these to the step
+units of the motor record using a scale factor of 1000,
+i.e. 1000 motor record steps is 1 micron or 1 millidegree.
+The if the MRES field of the motor record is 0.001 then
+the motor record will also use these units.  However, 
+MRES could also be 1.e-6 to work in mm and degrees, etc.
+
+The 'JOG' feature of the motor record is implemented
+using a relative-move command to a 'far-away' target.
+This might or might not work if a different position
+sensor (working at a different scale) is employed.
+
+Acceleration-control is not supported.
+
+The drivers makes the following assumptions about
+the setup
+ - reset command ('R') is never used by third party
+   while the driver is running.
+ - sensor is never disabled ('SSE'). Permanent 'on'
+   or power-save mode are OK.
+ - sensor type ('SST') is configured correctly (must
+   be performed once by third-party when a new unit
+   is commissioned).
+ - sensor is properly calibrated ('CS') but this
+   must not be performed by third party while this
+   driver is running.
+ - baud rate is configured correctly at both ends
+   ('CB') and terminal-server or UART port setup.
+
+Otherwise, a secondary driver using an orthogonal
+command set may run concurrently with this driver
+as long as it properly shares the asyn port driver
+in charge of serial communication.
+
+Special Features
+----------------
+
+Position Reference
+..................
+The driver implements the motor record home-forward and 
+home-reverse commands identically, using MTR (move to reference)
+command.  This will home the positioner to an absolute
+known position provided the CS (calibrate sensor) has been
+performed at least once for that axis.
+
+After power-up the position sensor must be positioned
+to a reference mark in order for it to provide
+absolute positions. The 'MOTOR_HOMED' bit in the
+'MSTA' field reflects the status of the positioner.
+Only if 'MOTOR_HOMED' is set the absolute position
+is correct. Note that this bit is read from the
+hardware and is hence preserved across IOC reboots
+(as long as power from the SCU is not removed).
+
+Position Holding
+................
+All motion commands are executed in 'closed-loop'
+mode of the SCU controller, i.e., the controller
+hardware itself drives the positioner to the target
+in 'closed-loop' mode.
+The SCU can also be instructed to actively hold the
+target position (compensating small movements, drift
+etc.). This feature can be programmed using the 
+motor record's CNEN field (enabled: SCU holds
+target position indefinitely; disabled: SCU goes
+to open-loop mode as soon as the target is
+reached).
+
+Usage Information
+-----------------
+The position sensor has a very high (0.1 micron)
+resolution and it is unlikely (especially
+in 'no-hold' mode, i.e., if CNEN is 'disabled')
+that the target position can be reached
+exactly. In order to avoid many retries
+the dead-band (RDBD) and/or other parameters
+of the motor record may need appropriate
+tuning.
+
+It should also be noted that the positioner
+is quite fast and performs moves almost
+'instantaneously' (as perceived by an operator)
+unless the speed is reduced (SCLF).
+'JOG' mode is probably useless unless the jog
+velocity (JVEL) is set to a relatively low
+value which allows the operator to observe
+the motion. However, performing a JOG operation
+with JVEL at zero will be rejected (since zero
+would choose the default speed which is too
+high to be useful). The driver immediately
+reports the motion as 'DONE' (in MSTA).
+It is the user's responsibility to clear the
+JOGF/JOGR field if this happens.
+
+Building an Application
+- - - - - - - - - - - -
+Building the driver into an application requires
+
+a) the 'asyn', 'motor' and 'smarActSCUMotor' (this
+   driver) packages/modules to be built and
+   installed. The application's RELEASE file must
+   point to these packages so that the build process
+   locates headers and libraries etc.
+
+b) the application's '.dbd' file must contain
+    - motorSupport.dbd
+    - devSmarActSCUMotor.dbd
+   as well as the 'asyn' serial port driver for serial
+   communication, drvAsynSerialPort.dbd
+
+   These '.dbd' files are best listed in the
+   application Makefile:
+    <app>_DBD += motorSupport.dbd
+    <app>_DBD += devSmarActSCUMotor.dbd
+    <app>_DBD += drvAsynSerialPort.dbd
+
+c) the application must be linked against
+   the 'smarActMotor', 'motor' and 'asyn'
+   libraries, e.g.,
+
+    <app>_LIBS += smarActMotor motor asyn
+
+Driver Run-Time Configuration
+- - - - - - - - - - - - - - -
+For each SCU controller a driver instance needs
+to be configured either from a startup script,
+C or C++ code (the C++ constructor takes the
+same arguments).
+However, at first an asyn port driver for
+serial communication must be created (e.g.
+from the startup script). E.g., when using
+a terminal server then drvAsynIPPort may be
+used:
+
+  drvAsynSerialPortConfigure("serial1","/dev/ttyUSB0",0,0,0)
+
+Next, an SCU controller driver instance is
+created. The respective call takes the following
+arguments:
+
+
+smarActSCUCreateController(
+     const char *motorPortName,
+     const char *serialPortName,
+     int         numAxes,
+     double      movingPollPeriod,
+     double      idlePollPeriod);
+
+  motorPortName: unique string to identify this
+                 instance to be used in the
+                 motor record's 'OUT' field.
+  serialPortName: asyn port name identifying the
+                 serial link for communication
+                 with the SCU.
+                 Note that such a link must
+                 be created prior to creating
+                 a SCU controller driver instance.
+  numAxes:       number of axes this SCU supports.
+  movingPollPeriod: period (in seconds - since 
+                 this is  a 'double' parameter
+                 fractional seconds are possible)
+                 at which the SCU is polled for
+                 status changes while the 
+                 positioner is moving.
+  idlePollPeriod: period (in seconds) at which 
+                 the SCU is polled for status
+                 changes while the positioner
+                 is stopped.
+
+E.g., to configure a driver with one axis using
+the serial connection 'serial' configured in the
+prior example we use
+
+smarActSCUCreateController("myMotor1","serial",1,0.02,1.0)
+
+This results in a polling interval of 20ms 
+while moving and 1s while idle. The driver
+instance is named 'myMotor1' and can be
+addressed from a motorRecord's OUT field:
+
+  field(DTYP, "asynMotor")
+  field(OUT,  "asyn(myMotor1,0)")
+
+After creating a controller, one or more SCU axes 
+are created for that controller.  The respective
+call takes the following arguments:
+
+
+smarActSCUCreateAxis(
+        const char *motorPortName,
+        int        axisNumber,
+        int        channel)
+{
+
+ motorPortName: unique string to identify this
+                instance to be used in the
+                motor record's 'OUT' field.
+ axisNumber:    axis number being created.
+ channel:       channel that the axis is physically
+                connected to.
+                Note that the channel will be 
+                prepended to the command string
+                sent to the particular axis.
+
+Call the smarActSCUCreateAxis() function for
+each axis that needs to be configured.                
