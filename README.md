@@ -1,5 +1,5 @@
 # motorSmarAct
-EPICS motor drivers for the following [SmarAct](http://www.smaract.com/) controllers: MCS
+EPICS motor drivers for the following [SmarAct](http://www.smaract.com/) controllers: MCS, MCS2, SCU
 
 motorSmarAct is a submodule of [motor](https://github.com/epics-modules/motor).  When motorSmarAct is built in the ``motor/modules`` directory, no manual configuration is needed.
 
