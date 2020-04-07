@@ -1,5 +1,13 @@
 # motorSmarAct Releases
 
+## __R1-2 (2020-04-XX)__
+R1-2 is a release based on the master branch.  
+
+### Changes since R1-1
+
+#### New features
+* Added support for the SCU controllers from [Mark Rivers](https://github.com/MarkRivers)
+
 ## __R1-1 (2019-08-08)__
 R1-1 is a release based on the master branch.  
 
