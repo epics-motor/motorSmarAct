@@ -10,7 +10,7 @@ R1-2 is a release based on the master branch.
 * Pull request [#2](https://github.com/epics-motor/motorSmarAct/pull/2): [Christoph Schröder](https://github.com/chrschroeder) added parameters for MCLF and CAL commands to the SmarActMCS2 support
 
 #### Modifications to existing features
-* Pull request [#4](https://github.com/epics-motor/motorSmarAct/pull/4): [Keenan Lang](https://github.com/keenanlang) Eliminated hard-coded sensor types which allows the SmarActMCS driver to work with newer stages
+* Pull request [#4](https://github.com/epics-motor/motorSmarAct/pull/4): [Keenan Lang](https://github.com/keenanlang) eliminated hard-coded sensor types which allows the SmarActMCS driver to work with newer stages
 
 #### Bug fixes
 * Commit [22a1fbe](https://github.com/epics-motor/motorSmarAct/commit/22a1fbe9043879330568ae8695d1f10a695fe336): Include ``$(MOTOR)/modules/RELEASE.$(EPICS_HOST_ARCH).local`` instead of ``$(MOTOR)/configure/RELEASE``
