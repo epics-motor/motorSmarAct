@@ -35,9 +35,9 @@
 #define FAR_AWAY     1000000000 /*nm*/
 #define UDEG_PER_REV 360000000
 
-// Windows and vxWorks do not have rint(), but minGW does
-#if defined __MINGW32__ || defined __MINGW64__
-#elif defined _WIN32 || defined vxWorks
+#ifdef __MSC__
+/* MSC may not have rint() function */
+#if(_MSC_VER < 1900)
 static double rint(double x)
 {
   //middle value point test
@@ -50,7 +50,7 @@ static double rint(double x)
   else return floor(x+0.5);
 }
 #endif
-  
+#endif
 
 /* The asyn motor driver apparently can't cope with exceptions */
 #undef  ASYN_CANDO_EXCEPTIONS
