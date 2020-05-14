@@ -1,5 +1,19 @@
 # motorSmarAct Releases
 
+## __R1-2-1 (2020-05-14)__
+R1-2-1 is a release based on the master branch.  
+
+### Changes since R1-2
+
+#### New features
+* None
+
+#### Modifications to existing features
+* None
+
+#### Bug fixes
+* Pull request [#6](https://github.com/epics-motor/motorSmarAct/pull/6): Include a local definition of rint on fewer platforms
+
 ## __R1-2 (2020-05-12)__
 R1-2 is a release based on the master branch.  
 
