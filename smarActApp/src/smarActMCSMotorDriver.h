@@ -69,6 +69,7 @@ private:
 	int                    channel_;
 	int                    sensorType_;
 	int                    isRot_;
+	int					   stepCount_; // open loop current step count
 
 friend class SmarActMCSController;
 };
