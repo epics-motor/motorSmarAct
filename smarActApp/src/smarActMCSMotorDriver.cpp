@@ -261,6 +261,13 @@ int val;
 	c_p_->getIntegerParam(axisNo_, c_p_->motorClosedLoop_, &val);
 	return val;
 }
+int
+SmarActMCSAxis::getEncoder()
+{
+int val;
+	c_p_->getIntegerParam(axisNo_, c_p_->motorStatusHasEncoder_, &val);
+	return val;
+}
 
 SmarActMCSAxis::SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int channel)
 	: asynMotorAxis(cnt_p, axis), c_p_(cnt_p)
@@ -380,7 +387,7 @@ SmarActMCSAxis::poll(bool* moving_p)
 	int                    rev;
 	enum SmarActMCSStatus status;
 
-	if (getClosedLoop())
+	if (getEncoder())
 	{
 		if (isRot_) {
 			if ((comStatus_ = getAngle(&angle, &rev)))
@@ -515,7 +522,7 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 	double rpos;
 	long angle;
 	int rev;
-	if (getClosedLoop())
+	if (getEncoder())
 	{
 		if (isRot_) {
 			fmt = fmt_rot;
@@ -524,6 +531,7 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 			fmt = fmt_lin;
 		}
 
+		printf("with encoder\n");
 
 #ifdef DEBUG
 		printf("Move to %f (speed %f - %f)\n", position, min_vel, max_vel);
@@ -552,6 +560,7 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 	}
 	else
 	{
+		printf("without encoder\n");
 		fmt = fmt_step;
 
 		rpos = rint(position);
@@ -622,7 +631,7 @@ SmarActMCSAxis::setPosition(double position)
 	double rpos;
 
 	rpos = rint(position);
-	if (getClosedLoop()) {
+	if (getEncoder()) {
 		if (isRot_) {
 			// For rotation stages the revolution will always be set to zero
 			// Only set position if it is between zero an 360 degrees
