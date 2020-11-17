@@ -61,7 +61,6 @@ public:
 	
 protected:
 	asynStatus  setSpeed(double velocity);
-	int getEncoder();
 private:
 	SmarActMCSController   *c_p_;  // pointer to asynMotorController for this axis
 	asynStatus             comStatus_;

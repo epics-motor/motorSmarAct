@@ -566,8 +566,9 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 		rpos = rint(position);
 		if (relative == 0 ) // absolute move
 		{
-			rpos -= stepCount_; // subtract current step count to produce steps for this move
+			int diff = rpos - stepCount_;
 			stepCount_ = rpos;
+			rpos = diff; // subtract current step count to produce steps for this move
 		}
 		else
 		{
@@ -580,9 +581,9 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 		// overload max_vel as frequency
 		int frequency = (max_vel> MAX_FREQ) ? (MAX_FREQ) : ((max_vel< 1) ? (1) : (max_vel));
 
-//#ifdef DEBUG
-		printf("Step Move to %ld (piezo voltage %d ,frequency %d)\n", (long)rpos, amplitude, frequency);
-//#endif
+#ifdef DEBUG
+		printf("Open loop Step to %ld (piezo voltage %d ,frequency %d)\n", (long)rpos, amplitude, frequency);
+#endif
 		// overload accel as frequency
 		comStatus_ = moveCmd(fmt, channel_, (long)rpos, amplitude, frequency);
 	}
