@@ -55,6 +55,7 @@ public:
 	virtual asynStatus getAngle(int *val_p, int *rev_p);
 	virtual asynStatus moveCmd(const char *cmd, ...);
 	virtual int        getClosedLoop();
+	int        getEncoder();
 
 	int         getVel() const { return vel_; }
 	

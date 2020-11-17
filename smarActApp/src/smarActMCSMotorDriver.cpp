@@ -254,17 +254,19 @@ size_t     got;
 /* Obtain value of the 'motorClosedLoop_' parameter (which
  * maps to the record's CNEN field)
  */
-int
-SmarActMCSAxis::getClosedLoop()
+int SmarActMCSAxis::getClosedLoop()
 {
 int val;
 	c_p_->getIntegerParam(axisNo_, c_p_->motorClosedLoop_, &val);
 	return val;
 }
-int
-SmarActMCSAxis::getEncoder()
+/*
+ * return 1 if encoder exists. 
+ * return 0 if encoder does not exist
+ */
+int SmarActMCSAxis::getEncoder()
 {
-int val;
+	int val;
 	c_p_->getIntegerParam(axisNo_, c_p_->motorStatusHasEncoder_, &val);
 	return val;
 }
@@ -518,10 +520,14 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 	const char* fmt_step = ":MST%u,%ld,%d,%d"; // open loop move using step count, amplitude (0-4095; 0V-100V), frequency (1-18500 Hz)
 	const char* fmt;
 	const int MAX_FREQ = 18500; // max allowed frequency
-	const int MAX_VOLTAGE = 4095; // max voltage count, 4095=100V
+	const int MAX_VOLTAGE = 100; // max voltage 100V
+	const double STEP_PER_VOLT = 4095.0/MAX_VOLTAGE; // max voltage index, 4095=100V
 	double rpos;
 	long angle;
 	int rev;
+#ifdef DEBUG
+		printf("Move to %f (speed %f - %f); accel %f\n", position, min_vel, max_vel, accel);
+#endif
 	if (getEncoder())
 	{
 		if (isRot_) {
@@ -531,9 +537,6 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 			fmt = fmt_lin;
 		}
 
-#ifdef DEBUG
-		printf("Move to %f (speed %f - %f)\n", position, min_vel, max_vel);
-#endif
 
 		if ((comStatus_ = setSpeed(max_vel)))
 			goto bail;
@@ -561,14 +564,25 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 		fmt = fmt_step;
 
 		rpos = rint(position);
-		if (relative)
+		if (relative == 0 ) // absolute move
 		{
-			rpos += stepCount_;
+			rpos -= stepCount_; // subtract current step count to produce steps for this move
+			stepCount_ = rpos;
+		}
+		else
+		{
+			// relative move. the position value is the number of steps intended
+			stepCount_ += rpos;
 		}
 		// overload min_vel as amplitude
-		int amplitude = (min_vel > MAX_VOLTAGE) ? (MAX_VOLTAGE) : ((min_vel < 0) ? (0) : (min_vel));
-		int frequency = (accel > MAX_FREQ) ? (MAX_FREQ) : ((accel < 1) ? (1) : (accel));
+		double piezoVoltage = (min_vel > MAX_VOLTAGE) ? (MAX_VOLTAGE) : ((min_vel < 1) ? (1) : (min_vel));
+		int amplitude = piezoVoltage * STEP_PER_VOLT;
+		// overload max_vel as frequency
+		int frequency = (max_vel> MAX_FREQ) ? (MAX_FREQ) : ((max_vel< 1) ? (1) : (max_vel));
 
+//#ifdef DEBUG
+		printf("Step Move to %ld (piezo voltage %d ,frequency %d)\n", (long)rpos, amplitude, frequency);
+//#endif
 		// overload accel as frequency
 		comStatus_ = moveCmd(fmt, channel_, (long)rpos, amplitude, frequency);
 	}
@@ -588,14 +602,22 @@ SmarActMCSAxis::home(double min_vel, double max_vel, double accel, int forwards)
 #ifdef DEBUG
 	printf("Home %u\n", forwards);
 #endif
+	if (getEncoder())
+	{
+	
+		if ( (comStatus_ = setSpeed(max_vel)) )
+			goto bail;
 
-	if ( (comStatus_ = setSpeed(max_vel)) )
-		goto bail;
+		/* cache 'closed-loop' setting until next move */
+		holdTime_  = getClosedLoop() ? HOLD_FOREVER : 0;
 
-	/* cache 'closed-loop' setting until next move */
-	holdTime_  = getClosedLoop() ? HOLD_FOREVER : 0;
-
-	comStatus_ = moveCmd(":FRM%u,%u,%d,%d", channel_, forwards ? 0 : 1, holdTime_, isRot_ ? 1 : 0);
+		comStatus_ = moveCmd(":FRM%u,%u,%d,%d", channel_, forwards ? 0 : 1, holdTime_, isRot_ ? 1 : 0);
+	}
+	else
+	{
+		// no encoder, can't home. So just set current step count to 0
+		stepCount_ = 0;
+	}
 
 bail:
 	if ( comStatus_ ) {
