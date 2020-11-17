@@ -57,10 +57,10 @@ public:
 	virtual int        getClosedLoop();
 
 	int         getVel() const { return vel_; }
-
+	
 protected:
 	asynStatus  setSpeed(double velocity);
-
+	int getEncoder();
 private:
 	SmarActMCSController   *c_p_;  // pointer to asynMotorController for this axis
 	asynStatus             comStatus_;

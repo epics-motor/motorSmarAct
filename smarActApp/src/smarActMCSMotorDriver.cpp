@@ -531,8 +531,6 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 			fmt = fmt_lin;
 		}
 
-		printf("with encoder\n");
-
 #ifdef DEBUG
 		printf("Move to %f (speed %f - %f)\n", position, min_vel, max_vel);
 #endif
@@ -560,7 +558,6 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
 	}
 	else
 	{
-		printf("without encoder\n");
 		fmt = fmt_step;
 
 		rpos = rint(position);
