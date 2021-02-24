@@ -1,10 +1,10 @@
-record(bo, "$(P)$(M)cmdCal") {
+record(bo, "$(P)$(M)Cal-Cmd") {
     field(DESC,"cmd calibration")
     field(DTYP,"asynInt32")
     field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))CAL")
 }
 
-record(longout, "$(P)$(M)setMclFreq") {
+record(longout, "$(P)$(M)Freq:MCL-SP") {
     field(DESC,"MCL Frequency")
     field(DTYP,"asynInt32")
     field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MCLF")
@@ -13,4 +13,30 @@ record(longout, "$(P)$(M)setMclFreq") {
     field(LOPR,"50")
     field(EGU, "Hz")
     field(PINI,"YES")
+}
+
+record(bi, "$(P)$(M)Cal-Sts") {
+    field(DESC,"calibration")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))CAL")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Not Calibrated")
+    field(ONAM, "Calibrated")
+}
+
+record(longin, "$(P)$(M)Freq:MCL-RB") {
+    field(DESC,"MCL Frequency")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MCLF")
+    field(SCAN, "I/O Intr")
+    field(EGU, "Hz")
+}
+
+record(bi, "$(P)$(M)Ref-Sts") {
+    field(DESC,"Reference")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))REF")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Not Referenced")
+    field(ONAM, "Referenced")
 }

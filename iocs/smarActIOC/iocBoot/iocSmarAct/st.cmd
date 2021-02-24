@@ -15,7 +15,7 @@ dbLoadRecords("$(MOTOR)/db/motorUtil.db", "P=smarAct:")
 
 # Uncomment one of the following lines for MCS or MCS2 controller
 #< smaractmcs.iocsh
-#< smaractmcs2.iocsh
+< smaractmcs2.iocsh
 
 ## 
 

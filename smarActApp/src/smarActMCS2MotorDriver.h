@@ -63,8 +63,9 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 #define HOLD_FOREVER 0xffffffff
 
 /** drvInfo strings for extra parameters that the MCS2 controller supports */
-#define MCS2MclfString "MCLF"
-#define MCS2CalString "CAL"
+#define MCS2MclfString	"MCLF"
+#define MCS2CalString	"CAL"
+#define MCS2RefString	"REF"
 
 class epicsShareClass MCS2Axis : public asynMotorAxis
 {
@@ -104,6 +105,7 @@ public:
 protected:
   int mclf_; /**< MCL frequency */
 #define FIRST_MCS2_PARAM mclf_
+  int ref_;  /**< reference command */ 
   int cal_;  /**< calibration command */
 #define LAST_MCS2_PARAM cal_
 #define NUM_MCS2_PARAMS (&LAST_MCS2_PARAM - &FIRST_MCS2_PARAM + 1)
