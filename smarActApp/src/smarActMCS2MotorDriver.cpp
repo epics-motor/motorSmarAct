@@ -309,7 +309,7 @@ void MCS2Axis::report(FILE *fp, int level)
 
     fprintf(fp, "  axis %d\n"
 			    " positioner type %d\n"
-				" positioner name %c\n"
+				" positioner name %s\n"
 				" state %d\n"
 				" velocity %d\n"
 				" acceleration %d\n"
