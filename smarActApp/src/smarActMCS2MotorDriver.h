@@ -64,6 +64,8 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 
 /** drvInfo strings for extra parameters that the MCS2 controller supports */
 #define MCS2MclfString "MCLF"
+#define MCS2PtypString "PTYP"
+#define MCS2PtypRbString "PTYP_RB"
 #define MCS2CalString "CAL"
 
 class epicsShareClass MCS2Axis : public asynMotorAxis
@@ -104,6 +106,8 @@ public:
 protected:
   int mclf_; /**< MCL frequency */
 #define FIRST_MCS2_PARAM mclf_
+  int ptyp_; /**< positioner type */
+  int ptyprb_; /**< positioner type readback */
   int cal_;  /**< calibration command */
 #define LAST_MCS2_PARAM cal_
 #define NUM_MCS2_PARAMS (&LAST_MCS2_PARAM - &FIRST_MCS2_PARAM + 1)

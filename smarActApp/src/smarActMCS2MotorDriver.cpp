@@ -48,6 +48,8 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
 
   // Create controller-specific parameters
   createParam(MCS2MclfString, asynParamInt32, &this->mclf_);
+  createParam(MCS2PtypString, asynParamInt32, &this->ptyp_);
+  createParam(MCS2PtypRbString, asynParamInt32, &this->ptyprb_);
   createParam(MCS2CalString, asynParamInt32, &this->cal_);
 
   /* Connect to MCS2 controller */
@@ -207,6 +209,11 @@ asynStatus MCS2Controller::writeInt32(asynUser *pasynUser, epicsInt32 value)
   if (function == mclf_) {
     /* set MCLF */
     sprintf(pAxis->pC_->outString_, ":CHAN%d:MCLF:CURR %d", pAxis->axisNo_, value);
+    status = pAxis->pC_->writeController();
+  }
+  else if (function == ptyp_) {
+    /* sat positioner type */
+    sprintf(pAxis->pC_->outString_, ":CHAN%d:PTYP %d", pAxis->axisNo_, value);
     status = pAxis->pC_->writeController();
   }
   else if (function == cal_) {
@@ -414,8 +421,8 @@ asynStatus MCS2Axis::setPosition(double position)
 
 /** Polls the axis.
   * This function reads the controller position, encoder position, the limit status, the moving status, 
-  * and the drive power-on status.  It does not current detect following error, etc. but this could be
-  * added.
+  * the drive power-on status and positioner type. It does not current detect following error, etc.
+  * but this could be added.
   * It calls setIntegerParam() and setDoubleParam() for each item that it polls,
   * and then calls callParamCallbacks() at the end.
   * \param[out] moving A flag that is set indicating that the axis is moving (1) or done (0). */
@@ -437,6 +444,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   int isStreaming;
   int overTemp;
   int refMark;
+  int positionerType;
   double encoderPosition;
   double theoryPosition;
   int driveOn;
@@ -498,6 +506,12 @@ asynStatus MCS2Axis::poll(bool *moving)
   driveOn = atoi(pC_->inString_) ? 1:0;
   setIntegerParam(pC_->motorStatusPowerOn_, driveOn);
   setIntegerParam(pC_->motorStatusProblem_, 0);
+
+  // Read the currently selected positioner type
+  sprintf(pC_->outString_, ":CHAN%d:PTYP?", channel_);
+  comStatus = pC_->writeReadController();
+  if (comStatus) goto skip;
+  chanState = atoi(pC_->inString_);
 
   skip:
   setIntegerParam(pC_->motorStatusProblem_, comStatus ? 1:0);
