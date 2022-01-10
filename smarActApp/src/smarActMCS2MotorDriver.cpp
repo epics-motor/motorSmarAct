@@ -146,7 +146,7 @@ asynStatus MCS2Controller::clearErrors()
 						break;
 		}
 	  asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR,
-			  "MCS2Axis::clearErrors: %s\n", errorMsg);
+			  "MCS2Controller::clearErrors: %s\n", errorMsg);
   }
 
   skip:
@@ -212,7 +212,7 @@ asynStatus MCS2Controller::writeInt32(asynUser *pasynUser, epicsInt32 value)
     status = pAxis->pC_->writeController();
   }
   else if (function == ptyp_) {
-    /* sat positioner type */
+    /* set positioner type */
     sprintf(pAxis->pC_->outString_, ":CHAN%d:PTYP %d", pAxis->axisNo_, value);
     status = pAxis->pC_->writeController();
   }
