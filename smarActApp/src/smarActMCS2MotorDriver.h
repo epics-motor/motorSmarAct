@@ -32,6 +32,10 @@ The two that may be of significant interest are:
 #include "asynMotorController.h"
 #include "asynMotorAxis.h"
 
+/* This is the same for lin and rot positioners
+ * lin: controller pm --> driver nm. Because of this the user can use the positioner for mm ranges
+ * rot: controller ndeg --> driver udeg. Because of tis the user can use the positioner for deg ranges
+ * If this scaling was not implemented the maximum range would be ~2.147 mm/deg, now it's ~2147 mm/deg */
 #define PULSES_PER_STEP 1000
 
 /** MCS2 Axis status flags **/
