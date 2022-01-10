@@ -511,7 +511,8 @@ asynStatus MCS2Axis::poll(bool *moving)
   sprintf(pC_->outString_, ":CHAN%d:PTYP?", channel_);
   comStatus = pC_->writeReadController();
   if (comStatus) goto skip;
-  chanState = atoi(pC_->inString_);
+  positionerType = atoi(pC_->inString_);
+  setIntegerParam(pC_->ptyprb_, positionerType);
 
   skip:
   setIntegerParam(pC_->motorStatusProblem_, comStatus ? 1:0);
