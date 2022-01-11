@@ -18,6 +18,9 @@ which then restricts the travel range to +/- 2.1mm. Until the 32-bit RMP
 restriction is lifted the easiest approach that doesn't require custom version
 of the motor record is to redefine the resolution so that 1 step=1 nm. That's
 the approach I use here.
+The same approach is used for rotational stages where MCS2 uses 1 step = 1 ndeg.
+This would limit the movement to +/- 2.1 deg so the driver redefines the
+recolution to 1 step = 1 udeg.
 
 Velocity and acceleration
 -------------------------
@@ -26,13 +29,18 @@ need to set it. Set these to zero drive and the MCS2 will drive at the default v
 
 Positioner types
 ----------------
-This driver does not attempt to set the positioner type. I
-have only type 300 stages and it works without configuration on my part. I'm
-not sure if that's true for every positioner/sensor combination.
+This driver supports setting the positioner type. A record for that is included in
+MCS2_Extra.db. When changing positioners it must first be calibrated and
+homed before use.
 
-Rotary not tested
------------------
-Only linear stages are supported right now (I have no rotary to test).
+Controller specific functions
+-----------------------------
+This driver currently supports three controller specific functions:
+- axis calibration,
+- setting the maximum closed loop frequency,
+- and setting positioner types.
+
+Other basic MCS2 functionalities can be added easily.
 
 Restrictions
 ------------
