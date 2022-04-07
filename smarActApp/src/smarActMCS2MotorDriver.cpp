@@ -122,6 +122,8 @@ asynStatus MCS2Controller::clearErrors()
 	  printf("%s", this->inString_);
 	  errorCode = atoi(this->inString_);
 	  switch (errorCode){
+		  case 259:		sprintf(errorMsg, "No sensor present");
+						break;
 		  case 0:		sprintf(errorMsg, "No error");
 						break;
 		  case -101:	sprintf(errorMsg, "Invalid character");
