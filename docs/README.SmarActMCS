@@ -179,7 +179,8 @@ smarActMCSCreateController(
      const char *ioPortName,
      int         numAxes,
      double      movingPollPeriod,
-     double      idlePollPeriod);
+     double      idlePollPeriod,
+     int         disableSpeed);
 
   motorPortName: unique string to identify this
                  instance to be used in the
@@ -201,12 +202,17 @@ smarActMCSCreateController(
                  the MCS is polled for status
                  changes while the positioner
                  is stopped.
+  disableSpeed:  The commands to get/set speed
+                 are not available on some 
+                 smarAct controllers. If set, 
+                 this flag disable all the 
+                 speed commands in the driver.
 
 E.g., to configure a driver with one axis using
 the serial connection 'myTS1' configured in the
 prior example we use
 
-smarActMCSCreateController("myMotor1","myTS1",1,0.02,1.0)
+smarActMCSCreateController("myMotor1","myTS1",1,0.02,1.0,0)
 
 This results in a polling interval of 20ms 
 while moving and 1s while idle. The driver
