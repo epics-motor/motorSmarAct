@@ -17,7 +17,9 @@ DB_INSTALLS += $(MOTOR_SMARACT)/db/MCS2_Extra.db
 else
 DB_INSTALLS += $(MOTOR)/db/MCS2_Extra.db
 endif
-
+#ifdef DEVIOCSTATS
+DB_INSTALLS += $(DEVIOCSTATS)/db/iocAdminSoft.db
+#endif
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_template = <templatename>

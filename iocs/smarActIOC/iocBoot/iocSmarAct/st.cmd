@@ -1,6 +1,8 @@
 #!../../bin/linux-x86_64/smarAct
 
 < envPaths
+epicsEnvSet("P", "smarAct:")
+epicsEnvSet("MC_CT", "unit1")
 
 cd "${TOP}"
 
@@ -18,10 +20,19 @@ dbLoadRecords("$(MOTOR)/db/motorUtil.db", "P=smarAct:")
 #< smaractmcs2.iocsh
 < smaractscu.iocsh
 ## 
+# Optional: load devIocStats records (requires DEVIOCSTATS module)
+#dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(P)$(MC_CT)")
+
+# autosave/restore machinery
+<AutoSave.cmd
+
 
 iocInit
 
 ## motorUtil (allstop & alldone)
 motorUtilInit("smarAct:")
+
+# save settings every thirty seconds
+create_monitor_set("auto_settings.req",30,"P=$(PREFIX)")
 
 # Boot complete

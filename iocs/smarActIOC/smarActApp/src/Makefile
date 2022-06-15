@@ -38,6 +38,14 @@ smarAct_LIBS += asyn
 #ifdef SNCSEQ
 smarAct_LIBS += seq pv
 #endif
+#ifdef DEVIOCSTATS
+smarAct_DBD += devIocStats.dbd iocAdmin.dbd
+smarAct_LIBS += devIocStats
+#endif
+#ifdef AUTOSAVE
+smarAct_DBD += asSupport.dbd as.dbd
+smarAct_LIBS += autosave
+#endif
 
 # smarAct_registerRecordDeviceDriver.cpp derives from smarAct.dbd
 smarAct_SRCS += smarAct_registerRecordDeviceDriver.cpp
