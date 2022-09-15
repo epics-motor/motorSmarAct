@@ -124,6 +124,8 @@ asynStatus MCS2Controller::clearErrors()
 	  switch (errorCode){
 		  case 259:		sprintf(errorMsg, "No sensor present");
 						break;
+		  case 34:		sprintf(errorMsg, "Invalid channel index");
+						break;
 		  case 0:		sprintf(errorMsg, "No error");
 						break;
 		  case -101:	sprintf(errorMsg, "Invalid character");
