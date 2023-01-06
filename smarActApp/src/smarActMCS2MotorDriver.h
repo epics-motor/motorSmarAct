@@ -91,7 +91,7 @@ friend class MCS2Controller;
 
 class epicsShareClass MCS2Controller : public asynMotorController {
 public:
-  MCS2Controller(const char *portName, const char *MCS2PortName, int numAxes, double movingPollPeriod, double idlePollPeriod);
+  MCS2Controller(const char *portName, const char *MCS2PortName, int numAxes, double movingPollPeriod, double idlePollPeriod, int unusedMask = 0);
   virtual asynStatus clearErrors();
 
   /* These are the methods that we override from asynMotorDriver */

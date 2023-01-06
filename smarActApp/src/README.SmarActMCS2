@@ -33,6 +33,7 @@ not sure if that's true for every positioner/sensor combination.
 Rotary not tested
 -----------------
 Only linear stages are supported right now (I have no rotary to test).
+Note: Tested, Rotary controlled by MCS2 uses the same commands as linear. 
 
 Restrictions
 ------------

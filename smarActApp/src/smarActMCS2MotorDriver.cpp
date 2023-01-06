@@ -12,7 +12,6 @@ Jan 19, 2019
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
 
 #include <iocsh.h>
 #include <epicsThread.h>
@@ -33,15 +32,17 @@ static const char *driverName = "SmarActMCS2MotorDriver";
   * \param[in] numAxes              The number of axes that this controller supports 
   * \param[in] movingPollPeriod     The time between polls when any axis is moving 
   * \param[in] idlePollPeriod       The time between polls when no axis is moving 
+  * \param[in] unusedMask	    The bit mask value of unused axes
   */
 MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, int numAxes, 
-                               double movingPollPeriod, double idlePollPeriod)
+                               double movingPollPeriod, double idlePollPeriod, int unusedMask)
   :  asynMotorController(portName, numAxes, NUM_MCS2_PARAMS, 
                          0, 0,
                          ASYN_CANBLOCK | ASYN_MULTIDEVICE, 
                          1, // autoconnect
                          0, 0)  // Default priority and stack size
 {
+  int axis, axisMask = 0;
   asynStatus status;
   static const char *functionName = "MCS2Controller";
   asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Controller::MCS2Controller: Creating controller\n");
@@ -75,6 +76,17 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "MCS2Controller::MCS2Controller: Device Name: %s\n", this->inString_);
   this->clearErrors();
 
+  // Create the axis objects
+  asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Controller::MCS2Controller: Creating axes\n");
+  for(axis=0; axis<numAxes; axis++){ 
+    axisMask = (unusedMask & (1 << axis)) >> axis;
+    if(!axisMask)
+	{
+	new MCS2Axis(this, axis);
+	printf("create axis %d\n", axis);
+	}
+  }
+
   startPoller(movingPollPeriod, idlePollPeriod, 2);
 }
 
@@ -86,39 +98,13 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   * \param[in] numAxes           The number of axes that this controller supports 
   * \param[in] movingPollPeriod  The time in ms between polls when any axis is moving
   * \param[in] idlePollPeriod    The time in ms between polls when no axis is moving 
+  * \param[in] unusedMask        The bit mask value of unused axes  
   */
 extern "C" int MCS2CreateController(const char *portName, const char *MCS2PortName, int numAxes, 
-                                    int movingPollPeriod, int idlePollPeriod)
+                                    int movingPollPeriod, int idlePollPeriod, int unusedMask)
 {
-  new MCS2Controller(portName, MCS2PortName, numAxes, movingPollPeriod/1000., idlePollPeriod/1000.);
+  new MCS2Controller(portName, MCS2PortName, numAxes, movingPollPeriod/1000., idlePollPeriod/1000., unusedMask);
   return(asynSuccess);
-}
-
-extern "C" int MCS2CreateAxis(const char *portName, int axis)
-{
-  MCS2Controller *pC;
-  MCS2Axis *pAxis;
-  asynMotorAxis *pAsynAxis;
-  static const char *functionName = "MCS2CreateAxis";
-
-  pC = (MCS2Controller*)findAsynPortDriver(portName);
-  if (!pC)
-  {
-	printf("%s: Error port %s not found\n", functionName, portName);
-	return asynError;
-  }
-
-  pAsynAxis = pC->getAxis(axis);
-  if (pAsynAxis != NULL )
-  {
-	printf("MCS2CreateAxis failed: axis %u already exists\n", axis);
-	return asynError;
-  }
-  pC->lock();
-  pAxis = new MCS2Axis(pC, axis);
-  pAxis = NULL;
-  pC->unlock();
-  return asynSuccess;
 }
 
 asynStatus MCS2Controller::clearErrors()
@@ -550,32 +536,22 @@ static const iocshArg MCS2CreateControllerArg1 = {"MCS2 port name", iocshArgStri
 static const iocshArg MCS2CreateControllerArg2 = {"Number of axes", iocshArgInt};
 static const iocshArg MCS2CreateControllerArg3 = {"Moving poll period (ms)", iocshArgInt};
 static const iocshArg MCS2CreateControllerArg4 = {"Idle poll period (ms)", iocshArgInt};
+static const iocshArg MCS2CreateControllerArg5 = {"Unused bit mask", iocshArgInt};
 static const iocshArg * const MCS2CreateControllerArgs[] = {&MCS2CreateControllerArg0,
                                                             &MCS2CreateControllerArg1,
                                                             &MCS2CreateControllerArg2,
                                                             &MCS2CreateControllerArg3,
-                                                            &MCS2CreateControllerArg4};
-static const iocshFuncDef MCS2CreateControllerDef = {"MCS2CreateController", 5, MCS2CreateControllerArgs};
+                                                            &MCS2CreateControllerArg4,
+                                                            &MCS2CreateControllerArg5};
+static const iocshFuncDef MCS2CreateControllerDef = {"MCS2CreateController", 6, MCS2CreateControllerArgs};
 static void MCS2CreateContollerCallFunc(const iocshArgBuf *args)
 {
-  MCS2CreateController(args[0].sval, args[1].sval, args[2].ival, args[3].ival, args[4].ival);
-}
-
-/* MCS2CreateAxis */
-static const iocshArg MCS2CreateAxisArg0 = {"MCS2 port name", iocshArgString};
-static const iocshArg MCS2CreateAxisArg1 = {"Axis number", iocshArgInt};
-static const iocshArg * const MCS2CreateAxisArgs[] = {&MCS2CreateAxisArg0,
-						      &MCS2CreateAxisArg1};
-static const iocshFuncDef MCS2CreateAxisDef = {"MCS2CreateAxis", 2, MCS2CreateAxisArgs};
-static void MCS2CreateAxisCallFunc(const iocshArgBuf *args)
-{
-  MCS2CreateAxis(args[0].sval, args[1].ival);
+  MCS2CreateController(args[0].sval, args[1].sval, args[2].ival, args[3].ival, args[4].ival, args[5].ival);
 }
 
 static void MCS2MotorRegister(void)
 {
   iocshRegister(&MCS2CreateControllerDef, MCS2CreateContollerCallFunc);
-  iocshRegister(&MCS2CreateAxisDef, MCS2CreateAxisCallFunc);
 }
 
 extern "C" {
