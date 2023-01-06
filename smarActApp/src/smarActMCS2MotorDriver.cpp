@@ -43,10 +43,7 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
                          1, // autoconnect
                          0, 0)  // Default priority and stack size
 {
-<<<<<<< HEAD
   int axis, axisMask = 0;
-=======
->>>>>>> 368fb0f7d1c9a9685b9e12ee1b83b3a924a9fe47
   asynStatus status;
   static const char *functionName = "MCS2Controller";
   asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Controller::MCS2Controller: Creating controller\n");
