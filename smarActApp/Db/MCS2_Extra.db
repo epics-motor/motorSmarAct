@@ -40,4 +40,3 @@ record(bi, "$(P)$(M)Ref-Sts") {
     field(ZNAM, "Not Referenced")
     field(ONAM, "Referenced")
 }
-
