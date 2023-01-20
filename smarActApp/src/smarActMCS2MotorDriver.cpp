@@ -50,6 +50,7 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   createParam(MCS2MclfString, asynParamInt32, &this->mclf_);
   createParam(MCS2PtypString, asynParamInt32, &this->ptyp_);
   createParam(MCS2PtypRbString, asynParamInt32, &this->ptyprb_);
+  createParam(MCS2PstatString, asynParamInt32, &this->pstatrb_);   // whole positioner status word
   createParam(MCS2CalString, asynParamInt32, &this->cal_);
 
   /* Connect to MCS2 controller */
@@ -435,18 +436,11 @@ asynStatus MCS2Axis::poll(bool *moving)
   int done;
   int chanState;
   int closedLoop;
-  int calibrating;
-  int referencing;
-  int moveDelayed;
   int sensorPresent;
-  int isCalibrated;
   int isReferenced;
   int endStopReached;
-  int rangeLimitReached;
   int followLimitReached;
   int movementFailed;
-  int isStreaming;
-  int overTemp;
   int refMark;
   int positionerType;
   double encoderPosition;
@@ -459,20 +453,14 @@ asynStatus MCS2Axis::poll(bool *moving)
   comStatus = pC_->writeReadController();
   if (comStatus) goto skip;
   chanState = atoi(pC_->inString_);
+  setIntegerParam(pC_->pstatrb_, chanState);
   done               = (chanState & ACTIVELY_MOVING)?0:1;
   closedLoop         = (chanState & CLOSED_LOOP_ACTIVE)?1:0;
-  calibrating        = (chanState & CALIBRATING)?1:0;
-  referencing        = (chanState & REFERENCING)?1:0;
-  moveDelayed        = (chanState & MOVE_DELAYED)?1:0;
   sensorPresent      = (chanState & SENSOR_PRESENT)?1:0;
-  isCalibrated       = (chanState & IS_CALIBRATED)?1:0;
   isReferenced       = (chanState & IS_REFERENCED)?1:0;
   endStopReached     = (chanState & END_STOP_REACHED)?1:0;
-  rangeLimitReached  = (chanState & RANGE_LIMIT_REACHED)?1:0;
   followLimitReached = (chanState & FOLLOWING_LIMIT_REACHED)?1:0;
   movementFailed     = (chanState & MOVEMENT_FAILED)?1:0;
-  isStreaming        = (chanState & STREAMING)?1:0;
-  overTemp           = (chanState & OVERTEMP)?1:0;
   refMark            = (chanState & REFERENCE_MARK)?1:0;
 
   *moving = done ? false:true;
