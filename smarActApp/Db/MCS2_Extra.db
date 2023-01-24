@@ -81,3 +81,10 @@ record(mbbi, "$(P)$(M)positionerTypeRb"){
   field(TVST, "LC")
   field(TTST, "L")
 }
+
+record(longin, "$(P)$(M)positionerStatusRb") {
+  field(DESC, "positioner status word")
+  field(DTYP, "asynInt32")
+  field(SCAN, "I/O Intr")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PSTAT")
+}
