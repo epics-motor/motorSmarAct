@@ -11,7 +11,7 @@ file "$(TOP)/db/MCS2_Extra.db"
 {
 pattern
 {P,     N,  M,        PORT,  ADDR,  TIMEOUT}
-{IOC:,  1,  "m$(N)",  MCS2,  0,     1.0}
-{IOC:,  2,  "m$(N)",  MCS2,  1,     1.0}
-{IOC:,  3,  "m$(N)",  MCS2,  2,     1.0}
+{IOC:,  1,  "m$(N):",  MCS2,  0,     1.0}
+{IOC:,  2,  "m$(N):",  MCS2,  1,     1.0}
+{IOC:,  3,  "m$(N):",  MCS2,  2,     1.0}
 }
