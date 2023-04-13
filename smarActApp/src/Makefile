@@ -14,13 +14,16 @@ LIBRARY_IOC  = smarActMotor
 # install devMotorSoft.dbd into <top>/dbd
 DBD += devSmarActMCSMotor.dbd
 DBD += devSmarActMCS2Motor.dbd
+DBD += devSmarActSCUMotor.dbd
 
 INC += smarActMCSMotorDriver.h
 INC += smarActMCS2MotorDriver.h
+INC += smarActSCUMotorDriver.h
 
 # The following are compiled and added to the Support library
 smarActMotor_SRCS += smarActMCSMotorDriver.cpp
 smarActMotor_SRCS += smarActMCS2MotorDriver.cpp
+smarActMotor_SRCS += smarActSCUMotorDriver.cpp
 
 smarActMotor_LIBS += motor
 smarActMotor_LIBS += asyn

@@ -70,6 +70,7 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 #define MCS2MclfString "MCLF"
 #define MCS2PtypString "PTYP"
 #define MCS2PtypRbString "PTYP_RB"
+#define MCS2PstatString "PSTAT"
 #define MCS2RefString "REF"
 #define MCS2CalString "CAL"
 
@@ -113,6 +114,7 @@ protected:
 #define FIRST_MCS2_PARAM mclf_
   int ptyp_; /**< positioner type */
   int ptyprb_; /**< positioner type readback */
+  int pstatrb_; /**< positoner status word readback */
   int ref_;  /**< reference command */ 
   int cal_;  /**< calibration command */
 #define LAST_MCS2_PARAM cal_

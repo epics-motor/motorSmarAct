@@ -1,19 +1,18 @@
-Driver for smarAct MCS Positioner
+Driver for smarAct SCU Positioners
 ==================================
 
-Till Straumann <strauman@slac.stanford.edu>, 9/2011
+Mark Ruvers <rivers@cars.uchicago.edu>, 4/2020
 
 Introduction
 ------------
 
-This driver supports the smarAct MCS Positioner
+This driver supports the smarAct SCU Positioners
 by implementing subclasses of the 'asynMotorController'
 and 'asynMotorAxis' objects.
 
 Communication with the hardware is established via
-a 'asyn port' driver layer and it is thus possible
-to use either a physical RS232 port or a terminal
-server in a transparent fashion. 
+a 'asyn port' driver layer using the drvAsynSerialPort
+driver with the FTDI USB serial port. 
 
 Note: the reader is assumed to be familiar with the
 motor record. Please consult relevant documentation.
@@ -21,22 +20,28 @@ motor record. Please consult relevant documentation.
 Restrictions
 ------------
 
-The driver does not support all features of the MCS
+The driver does not support all features of the SCU
 firmware (some of which are outside of the scope of
 the motor record). Neither are all features of the
 motor record supported.
 
 The driver currently relies on the presence of a
-linear position sensor and uses a command set specific
+position sensor and uses a command set specific
 to such sensors. Rotary sensors and the associated
-command set are not supported. Closed-loop mode is
-used exclusively for all motion commands.
+command set are supported but have not been tested.
+Closed-loop mode is used exclusively for all motion commands.
 
-Limit switches are not supported (the MCS command
+Limit switches are not supported (the SCU command
 set defines no interface to hardware limit switches).
 
-The driver operates directly in user coordinates (nm)
-no translation into 'steps' is supported.
+The SCU controller always communicates in units of
+microns for linear actuators and millidegrees for
+rotary actuators.  The driver converts these to the step
+units of the motor record using a scale factor of 1000,
+i.e. 1000 motor record steps is 1 micron or 1 millidegree.
+The if the MRES field of the motor record is 0.001 then
+the motor record will also use these units.  However, 
+MRES could also be 1.e-6 to work in mm and degrees, etc.
 
 The 'JOG' feature of the motor record is implemented
 using a relative-move command to a 'far-away' target.
@@ -49,12 +54,6 @@ The drivers makes the following assumptions about
 the setup
  - reset command ('R') is never used by third party
    while the driver is running.
- - 'synchronous' communication mode ('SCM') is in
-   effect.
- - 'keep-alive' mode is not in effect (but if the
-   keep-alive time is longer than the driver's 
-   slowest polling period then 'keep-alive' mode
-   should work).
  - sensor is never disabled ('SSE'). Permanent 'on'
    or power-save mode are OK.
  - sensor type ('SST') is configured correctly (must
@@ -76,6 +75,12 @@ Special Features
 
 Position Reference
 ..................
+The driver implements the motor record home-forward and 
+home-reverse commands identically, using MTR (move to reference)
+command.  This will home the positioner to an absolute
+known position provided the CS (calibrate sensor) has been
+performed at least once for that axis.
+
 After power-up the position sensor must be positioned
 to a reference mark in order for it to provide
 absolute positions. The 'MOTOR_HOMED' bit in the
@@ -83,25 +88,25 @@ absolute positions. The 'MOTOR_HOMED' bit in the
 Only if 'MOTOR_HOMED' is set the absolute position
 is correct. Note that this bit is read from the
 hardware and is hence preserved across IOC reboots
-(as long as power from the MCS is not removed).
+(as long as power from the SCU is not removed).
 
 Position Holding
 ................
 All motion commands are executed in 'closed-loop'
-mode of the MCS controller, i.e., the controller
+mode of the SCU controller, i.e., the controller
 hardware itself drives the positioner to the target
 in 'closed-loop' mode.
-The MCS can also be instructed to actively hold the
+The SCU can also be instructed to actively hold the
 target position (compensating small movements, drift
 etc.). This feature can be programmed using the 
-motor record's CNEN field (enabled: MCS holds
-target position indefinitely; disabled: MCS goes
+motor record's CNEN field (enabled: SCU holds
+target position indefinitely; disabled: SCU goes
 to open-loop mode as soon as the target is
 reached).
 
 Usage Information
 -----------------
-The position sensor has a very high (1nm)
+The position sensor has a very high (0.1 micron)
 resolution and it is unlikely (especially
 in 'no-hold' mode, i.e., if CNEN is 'disabled')
 that the target position can be reached
@@ -111,9 +116,9 @@ of the motor record may need appropriate
 tuning.
 
 It should also be noted that the positioner
-is quite fast and performes moves almost
+is quite fast and performs moves almost
 'instantaneously' (as perceived by an operator)
-unless the speed is reduced (VELO).
+unless the speed is reduced (SCLF).
 'JOG' mode is probably useless unless the jog
 velocity (JVEL) is set to a relatively low
 value which allows the operator to observe
@@ -129,7 +134,7 @@ Building an Application
 - - - - - - - - - - - -
 Building the driver into an application requires
 
-a) the 'asyn', 'motor' and 'smarActMCSMotor' (this
+a) the 'asyn', 'motor' and 'smarActSCUMotor' (this
    driver) packages/modules to be built and
    installed. The application's RELEASE file must
    point to these packages so that the build process
@@ -137,27 +142,25 @@ a) the 'asyn', 'motor' and 'smarActMCSMotor' (this
 
 b) the application's '.dbd' file must contain
     - motorSupport.dbd
-    - devSmarActMCSMotor.dbd
-   as well as an 'asyn' port driver for serial
-   communication. In case of a connection via
-   TCP/IP + terminal server this would be
-    - drvAsynIPPort.dbd
+    - devSmarActSCUMotor.dbd
+   as well as the 'asyn' serial port driver for serial
+   communication, drvAsynSerialPort.dbd
 
    These '.dbd' files are best listed in the
    application Makefile:
     <app>_DBD += motorSupport.dbd
-    <app>_DBD += devSmarActMCSMotor.dbd
-    <app>_DBD += drvAsynIPPort.dbd
+    <app>_DBD += devSmarActSCUMotor.dbd
+    <app>_DBD += drvAsynSerialPort.dbd
 
 c) the application must be linked against
-   the 'smarActMCSMotor', 'motor' and 'asyn'
+   the 'smarActMotor', 'motor' and 'asyn'
    libraries, e.g.,
 
-    <app>_LIBS += smarActMCSMotor motor asyn
+    <app>_LIBS += smarActMotor motor asyn
 
 Driver Run-Time Configuration
 - - - - - - - - - - - - - - -
-For each MCS controller a driver instance needs
+For each SCU controller a driver instance needs
 to be configured either from a startup script,
 C or C++ code (the C++ constructor takes the
 same arguments).
@@ -167,16 +170,16 @@ from the startup script). E.g., when using
 a terminal server then drvAsynIPPort may be
 used:
 
-  drvAsynIPPortConfigure("myTS1","terminalserver:port",0,0,0)
+  drvAsynSerialPortConfigure("serial1","/dev/ttyUSB0",0,0,0)
 
-Next, an MCS controller driver instance is
+Next, an SCU controller driver instance is
 created. The respective call takes the following
 arguments:
 
 
-smarActMCSCreateController(
+smarActSCUCreateController(
      const char *motorPortName,
-     const char *ioPortName,
+     const char *serialPortName,
      int         numAxes,
      double      movingPollPeriod,
      double      idlePollPeriod);
@@ -184,29 +187,29 @@ smarActMCSCreateController(
   motorPortName: unique string to identify this
                  instance to be used in the
                  motor record's 'OUT' field.
-  ioPortName:    asyn port name identifying the
+  serialPortName: asyn port name identifying the
                  serial link for communication
-                 with the MCS.
+                 with the SCU.
                  Note that such a link must
                  be created prior to creating
-                 a MCS controller driver instance.
-  numAxes:       number of axes this MCS supports.
+                 a SCU controller driver instance.
+  numAxes:       number of axes this SCU supports.
   movingPollPeriod: period (in seconds - since 
                  this is  a 'double' parameter
                  fractional seconds are possible)
-                 at which the MCS is polled for
+                 at which the SCU is polled for
                  status changes while the 
                  positioner is moving.
   idlePollPeriod: period (in seconds) at which 
-                 the MCS is polled for status
+                 the SCU is polled for status
                  changes while the positioner
                  is stopped.
 
 E.g., to configure a driver with one axis using
-the serial connection 'myTS1' configured in the
+the serial connection 'serial' configured in the
 prior example we use
 
-smarActMCSCreateController("myMotor1","myTS1",1,0.02,1.0)
+smarActSCUCreateController("myMotor1","serial",1,0.02,1.0)
 
 This results in a polling interval of 20ms 
 while moving and 1s while idle. The driver
@@ -216,12 +219,12 @@ addressed from a motorRecord's OUT field:
   field(DTYP, "asynMotor")
   field(OUT,  "asyn(myMotor1,0)")
 
-After creating a controller, one or more MCS axes 
+After creating a controller, one or more SCU axes 
 are created for that controller.  The respective
 call takes the following arguments:
 
 
-smarActMCSCreateAxis(
+smarActSCUCreateAxis(
         const char *motorPortName,
         int        axisNumber,
         int        channel)
@@ -237,24 +240,5 @@ smarActMCSCreateAxis(
                 prepended to the command string
                 sent to the particular axis.
 
-Call the smarActMCSCreateAxis() function for
+Call the smarActSCUCreateAxis() function for
 each axis that needs to be configured.                
-
-Terminal Server / RS232 Port Notes
-- - - - - - - - - - - - - - - - - -
-It is the user's responsibility to configure
-the serial port so it matches the MCS' setup.
-
-Note that a terminal server might need
-additional configuration to make sure that
-a 'raw' TCP connection is used. Otherwise,
-the terminal server might use other protocols
-(most notably: the TELNET protocol) on top
-of TCP which result in extra characters being
-inserted in the data stream which are not
-or mis-interpreted by this driver which
-expects a 'raw' communication channel.
-On some terminal servers a raw TCP socket
-may listen on a different port number than
-used for a TELNET connection. 
-

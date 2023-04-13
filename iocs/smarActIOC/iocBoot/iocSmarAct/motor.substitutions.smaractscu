@@ -1,0 +1,11 @@
+file "$(MOTOR)/db/asyn_motor.db"
+{
+pattern
+{P,        M,      DTYP,      PORT, ADDR,   DESC,     EGU, DIR,   VELO,  VBAS, ACCL, BDST, BVEL, BACC, MRES, PREC,   DHLM,    DLLM, INIT}
+{smarAct:, m1, "asynMotor",  "SCU1",   0,  "motor 1", mm,  Pos,   1,     0,    0.2,  0,    1,    0.2,  1e-3, 3,      20000,  -20000,   ""} 
+{smarAct:, m2, "asynMotor",  "SCU1",   1,  "motor 2", mm,  Pos,   1,     0,    0.2,  0,    1,    0.2,  1e-3, 3,      20000,  -20000,   ""} 
+{smarAct:, m3, "asynMotor",  "SCU1",   2,  "motor 3", mm,  Pos,   1,     0,    0.2,  0,    1,    0.2,  1e-3, 3,      20000,  -20000,   ""} 
+{smarAct:, m4, "asynMotor",  "SCU2",   0,  "motor 4", mm,  Pos,   1,     0,    0.2,  0,    1,    0.2,  1e-3, 3,      20000,  -20000,   ""} 
+{smarAct:, m5, "asynMotor",  "SCU2",   1,  "motor 5", mm,  Pos,   1,     0,    0.2,  0,    1,    0.2,  1e-3, 3,      20000,  -20000,   ""} 
+{smarAct:, m6, "asynMotor",  "SCU2",   2,  "motor 6", mm,  Pos,   1,     0,    0.2,  0,    1,    0.2,  1e-3, 3,      20000,  -20000,   ""} 
+}

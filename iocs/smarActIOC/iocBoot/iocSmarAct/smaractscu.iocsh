@@ -1,0 +1,39 @@
+### Motors
+# Motors substitutions, customize this for your motor
+dbLoadTemplate "motor.substitutions.smaractscu"
+
+# Configure each controller
+drvAsynSerialPortConfigure("serial1","COM5")
+asynOctetSetOutputEos("serial1",0,"\n")
+asynOctetSetInputEos("serial1",0,"\n")
+asynSetTraceIOMask("serial1",0,2)
+#asynSetTraceMask("serial1",0,9)
+drvAsynSerialPortConfigure("serial2","COM6")
+asynOctetSetOutputEos("serial2",0,"\n")
+asynOctetSetInputEos("serial2",0,"\n")
+asynSetTraceIOMask("serial2",0,2)
+#asynSetTraceMask("serial2",0,9)
+
+# Controller port, asyn port, number of axis, moving poll period, idle poll period
+# smarActSCUCreateController(const char *motorPortName, const char *ioPortName, int numAxes, double movingPollPeriod, double idlePollPeriod);
+smarActSCUCreateController("SCU1", "serial1", 3, .05, 1.0)
+smarActSCUCreateController("SCU2", "serial2", 3, .05, 1.0)
+#asynSetTraceMask("SCU1", 0, 11)
+#asynSetTraceMask("SCU1", 1, 11)
+#asynSetTraceMask("SCU1", 2, 11)
+#asynSetTraceMask("SCU2", 0, 11)
+#asynSetTraceMask("SCU2", 1, 11)
+#asynSetTraceMask("SCU2", 2, 11)
+
+# Controller port, axis number, controller channel
+# smarActSCUCreateAxis(const char *motorPortName, int axisNumber, int channel)
+smarActSCUCreateAxis("SCU1", 0, 0);
+smarActSCUCreateAxis("SCU1", 1, 1);
+smarActSCUCreateAxis("SCU1", 2, 2);
+smarActSCUCreateAxis("SCU2", 0, 0);
+smarActSCUCreateAxis("SCU2", 1, 1);
+smarActSCUCreateAxis("SCU2", 2, 2);
+
+# Need to sleep for a second to allow poller to run.
+# Without this the motors won't have their initial positions
+epicsThreadSleep(1.0)

@@ -1,5 +1,8 @@
 # motorSmarAct
-EPICS motor drivers for the following [SmarAct](http://www.smaract.com/) controllers: MCS
+EPICS motor drivers for the following [SmarAct](http://www.smaract.com/) controllers: MCS, MCS2, SCU
+
+[![Build Status](https://github.com/epics-motor/motorSmarAct/actions/workflows/ci-scripts-build.yml/badge.svg)](https://github.com/epics-motor/motorSmarAct/actions/workflows/ci-scripts-build.yml)
+<!--[![Build Status](https://travis-ci.org/epics-motor/motorSmarAct.png)](https://travis-ci.org/epics-motor/motorSmarAct)-->
 
 motorSmarAct is a submodule of [motor](https://github.com/epics-modules/motor).  When motorSmarAct is built in the ``motor/modules`` directory, no manual configuration is needed.
 

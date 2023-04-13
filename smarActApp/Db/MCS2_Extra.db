@@ -108,3 +108,9 @@ record(bi, "$(P)$(M)Ref-Sts") {
     field(ONAM, "Referenced")
 }
 
+record(longin, "$(P)$(M)positionerStatusRb") {
+  field(DESC, "positioner status word")
+  field(DTYP, "asynInt32")
+  field(SCAN, "I/O Intr")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PSTAT")
+}
