@@ -52,7 +52,7 @@ record(mbbi, "$(P)$(M)positionerTypeRb"){
   field(DESC, "get positioner type")
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PTYP")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PTYP_RB")
   field(NOBT, "11")
   field(ZRVL, "300")
   field(ONVL, "312")
@@ -80,6 +80,32 @@ record(mbbi, "$(P)$(M)positionerTypeRb"){
   field(TEST, "None")
   field(TVST, "LC")
   field(TTST, "L")
+}
+
+record(bi, "$(P)$(M)Cal-Sts") {
+    field(DESC,"calibration")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))CAL")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Not Calibrated")
+    field(ONAM, "Calibrated")
+}
+
+record(longin, "$(P)$(M)Freq:MCL-RB") {
+    field(DESC,"MCL Frequency")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MCLF")
+    field(SCAN, "I/O Intr")
+    field(EGU, "Hz")
+}
+
+record(bi, "$(P)$(M)Ref-Sts") {
+    field(DESC,"Reference")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))REF")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Not Referenced")
+    field(ONAM, "Referenced")
 }
 
 record(longin, "$(P)$(M)positionerStatusRb") {

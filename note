@@ -1,0 +1,4 @@
+Huijuan Xu <hxu@bnl.gov>
+
+* Add unusedmask parameter for axis not in use
+* Add status readback for calibration, MCL frequency and reference

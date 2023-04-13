@@ -34,14 +34,14 @@ static const char *driverName = "SmarActMCS2MotorDriver";
   * \param[in] idlePollPeriod       The time between polls when no axis is moving 
   */
 MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, int numAxes, 
-                               double movingPollPeriod, double idlePollPeriod)
+                               double movingPollPeriod, double idlePollPeriod, int unusedMask)
   :  asynMotorController(portName, numAxes, NUM_MCS2_PARAMS, 
                          0, 0,
                          ASYN_CANBLOCK | ASYN_MULTIDEVICE, 
                          1, // autoconnect
                          0, 0)  // Default priority and stack size
 {
-  int axis;
+  int axis, axisMask = 0;
   asynStatus status;
   static const char *functionName = "MCS2Controller";
   asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Controller::MCS2Controller: Creating controller\n");
@@ -51,6 +51,7 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   createParam(MCS2PtypString, asynParamInt32, &this->ptyp_);
   createParam(MCS2PtypRbString, asynParamInt32, &this->ptyprb_);
   createParam(MCS2PstatString, asynParamInt32, &this->pstatrb_);   // whole positioner status word
+  createParam(MCS2RefString, asynParamInt32, &this->ref_);
   createParam(MCS2CalString, asynParamInt32, &this->cal_);
 
   /* Connect to MCS2 controller */
@@ -80,8 +81,11 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
 
   // Create the axis objects
   asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Controller::MCS2Controller: Creating axes\n");
-  for (axis=0; axis<numAxes; axis++) {
-    new MCS2Axis(this, axis);
+
+  for(axis=0; axis<numAxes; axis++){ 
+    axisMask = (unusedMask & (1 << axis)) >> axis;
+    if(!axisMask)
+        new MCS2Axis(this, axis);
   }
 
   startPoller(movingPollPeriod, idlePollPeriod, 2);
@@ -97,9 +101,9 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   * \param[in] idlePollPeriod    The time in ms between polls when no axis is moving 
   */
 extern "C" int MCS2CreateController(const char *portName, const char *MCS2PortName, int numAxes, 
-                                    int movingPollPeriod, int idlePollPeriod)
+                                    int movingPollPeriod, int idlePollPeriod, int unusedMask)
 {
-  new MCS2Controller(portName, MCS2PortName, numAxes, movingPollPeriod/1000., idlePollPeriod/1000.);
+  new MCS2Controller(portName, MCS2PortName, numAxes, movingPollPeriod/1000., idlePollPeriod/1000., unusedMask);
   return(asynSuccess);
 }
 
@@ -207,6 +211,9 @@ asynStatus MCS2Controller::writeInt32(asynUser *pasynUser, epicsInt32 value)
   MCS2Axis *pAxis = getAxis(pasynUser);
   static const char *functionName = "writeInt32";
 
+  /* Check if axis exists */
+  if(!pAxis) return asynError;
+
   /* Set the parameter and readback in the parameter library.  This may be overwritten when we read back the
    * status at the end, but that's OK */
   status = setIntegerParam(pAxis->axisNo_, function, value);
@@ -260,6 +267,7 @@ MCS2Axis::MCS2Axis(MCS2Controller *pC, int axisNo)
 
   asynPrint(pC->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Axis::MCS2Axis: Creating axis %u\n", axisNo);
   channel_ = axisNo;
+
   // Set hold time
   sprintf(pC_->outString_, ":CHAN%d:HOLD %d", channel_, HOLD_FOREVER);
   status = pC_->writeController();
@@ -437,6 +445,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   int chanState;
   int closedLoop;
   int sensorPresent;
+  int isCalibrated;
   int isReferenced;
   int endStopReached;
   int followLimitReached;
@@ -446,6 +455,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   double encoderPosition;
   double theoryPosition;
   int driveOn;
+  int mclf;
   asynStatus comStatus = asynSuccess;
 
   // Read the channel state
@@ -457,6 +467,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   done               = (chanState & ACTIVELY_MOVING)?0:1;
   closedLoop         = (chanState & CLOSED_LOOP_ACTIVE)?1:0;
   sensorPresent      = (chanState & SENSOR_PRESENT)?1:0;
+  isCalibrated       = (chanState & IS_CALIBRATED)?1:0;
   isReferenced       = (chanState & IS_REFERENCED)?1:0;
   endStopReached     = (chanState & END_STOP_REACHED)?1:0;
   followLimitReached = (chanState & FOLLOWING_LIMIT_REACHED)?1:0;
@@ -506,6 +517,18 @@ asynStatus MCS2Axis::poll(bool *moving)
   positionerType = atoi(pC_->inString_);
   setIntegerParam(pC_->ptyprb_, positionerType);
 
+  // Read CAL/REF status and MCLF when idle
+  if(done)
+  {
+        setIntegerParam(pC_->cal_, isCalibrated);
+        setIntegerParam(pC_->ref_, isReferenced);
+        sprintf(pC_->outString_, ":CHAN%d:MCLF?", channel_);
+        comStatus = pC_->writeReadController();
+        if (comStatus) goto skip;
+        mclf = atoi(pC_->inString_);
+        setIntegerParam(pC_->mclf_, mclf);
+  }
+
   skip:
   setIntegerParam(pC_->motorStatusProblem_, comStatus ? 1:0);
   callParamCallbacks();
@@ -518,15 +541,17 @@ static const iocshArg MCS2CreateControllerArg1 = {"MCS2 port name", iocshArgStri
 static const iocshArg MCS2CreateControllerArg2 = {"Number of axes", iocshArgInt};
 static const iocshArg MCS2CreateControllerArg3 = {"Moving poll period (ms)", iocshArgInt};
 static const iocshArg MCS2CreateControllerArg4 = {"Idle poll period (ms)", iocshArgInt};
+static const iocshArg MCS2CreateControllerArg5 = {"Unused bit mask", iocshArgInt};
 static const iocshArg * const MCS2CreateControllerArgs[] = {&MCS2CreateControllerArg0,
                                                             &MCS2CreateControllerArg1,
                                                             &MCS2CreateControllerArg2,
                                                             &MCS2CreateControllerArg3,
-                                                            &MCS2CreateControllerArg4};
-static const iocshFuncDef MCS2CreateControllerDef = {"MCS2CreateController", 5, MCS2CreateControllerArgs};
+                                                            &MCS2CreateControllerArg4,
+                                                            &MCS2CreateControllerArg5};
+static const iocshFuncDef MCS2CreateControllerDef = {"MCS2CreateController", 6, MCS2CreateControllerArgs};
 static void MCS2CreateContollerCallFunc(const iocshArgBuf *args)
 {
-  MCS2CreateController(args[0].sval, args[1].sval, args[2].ival, args[3].ival, args[4].ival);
+  MCS2CreateController(args[0].sval, args[1].sval, args[2].ival, args[3].ival, args[4].ival, args[5].ival);
 }
 
 static void MCS2MotorRegister(void)

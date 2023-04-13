@@ -5,8 +5,12 @@ drvAsynIPPortConfigure("MCS2_ETH", "10.0.1.200:55551", 0, 0, 0)
 
 dbLoadRecords("$(ASYN)/db/asynRecord.db", "P=IOC:, R=asyn1, PORT=MCS2_ETH, ADDR=0, OMAX=256, IMAX=256")
 
-# PORT, MCS_PORT, number of axes, active poll period (ms), idle poll period (ms)
-MCS2CreateController("MCS2", "MCS2_ETH", 1, 100, 100)
+# PORT, MCS_PORT, number of axes, active poll period (ms), idle poll period (ms), unusedMask
+MCS2CreateController("MCS2", "MCS2_ETH", 3, 100, 100, 0)
+# PORT, axis number
+MCS2CreateAxis("MCS2",0)
+MCS2CreateAxis("MCS2",1)
+MCS2CreateAxis("MCS2",2)
 
 #asynSetTraceMask("MCS2", 0, 255)
 asynSetTraceIOMask("MCS2", -1, 0x8)
