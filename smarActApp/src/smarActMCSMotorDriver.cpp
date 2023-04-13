@@ -257,11 +257,20 @@ size_t     got;
 /* Obtain value of the 'motorClosedLoop_' parameter (which
  * maps to the record's CNEN field)
  */
-int
-SmarActMCSAxis::getClosedLoop()
+int SmarActMCSAxis::getClosedLoop()
 {
 int val;
 	c_p_->getIntegerParam(axisNo_, c_p_->motorClosedLoop_, &val);
+	return val;
+}
+/*
+ * return 1 if encoder exists. 
+ * return 0 if encoder does not exist
+ */
+int SmarActMCSAxis::getEncoder()
+{
+	int val;
+	c_p_->getIntegerParam(axisNo_, c_p_->motorStatusHasEncoder_, &val);
 	return val;
 }
 
@@ -272,7 +281,7 @@ SmarActMCSAxis::SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int 
 	int angle;
 	int rev;
 	channel_ = channel;
-
+	stepCount_ = 0; // initialize open loop step count to 0. Does it need to be restored from auto save?
 	asynPrint(c_p_->pasynUserSelf, ASYN_TRACEIO_DRIVER, "SmarActMCSAxis::SmarActMCSAxis -- creating axis %u\n", axis);
 	if (c_p_->disableSpeed_)
 		comStatus_ = asynSuccess;
@@ -298,9 +307,9 @@ SmarActMCSAxis::SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int 
 	}
 
 	// Attempt to check linear position, if we receive
-	// an error, we're a rotary motor. 
+	// an error, we're a rotary motor.
 	isRot_ = 0;
-	
+
 	if ( (comStatus_ = getVal("GP", &val)) ) {
 		isRot_ = 1;
 	}
@@ -336,7 +345,7 @@ bail:
  *
  * parm_cmd: MCS command (w/o ':' char) to read parameter
  * val_p:    where to store the value returned by the MCS
- * 
+ *
  * RETURNS:  asynError if an error occurred, asynSuccess otherwise.
  */
 asynStatus
@@ -359,7 +368,7 @@ int        ax;
  *
  * parm_cmd: MCS command (w/o ':' char) to read parameter
  * val_p:    where to store the value returned by the MCS
- * 
+ *
  * RETURNS:  asynError if an error occurred, asynSuccess otherwise.
  */
 asynStatus
@@ -378,38 +387,43 @@ int        ax;
 }
 
 asynStatus
-SmarActMCSAxis::poll(bool *moving_p)
+SmarActMCSAxis::poll(bool* moving_p)
 {
-int                    val;
-int                    angle;
-int                    rev;
-enum SmarActMCSStatus status;
+	int                    val;
+	int                    angle;
+	int                    rev;
+	enum SmarActMCSStatus status;
 
-	if ( isRot_ ) {
-		if ( (comStatus_ = getAngle(&angle, &rev)) )
-			goto bail;
-		// Convert angle and revs to total angle
-		val = rev * UDEG_PER_REV + angle;
+	if (getEncoder())
+	{
+		if (isRot_) {
+			if ((comStatus_ = getAngle(&angle, &rev)))
+				goto bail;
+			// Convert angle and revs to total angle
+			val = rev * UDEG_PER_REV + angle;
+		}
+		else {
+			if ((comStatus_ = getVal("GP", &val)))
+				goto bail;
+		}
 	}
 	else {
-		if ( (comStatus_ = getVal("GP", &val)) )
-			goto bail;
-        }
-
+		val = stepCount_;
+	}
 	setDoubleParam(c_p_->motorEncoderPosition_, (double)val);
 	setDoubleParam(c_p_->motorPosition_, (double)val);
 #ifdef DEBUG
 	printf("POLL (position %d)", val);
 #endif
 
-	if ( (comStatus_ = getVal("GS", &val)) )
+	if ((comStatus_ = getVal("GS", &val)))
 		goto bail;
 
 	status = (enum SmarActMCSStatus)val;
 
-	switch ( status ) {
-		default:
-			*moving_p = false;
+	switch (status) {
+	default:
+		*moving_p = false;
 		break;
 
 		/* If we use 'infinite' holding (until the next 'move' command)
@@ -417,38 +431,38 @@ enum SmarActMCSStatus status;
 		 * if we use a 'finite' holding time then we probably should consider
 		 * the 'move' command incomplete until the holding time expires.
 		 */
-		case Holding:
-			*moving_p = HOLD_FOREVER == holdTime_ ? false : true;
+	case Holding:
+		*moving_p = HOLD_FOREVER == holdTime_ ? false : true;
 		break;
 
-		case Stepping:
-		case Scanning:
-		case Targeting:
-		case MoveDelay:
-		case Calibrating:
-		case FindRefMark:
-			*moving_p = true;
+	case Stepping:
+	case Scanning:
+	case Targeting:
+	case MoveDelay:
+	case Calibrating:
+	case FindRefMark:
+		*moving_p = true;
 		break;
 	}
 
-	setIntegerParam(c_p_->motorStatusDone_, ! *moving_p );
+	setIntegerParam(c_p_->motorStatusDone_, !*moving_p);
 
 
 	/* Check if the sensor 'knows' absolute position and
 	 * update the MSTA 'HOMED' bit.
 	 */
-	if ( (comStatus_ = getVal("GPPK", &val)) ) 
+	if ((comStatus_ = getVal("GPPK", &val)))
 		goto bail;
 
-	setIntegerParam(c_p_->motorStatusHomed_, val ? 1 : 0 );
+	setIntegerParam(c_p_->motorStatusHomed_, val ? 1 : 0);
 
 #ifdef DEBUG
 	printf(" status %u", status);
 #endif
 
 bail:
-	setIntegerParam(c_p_->motorStatusProblem_,    comStatus_ ? 1 : 0 );
-	setIntegerParam(c_p_->motorStatusCommsError_, comStatus_ ? 1 : 0 );
+	setIntegerParam(c_p_->motorStatusProblem_, comStatus_ ? 1 : 0);
+	setIntegerParam(c_p_->motorStatusCommsError_, comStatus_ ? 1 : 0);
 #ifdef DEBUG
 	printf("\n");
 #endif
@@ -507,48 +521,83 @@ asynStatus status;
 	return asynSuccess;
 }
 
-asynStatus  
+asynStatus
 SmarActMCSAxis::move(double position, int relative, double min_vel, double max_vel, double accel)
 {
-const char *fmt_rot = relative ? ":MAR%u,%ld,%d,%d" : ":MAA%u,%ld,%d,%d";
-const char *fmt_lin = relative ? ":MPR%u,%ld,%d" : ":MPA%u,%ld,%d";
-const char *fmt;
-double rpos;
-long angle;
-int rev;
+	const char* fmt_rot = relative ? ":MAR%u,%ld,%d,%d" : ":MAA%u,%ld,%d,%d";
+	const char* fmt_lin = relative ? ":MPR%u,%ld,%d" : ":MPA%u,%ld,%d";
+	const char* fmt_step = ":MST%u,%ld,%d,%d"; // open loop move using step count, amplitude (0-4095; 0V-100V), frequency (1-18500 Hz)
+	const char* fmt;
+	const int MAX_FREQ = 18500; // max allowed frequency
+	const int MAX_VOLTAGE = 100; // max voltage 100V
+	const double STEP_PER_VOLT = 4095.0/MAX_VOLTAGE; // max voltage index, 4095=100V
+	double rpos;
+	long angle;
+	int rev;
+#ifdef DEBUG
+		printf("Move to %f (speed %f - %f); accel %f\n", position, min_vel, max_vel, accel);
+#endif
+	if (getEncoder())
+	{
+		if (isRot_) {
+			fmt = fmt_rot;
+		}
+		else {
+			fmt = fmt_lin;
+		}
 
-	if ( isRot_ ) {
-		fmt = fmt_rot;
-	} else {
-		fmt = fmt_lin;
+
+		if ((comStatus_ = setSpeed(max_vel)))
+			goto bail;
+
+		/* cache 'closed-loop' setting until next move */
+		holdTime_ = getClosedLoop() ? HOLD_FOREVER : 0;
+
+		rpos = rint(position);
+
+		if (isRot_) {
+			angle = (long)rpos % UDEG_PER_REV;
+			rev = (int)(rpos / UDEG_PER_REV);
+			if (angle < 0) {
+				angle += UDEG_PER_REV;
+				rev -= 1;
+			}
+			comStatus_ = moveCmd(fmt, channel_, angle, rev, holdTime_);
+		}
+		else {
+			comStatus_ = moveCmd(fmt, channel_, (long)rpos, holdTime_);
+		}
 	}
+	else
+	{
+		fmt = fmt_step;
+
+		rpos = rint(position);
+		if (relative == 0 ) // absolute move
+		{
+			int diff = rpos - stepCount_;
+			stepCount_ = rpos;
+			rpos = diff; // subtract current step count to produce steps for this move
+		}
+		else
+		{
+			// relative move. the position value is the number of steps intended
+			stepCount_ += rpos;
+		}
+		// overload min_vel as amplitude
+		double piezoVoltage = (min_vel > MAX_VOLTAGE) ? (MAX_VOLTAGE) : ((min_vel < 1) ? (1) : (min_vel));
+		int amplitude = piezoVoltage * STEP_PER_VOLT;
+		// overload max_vel as frequency
+		int frequency = (max_vel> MAX_FREQ) ? (MAX_FREQ) : ((max_vel< 1) ? (1) : (max_vel));
 
 #ifdef DEBUG
-	printf("Move to %f (speed %f - %f)\n", position, min_vel, max_vel);
+		printf("Open loop Step to %ld (piezo voltage %d ,frequency %d)\n", (long)rpos, amplitude, frequency);
 #endif
-
-	if ( (comStatus_ = setSpeed(max_vel)) )
-		goto bail;
-
-	/* cache 'closed-loop' setting until next move */
-	holdTime_  = getClosedLoop() ? HOLD_FOREVER : 0;
-
-	rpos = rint(position);
-
-	if ( isRot_ ) {
-		angle = (long)rpos % UDEG_PER_REV;
-		rev = (int)(rpos / UDEG_PER_REV);
-		if (angle < 0) {
-			angle += UDEG_PER_REV;
-			rev -= 1;
-		}
-		comStatus_ = moveCmd(fmt, channel_, angle, rev, holdTime_);
-	} else {
-		comStatus_ = moveCmd(fmt, channel_, (long)rpos, holdTime_);
+		// overload accel as frequency
+		comStatus_ = moveCmd(fmt, channel_, (long)rpos, amplitude, frequency);
 	}
-
 bail:
-	if ( comStatus_ ) {
+	if (comStatus_) {
 		setIntegerParam(c_p_->motorStatusProblem_, 1);
 		setIntegerParam(c_p_->motorStatusCommsError_, 1);
 		callParamCallbacks();
@@ -563,14 +612,22 @@ SmarActMCSAxis::home(double min_vel, double max_vel, double accel, int forwards)
 #ifdef DEBUG
 	printf("Home %u\n", forwards);
 #endif
+	if (getEncoder())
+	{
+	
+		if ( (comStatus_ = setSpeed(max_vel)) )
+			goto bail;
 
-	if ( (comStatus_ = setSpeed(max_vel)) )
-		goto bail;
+		/* cache 'closed-loop' setting until next move */
+		holdTime_  = getClosedLoop() ? HOLD_FOREVER : 0;
 
-	/* cache 'closed-loop' setting until next move */
-	holdTime_  = getClosedLoop() ? HOLD_FOREVER : 0;
-
-	comStatus_ = moveCmd(":FRM%u,%u,%d,%d", channel_, forwards ? 0 : 1, holdTime_, isRot_ ? 1 : 0);
+		comStatus_ = moveCmd(":FRM%u,%u,%d,%d", channel_, forwards ? 0 : 1, holdTime_, isRot_ ? 1 : 0);
+	}
+	else
+	{
+		// no encoder, can't home. So just set current step count to 0
+		stepCount_ = 0;
+	}
 
 bail:
 	if ( comStatus_ ) {
@@ -600,22 +657,28 @@ SmarActMCSAxis::stop(double acceleration)
 asynStatus
 SmarActMCSAxis::setPosition(double position)
 {
-double rpos;
+	double rpos;
 
 	rpos = rint(position);
-
-	if ( isRot_ ) {
-		// For rotation stages the revolution will always be set to zero
-		// Only set position if it is between zero an 360 degrees
-		if (rpos >= 0.0 && rpos < (double)UDEG_PER_REV) {
-			comStatus_ = moveCmd(":SP%u,%d", channel_, (long)rpos);
-		} else {
-			comStatus_ = asynError;
+	if (getEncoder()) {
+		if (isRot_) {
+			// For rotation stages the revolution will always be set to zero
+			// Only set position if it is between zero an 360 degrees
+			if (rpos >= 0.0 && rpos < (double)UDEG_PER_REV) {
+				comStatus_ = moveCmd(":SP%u,%d", channel_, (long)rpos);
+			}
+			else {
+				comStatus_ = asynError;
+			}
 		}
-	} else {
-		comStatus_ = moveCmd(":SP%u,%d", channel_, (long)rpos);
+		else {
+			comStatus_ = moveCmd(":SP%u,%d", channel_, (long)rpos);
+		}
 	}
-
+	else
+	{
+		stepCount_ = rpos;
+	}
 	if ( comStatus_ ) {
 		setIntegerParam(c_p_->motorStatusProblem_,    1);
 		setIntegerParam(c_p_->motorStatusCommsError_, 1);

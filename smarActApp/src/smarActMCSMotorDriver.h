@@ -55,12 +55,12 @@ public:
 	virtual asynStatus getAngle(int *val_p, int *rev_p);
 	virtual asynStatus moveCmd(const char *cmd, ...);
 	virtual int        getClosedLoop();
+	int        getEncoder();
 
 	int         getVel() const { return vel_; }
-
+	
 protected:
 	asynStatus  setSpeed(double velocity);
-
 private:
 	SmarActMCSController   *c_p_;  // pointer to asynMotorController for this axis
 	asynStatus             comStatus_;
@@ -69,6 +69,7 @@ private:
 	int                    channel_;
 	int                    sensorType_;
 	int                    isRot_;
+	int					   stepCount_; // open loop current step count
 
 friend class SmarActMCSController;
 };
