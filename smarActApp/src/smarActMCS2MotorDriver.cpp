@@ -445,6 +445,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   int chanState;
   int closedLoop;
   int sensorPresent;
+  int isCalibrated;
   int isReferenced;
   int endStopReached;
   int followLimitReached;
@@ -466,6 +467,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   done               = (chanState & ACTIVELY_MOVING)?0:1;
   closedLoop         = (chanState & CLOSED_LOOP_ACTIVE)?1:0;
   sensorPresent      = (chanState & SENSOR_PRESENT)?1:0;
+  isCalibrated       = (chanState & IS_CALIBRATED)?1:0;
   isReferenced       = (chanState & IS_REFERENCED)?1:0;
   endStopReached     = (chanState & END_STOP_REACHED)?1:0;
   followLimitReached = (chanState & FOLLOWING_LIMIT_REACHED)?1:0;
