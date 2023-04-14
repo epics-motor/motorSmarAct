@@ -19,11 +19,11 @@ DBD += smarAct.dbd
 smarAct_DBD += base.dbd
 
 # Include dbd files from all support applications:
-#ifdef ASYN
+ifdef ASYN
 smarAct_DBD += asyn.dbd
 smarAct_DBD += drvAsynSerialPort.dbd
 smarAct_DBD += drvAsynIPPort.dbd
-#endif
+endif
 smarAct_DBD += motorSupport.dbd
 smarAct_DBD += devSmarActMCSMotor.dbd
 smarAct_DBD += devSmarActMCS2Motor.dbd
@@ -32,12 +32,20 @@ smarAct_DBD += devSmarActSCUMotor.dbd
 # Add all the support libraries needed by this IOC
 smarAct_LIBS += smarActMotor
 smarAct_LIBS += motor
-#ifdef ASYN
+ifdef ASYN
 smarAct_LIBS += asyn
-#endif
-#ifdef SNCSEQ
+endif
+ifdef SNCSEQ
 smarAct_LIBS += seq pv
-#endif
+endif
+ifdef DEVIOCSTATS
+smarAct_DBD += devIocStats.dbd iocAdmin.dbd
+smarAct_LIBS += devIocStats
+endif
+ifdef AUTOSAVE
+smarAct_DBD += asSupport.dbd as.dbd
+smarAct_LIBS += autosave
+endif
 
 # smarAct_registerRecordDeviceDriver.cpp derives from smarAct.dbd
 smarAct_SRCS += smarAct_registerRecordDeviceDriver.cpp

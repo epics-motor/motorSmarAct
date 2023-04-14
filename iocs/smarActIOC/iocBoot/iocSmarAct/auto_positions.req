@@ -1,0 +1,3 @@
+file "asyn_motor_positions.req", P=$(P), M=m1
+file "asyn_motor_positions.req", P=$(P), M=m2
+file "asyn_motor_positions.req", P=$(P), M=m3

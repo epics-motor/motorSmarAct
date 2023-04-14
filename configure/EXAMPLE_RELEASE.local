@@ -1,4 +1,14 @@
+# define all modules if building outside motor
+SUPPORT=
+ASYN=$(SUPPORT)/asyn
+BUSY=$(SUPPORT)/busy
+IPAC=$(SUPPORT)/ipac
+#optional DEVIOCSTATS, AUTOSAVE
+#DEVIOCSTATS=$(SUPPORT)/iocStats
+AUTOSAVE=$(SUPPORT)/autosave
+
 MOTOR=
 -include $(MOTOR)/modules/RELEASE.$(EPICS_HOST_ARCH).local
 # path to motorSmarAct is needed to build the IOC inside motorSmarAct, but outside motor
 MOTOR_SMARACT=
+EPICS_BASE=
