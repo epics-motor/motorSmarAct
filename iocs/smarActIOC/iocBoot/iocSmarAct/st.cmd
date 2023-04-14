@@ -32,7 +32,9 @@ iocInit
 ## motorUtil (allstop & alldone)
 motorUtilInit("smarAct:")
 
+# save motor positions every five seconds
+create_monitor_set("auto_positions.req",5,"P=$(P)")
 # save settings every thirty seconds
-create_monitor_set("auto_settings.req",30,"P=$(PREFIX)")
+create_monitor_set("auto_settings.req",30,"P=$(P)")
 
 # Boot complete
