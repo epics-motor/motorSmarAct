@@ -1,5 +1,29 @@
 # motorSmarAct Releases
 
+## __R2-0 (2023-04-14)__
+R2-0 is a release based on the master branch.
+
+### Changes since R1-2-1
+
+#### New features
+* Pull request [#7](https://github.com/epics-motor/motorSmarAct/pull/7): [Lee Yang](https://github.com/LeeYangLBLBCS) modified the MCS driver to allow the use of motors without encoders
+* Pull request [#8](https://github.com/epics-motor/motorSmarAct/pull/8): [Huijuan](https://github.com/Huijuan-Xu) Added Cal/Ref/MCL frequency readback
+* Pull request [#12](https://github.com/epics-motor/motorSmarAct/pull/12): [Žan Matic Pratnemer](https://github.com/ZanMaticPratnemer) added positioner type selection and readback to the MCS2 driver
+* Pull request [#17](https://github.com/epics-motor/motorSmarAct/pull/17): [Oksana Ivashkevych](https://github.com/oksanagit) Added autosave and iocStats to the example IOC as configurable options
+* Pull request [#19](https://github.com/epics-motor/motorSmarAct/pull/19): [Niko Kivel](https://github.com/kivel) added a positioner status word to the MCS2 driver
+
+#### Modifications to existing features
+* Pull request [#8](https://github.com/epics-motor/motorSmarAct/pull/8): [Huijuan](https://github.com/Huijuan-Xu) added an unusedMask argument to MCS2CreateController to allow gaps between used channels
+* Pull request [#13](https://github.com/epics-motor/motorSmarAct/pull/13): [Diego Omitto](https://github.com/domitto) added a disableSpeed argument to smarActMCSCreateController (not all MCS controllers support getting/setting speeds)
+
+#### Bug fixes
+* Pull request [#15](https://github.com/epics-motor/motorSmarAct/pull/15): [David Vine](https://github.com/djvine) Updated the MCS2 driver to handle "No sensor present" errors (error code 259)
+* Pull request [#18](https://github.com/epics-motor/motorSmarAct/pull/18): [Scott Stubbs](https://github.com/shadowguy) Updated the MCS2 driver to handle "Invalid channel index" errors (error code 34)
+
+#### Continuous integration
+* Added ci-scripts (v3.0.1)
+* Configured to use Github Actions for CI
+
 ## __R1-2-1 (2020-05-14)__
 R1-2-1 is a release based on the master branch.  
 
