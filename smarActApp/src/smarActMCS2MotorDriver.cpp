@@ -372,45 +372,27 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
     sprintf(pC_->outString_, ":MOVE%d %f", channel_, position * PULSES_PER_STEP);
     status = pC_->writeController();
   } else {
-    printf("=================\n");
 
-    printf("current step position      = %d\n", stepTarget_);
-    printf("new target position (r=%d) = %f\n", relative, position);
-    int dtg = position - stepTarget_;
-    printf("distance to go             = %d\n", dtg);
-    stepTarget_ = (int)position;
-    printf("step tgt= %d\n", stepTarget_);
+    PositionType dtg = position - stepTarget_;  // distance to go
+    stepTarget_ = (PositionType)position;       // store position in global scope
 
-    printf("---------\nMOVE\n");
-    // Set mode
+    // Set mode; 4 == STEP
     sprintf(pC_->outString_, ":CHAN%d:MMOD 4", channel_);
-    printf(pC_->outString_);
     status = pC_->writeController();
-    /* printf("%s\n", pC_->outString_); check_for_error(); */
 
-    // Set amplitude
-    sprintf(pC_->outString_, ":CHAN%d:STEP:AMPL 32767", channel_);
-    printf(pC_->outString_);
+    // Set frequency; range 1..20000 Hz
+    unsigned short frequency = (unsigned short)maxVelocity;
+    if(frequency >= MAX_FREQUENCY) {
+      frequency = MAX_FREQUENCY;
+    }
+    sprintf(pC_->outString_, ":CHAN%d:STEP:FREQ %u", channel_, frequency);
+    printf("----> %s\n", pC_->outString_);
     status = pC_->writeController();
-    /* printf("%s\n", pC_->outString_); check_for_error(); */
-
-    // Set frequency
-    sprintf(pC_->outString_, ":CHAN%d:STEP:FREQ %d", channel_, (long)maxVelocity);
-    printf(pC_->outString_);
-    status = pC_->writeController();
-    /* printf("%s\n", pC_->outString_); check_for_error(); */
 
     // Do move
-    sprintf(pC_->outString_, ":MOVE%d %f", channel_, (double)dtg);
-    printf(pC_->outString_);
+    sprintf(pC_->outString_, ":MOVE%d %lld", channel_, dtg);
     status = pC_->writeController();
-    printf("%s\n", pC_->outString_);
-    printf("----------\nset position to %f\n", stepTarget_);
     setDoubleParam(pC_->motorPosition_, (double)stepTarget_);
-    printf("THE END = %f\n", pC_->motorPosition_);
-    printf("---------------\n");
-
-//    setDoubleParam(pC_->motorEncoderPosition_, position);
   }
 
   return status;
