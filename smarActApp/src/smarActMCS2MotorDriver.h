@@ -90,9 +90,10 @@ private:
   MCS2Controller *pC_;      /**< Pointer to the asynMotorController to which this axis belongs.
                                 *   Abbreviated because it is used very frequently */
   int channel_;
+  int sensorPresent_;
+  int stepTarget_ = 0;
   asynStatus comStatus_;
 
-  
 friend class MCS2Controller;
 };
 
