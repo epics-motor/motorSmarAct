@@ -1,5 +1,19 @@
 # motorSmarAct Releases
 
+## __R2-1 (2023-09-06)__
+R2-1 is a release based on the master branch.
+
+### Changes since R2-0
+
+#### New features
+* Pull request [#21](https://github.com/epics-motor/motorSmarAct/pull/21): [Niko Kivel](https://github.com/kivel) and [Russ Berg](https://github.com/RussBerg) Added support for sensorless positioners
+
+#### Modifications to existing features
+* None
+
+#### Bug fixes
+* None
+
 ## __R2-0 (2023-04-14)__
 R2-0 is a release based on the master branch.
 
