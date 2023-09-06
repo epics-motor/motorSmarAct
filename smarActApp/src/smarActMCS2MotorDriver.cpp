@@ -355,20 +355,41 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
   /* MCS2 move mode is:
    *	- absolute=0
    *	- relative=1
+   *	- step=4
    */
-
-  // Set hold time
-  sprintf(pC_->outString_, ":CHAN%d:MMOD %d", channel_, relative>0?1:0);
-  status = pC_->writeController();
-  // Set acceleration
-  sprintf(pC_->outString_, ":CHAN%d:ACC %f", channel_, acceleration*PULSES_PER_STEP);
-  status = pC_->writeController();
-  // Set velocity
-  sprintf(pC_->outString_, ":CHAN%d:VEL %f", channel_, maxVelocity*PULSES_PER_STEP);
-  status = pC_->writeController();
-  // Do move
-  sprintf(pC_->outString_, ":MOVE%d %f", channel_, position*PULSES_PER_STEP);
-  status = pC_->writeController();
+  if(sensorPresent_) {
+    // closed loop move
+    // Set hold time
+    sprintf(pC_->outString_, ":CHAN%d:MMOD %d", channel_, relative > 0 ? 1 : 0);
+    status = pC_->writeController();
+    // Set acceleration
+    sprintf(pC_->outString_, ":CHAN%d:ACC %f", channel_, acceleration * PULSES_PER_STEP);
+    status = pC_->writeController();
+    // Set velocity
+    sprintf(pC_->outString_, ":CHAN%d:VEL %f", channel_, maxVelocity * PULSES_PER_STEP);
+    status = pC_->writeController();
+    // Do move
+    sprintf(pC_->outString_, ":MOVE%d %f", channel_, position * PULSES_PER_STEP);
+    status = pC_->writeController();
+  } else {
+    // open loop move
+    PositionType dtg = position - stepTarget_;  // distance to go
+    stepTarget_ = (PositionType)position;       // store position in global scope
+    // Set mode; 4 == STEP
+    sprintf(pC_->outString_, ":CHAN%d:MMOD 4", channel_);
+    status = pC_->writeController();
+    // Set frequency; range 1..20000 Hz
+    unsigned short frequency = (unsigned short)maxVelocity;
+    if(frequency >= MAX_FREQUENCY) {
+      frequency = MAX_FREQUENCY;
+    }
+    sprintf(pC_->outString_, ":CHAN%d:STEP:FREQ %u", channel_, frequency);
+    status = pC_->writeController();
+    // Do move
+    sprintf(pC_->outString_, ":MOVE%d %lld", channel_, dtg);
+    status = pC_->writeController();
+    setDoubleParam(pC_->motorPosition_, (double)stepTarget_);
+  }
 
   return status;
 }
@@ -486,21 +507,24 @@ asynStatus MCS2Axis::poll(bool *moving)
   setIntegerParam(pC_->motorStatusProblem_, movementFailed);
   setIntegerParam(pC_->motorStatusAtHome_, refMark);
 
-  // Read the current encoder position
-  sprintf(pC_->outString_, ":CHAN%d:POS?", channel_);
-  comStatus = pC_->writeReadController();
-  if (comStatus) goto skip;
-  encoderPosition = (double)strtod(pC_->inString_, NULL);
-  encoderPosition /= PULSES_PER_STEP;
-  setDoubleParam(pC_->motorEncoderPosition_, encoderPosition);
+  // Read the current encoder position, if the positioner has a sensor
+  sensorPresent_ = sensorPresent;
+  if(sensorPresent){
+    sprintf(pC_->outString_, ":CHAN%d:POS?", channel_);
+    comStatus = pC_->writeReadController();
+    if (comStatus) goto skip;
+    encoderPosition = (double)strtod(pC_->inString_, NULL);
+    encoderPosition /= PULSES_PER_STEP;
+    setDoubleParam(pC_->motorEncoderPosition_, encoderPosition);
 
-  // Read the current theoretical position
-  sprintf(pC_->outString_, ":CHAN%d:POS:TARG?", channel_);
-  comStatus = pC_->writeReadController();
-  if (comStatus) goto skip;
-  theoryPosition = (double)strtod(pC_->inString_, NULL);
-  theoryPosition /= PULSES_PER_STEP;
-  setDoubleParam(pC_->motorPosition_, theoryPosition);
+    // Read the current theoretical position
+    sprintf(pC_->outString_, ":CHAN%d:POS:TARG?", channel_);
+    comStatus = pC_->writeReadController();
+    if (comStatus) goto skip;
+    theoryPosition = (double)strtod(pC_->inString_, NULL);
+    theoryPosition /= PULSES_PER_STEP;
+    setDoubleParam(pC_->motorPosition_, theoryPosition);
+  }
 
   // Read the drive power on status
   sprintf(pC_->outString_, ":CHAN%d:AMPL?", channel_);
