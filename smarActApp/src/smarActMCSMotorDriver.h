@@ -15,84 +15,88 @@
 #include <exception>
 
 enum SmarActMCSExceptionType {
-	MCSUnknownError,
-	MCSConnectionError,
-	MCSCommunicationError,
+  MCSUnknownError,
+  MCSConnectionError,
+  MCSCommunicationError,
 };
 
-class SmarActMCSException : public std::exception {
+class SmarActMCSException : public std::exception
+{
 public:
-	SmarActMCSException(SmarActMCSExceptionType t, const char *fmt, ...);
-	SmarActMCSException(SmarActMCSExceptionType t)
-		: t_(t)
-		{ str_[0] = 0; }
-	SmarActMCSException()
-		: t_(MCSUnknownError)
-		{ str_[0] = 0; }
-	SmarActMCSException(SmarActMCSExceptionType t, const char *fmt, va_list ap);
-	SmarActMCSExceptionType getType()
-		const { return t_; }
-	virtual const char *what()
-		const throw() {return str_ ;}
-protected:
-	char str_[100];	
-	SmarActMCSExceptionType t_;
-};
+  SmarActMCSException(SmarActMCSExceptionType t, const char *fmt, ...);
+  SmarActMCSException(SmarActMCSExceptionType t)
+    : t_(t)
+  { str_[0] = 0; }
+  SmarActMCSException()
+    : t_(MCSUnknownError)
+  { str_[0] = 0; }
+  SmarActMCSException(SmarActMCSExceptionType t, const char *fmt, va_list ap);
+  SmarActMCSExceptionType getType()
+    const { return t_; }
+  virtual const char *what()
+    const throw() { return str_; }
 
+protected:
+  char str_[100];
+  SmarActMCSExceptionType t_;
+};
 
 class SmarActMCSAxis : public asynMotorAxis
 {
 public:
-	SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int channel);
-	asynStatus  poll(bool *moving_p);
-	asynStatus  move(double position, int relative, double min_vel, double max_vel, double accel);
-	asynStatus  home(double min_vel, double max_vel, double accel, int forwards);
-	asynStatus  stop(double acceleration);
-	asynStatus  setPosition(double position);
-	asynStatus  moveVelocity(double min_vel, double max_vel, double accel);
+  SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int channel);
+  asynStatus poll(bool *moving_p);
+  asynStatus move(double position, int relative, double min_vel, double max_vel, double accel);
+  asynStatus home(double min_vel, double max_vel, double accel, int forwards);
+  asynStatus stop(double acceleration);
+  asynStatus setPosition(double position);
+  asynStatus moveVelocity(double min_vel, double max_vel, double accel);
 
-	virtual asynStatus getVal(const char *parm, int *val_p);
-	virtual asynStatus getAngle(int *val_p, int *rev_p);
-	virtual asynStatus moveCmd(const char *cmd, ...);
-	virtual int        getClosedLoop();
-	int        getEncoder();
+  virtual asynStatus getVal(const char *parm, int *val_p);
+  virtual asynStatus getAngle(int *val_p, int *rev_p);
+  virtual asynStatus moveCmd(const char *cmd, ...);
+  virtual int getClosedLoop();
+  int getEncoder();
 
-	int         getVel() const { return vel_; }
-	
+  int getVel() const { return vel_; }
+
 protected:
-	asynStatus  setSpeed(double velocity);
-private:
-	SmarActMCSController   *c_p_;  // pointer to asynMotorController for this axis
-	asynStatus             comStatus_;
-	int                    vel_;
-	unsigned               holdTime_;
-	int                    channel_;
-	int                    sensorType_;
-	int                    isRot_;
-	int					   stepCount_; // open loop current step count
+  asynStatus setSpeed(double velocity);
 
-friend class SmarActMCSController;
+private:
+  SmarActMCSController *c_p_; // pointer to asynMotorController for this axis
+  asynStatus comStatus_;
+  int vel_;
+  unsigned holdTime_;
+  int channel_;
+  int sensorType_;
+  int isRot_;
+  int stepCount_; // open loop current step count
+
+  friend class SmarActMCSController;
 };
 
 class SmarActMCSController : public asynMotorController
 {
 public:
-	SmarActMCSController(const char *portName, const char *IOPortName, int numAxes, double movingPollPeriod, double idlePollPeriod, int disableSpeed = 0);
-	virtual asynStatus sendCmd(size_t *got_p, char *rep, int len, double timeout, const char *fmt, va_list ap);
-	virtual asynStatus sendCmd(size_t *got_p, char *rep, int len, double timeout, const char *fmt, ...);
-	virtual asynStatus sendCmd(size_t *got_p, char *rep, int len, const char *fmt, ...);
-	virtual asynStatus sendCmd(char *rep, int len, const char *fmt, ...);
+  SmarActMCSController(const char *portName, const char *IOPortName, int numAxes, double movingPollPeriod, double idlePollPeriod, int disableSpeed = 0);
+  virtual asynStatus sendCmd(size_t *got_p, char *rep, int len, double timeout, const char *fmt, va_list ap);
+  virtual asynStatus sendCmd(size_t *got_p, char *rep, int len, double timeout, const char *fmt, ...);
+  virtual asynStatus sendCmd(size_t *got_p, char *rep, int len, const char *fmt, ...);
+  virtual asynStatus sendCmd(char *rep, int len, const char *fmt, ...);
 
-	static int parseReply(const char *reply, int *ax_p, int *val_p);
-	static int parseAngle(const char *reply, int *ax_p, int *val_p, int *rot_p);
+  static int parseReply(const char *reply, int *ax_p, int *val_p);
+  static int parseAngle(const char *reply, int *ax_p, int *val_p, int *rot_p);
+
+  /* These are the methods that we override from asynMotorDriver */
 
 protected:
-	SmarActMCSAxis **pAxes_;
+  SmarActMCSAxis **pAxes_;
 
 private:
-	asynUser *asynUserMot_p_;
-	int disableSpeed_;
-friend class SmarActMCSAxis;
+  asynUser *asynUserMot_p_;
+  int disableSpeed_;
+  friend class SmarActMCSAxis;
 };
 
 #endif // _cplusplus
