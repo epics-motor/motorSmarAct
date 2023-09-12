@@ -24,15 +24,18 @@
 #include <epicsExport.h>
 
 /* Static configuration parameters (compile-time constants) */
-#undef DEBUG
+#ifdef DEBUG
+  #define DBG_PRINTF(...) printf(__VA_ARGS__)
+#else
+  #define DBG_PRINTF(...)
+#endif
 
 #define CMD_LEN 50
 #define REP_LEN 50
 #define DEFLT_TIMEOUT 2.0
 
-#define HOLD_FOREVER 60000
-#define HOLD_NEVER       0
-#define FAR_AWAY     1000000000 /*nm*/
+#define FAR_AWAY_LIN 1000000000 /*nm*/
+#define FAR_AWAY_ROT 32767  /*revolutions*/
 #define UDEG_PER_REV 360000000
 
 #ifdef __MSC__
@@ -162,9 +165,8 @@ SmarActMCSController::SmarActMCSController(const char *portName, const char *IOP
                           0, // interrupt mask
                           ASYN_CANBLOCK | ASYN_MULTIDEVICE,
                           1,    // autoconnect
-                          0, 0) // default priority and stack size
-      ,
-      asynUserMot_p_(0)
+                          0, 0), // default priority and stack size
+       asynUserMot_p_(0)
 {
   asynStatus status;
   char junk[100];
@@ -174,6 +176,13 @@ SmarActMCSController::SmarActMCSController(const char *portName, const char *IOP
   disableSpeed_ = disableSpeed;
   if (disableSpeed_)
     epicsPrintf("SmarActMCSController(%s): WARNING - The speed set commands have been disabled for this controller\n", portName);
+
+  createParam(MCSPtypString, asynParamInt32, &this->ptyp_);
+  createParam(MCSPtypRbString, asynParamInt32, &this->ptyprb_);
+  createParam(MCSAutoZeroString, asynParamInt32, &this->autoZero_);
+  createParam(MCSHoldTimeString, asynParamInt32, &this->holdTime_);
+  createParam(MCSSclfString, asynParamInt32, &this->sclf_);
+  createParam(MCSCalString, asynParamInt32, &this->cal_);
 
   status = pasynOctetSyncIO->connect(IOPortName, 0, &asynUserMot_p_, NULL);
   if (status) {
@@ -218,8 +227,8 @@ SmarActMCSController::sendCmd(size_t *got_p, char *rep, int len, double timeout,
 
   status = pasynOctetSyncIO->writeRead(asynUserMot_p_, buf, strlen(buf), rep, len, timeout, &nwrite, got_p, &eomReason);
 
+  //DBG_PRINTF("SmarActMCSController::sendCmd: %s -> %d\n", buf,status);
   // asynPrint(c_p_->pasynUserSelf, ASYN_TRACEIO_DRIVER, "sendCmd()=%s", buf);
-
   return status;
 }
 
@@ -255,24 +264,84 @@ asynStatus SmarActMCSController::sendCmd(char *rep, int len, const char *fmt, ..
   return status;
 }
 
-/* Obtain value of the 'motorClosedLoop_' parameter (which
- * maps to the record's CNEN field)
- */
-int SmarActMCSAxis::getClosedLoop()
+/** Called when asyn clients call pasynInt32->write().
+ * Extracts the function and axis number from pasynUser.
+ * Sets the value in the parameter library.
+ * For all other functions it calls asynMotorController::writeInt32.
+ * Calls any registered callbacks for this pasynUser->reason and address.
+ * \param[in] pasynUser asynUser structure that encodes the reason and address.
+ * \param[in] value     Value to write. */
+asynStatus SmarActMCSController::writeInt32(asynUser *pasynUser, epicsInt32 value)
 {
-  int val;
-  c_p_->getIntegerParam(axisNo_, c_p_->motorClosedLoop_, &val);
-  return val;
+  int function = pasynUser->reason;
+  asynStatus status = asynSuccess;
+  char rep[REP_LEN];
+  int val, ax;
+  SmarActMCSAxis *pAxis = static_cast<SmarActMCSAxis *>(getAxis(pasynUser));
+
+  if (pAxis == NULL) {
+    asynPrint(pasynUser, ASYN_TRACE_ERROR,
+          "SmarActMCSController:writeInt32: error, function: %i. Invalid axis number.\n",
+          function);
+    return asynError;
+  }
+
+  /* Set the parameter and readback in the parameter library.  This may be overwritten when we read back the
+   * status at the end, but that's OK */
+  status = setIntegerParam(pAxis->axisNo_, function, value);
+
+  if (function == ptyp_) {
+    // set positioner type
+    status = sendCmd(rep, sizeof(rep), ":SST%i,%i", pAxis->channel_, value);
+    if (status) return status;
+    if (parseReply(rep, &ax, &val)) return asynError;
+    pAxis->checkType();
+  }
+  else if (function == cal_) {
+    // send calibration command
+    status = sendCmd(rep, sizeof(rep), ":CS%i", pAxis->channel_);
+    if (status) return status;
+    if (parseReply(rep, &ax, &val)) return asynError;
+  }
+  else if (function == sclf_) {
+    // set piezo MaxClockFreq
+    status = sendCmd(rep, sizeof(rep), ":SCLF%i,%i", pAxis->channel_, value);
+    if (status) return status;
+    if (parseReply(rep, &ax, &val)) return asynError;
+  }
+  else {
+    /* Call base class method */
+    status = asynMotorController::writeInt32(pasynUser, value);
+  }
+
+  /* Do callbacks so higher layers see any changes */
+  callParamCallbacks(pAxis->channel_);
+  if (status)
+    asynPrint(pasynUser, ASYN_TRACE_ERROR,
+          "SmarActMCSController:writeInt32: error, status=%d function=%d, value=%d\n",
+          status, function, value);
+  else
+    asynPrint(pasynUser, ASYN_TRACEIO_DRIVER,
+          "SmarActMCSController:writeInt32: function=%d, value=%d\n",
+          function, value);
+  return status;
 }
-/*
- * return 1 if encoder exists.
- * return 0 if encoder does not exist
+
+/* Check if the positioner type set on the controller
+ * is linear or rotary and set the isRot_ parameter correctly.
  */
-int SmarActMCSAxis::getEncoder()
+void SmarActMCSAxis::checkType()
 {
   int val;
-  c_p_->getIntegerParam(axisNo_, c_p_->motorStatusHasEncoder_, &val);
-  return val;
+  // Attempt to check linear position, if we receive
+  // an error, we're a rotary motor.
+  if ((comStatus_ = getVal("GP", &val))) {
+    isRot_ = 1;
+  }
+  else {
+    isRot_ = 0;
+  }
+  return;
 }
 
 SmarActMCSAxis::SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int channel)
@@ -282,39 +351,23 @@ SmarActMCSAxis::SmarActMCSAxis(class SmarActMCSController *cnt_p, int axis, int 
   int angle;
   int rev;
   channel_ = channel;
-  stepCount_ = 0; // initialize open loop step count to 0. Does it need to be restored from auto save?
+
   asynPrint(c_p_->pasynUserSelf, ASYN_TRACEIO_DRIVER, "SmarActMCSAxis::SmarActMCSAxis -- creating axis %u\n", axis);
+
   if (c_p_->disableSpeed_)
     comStatus_ = asynSuccess;
   else
     comStatus_ = getVal("GCLS", &vel_);
-#ifdef DEBUG
-  printf("GCLS %u returned %i\n", axis, comStatus_);
-#endif
+  DBG_PRINTF("SmarActMCSAxis::SmarActMCSAxis: GCLS %u returned %i\n", axis, comStatus_);
   if (comStatus_)
     goto bail;
   if ((comStatus_ = getVal("GS", &val)))
     goto bail;
 
-  if (Holding == val) {
-    // still holding? This means that - in a previous life - the
-    // axis was configured for 'infinite holding'. Inherit this
-    // (until the next 'move' command that is).
-    ///
-    holdTime_ = HOLD_FOREVER;
-  }
-  else {
-    // initial value from 'closed-loop' property
-    holdTime_ = getClosedLoop() ? HOLD_FOREVER : 0;
-  }
+  setIntegerParam(c_p_->autoZero_, 1);
+  setIntegerParam(c_p_->holdTime_, 0);
 
-  // Attempt to check linear position, if we receive
-  // an error, we're a rotary motor.
-  isRot_ = 0;
-
-  if ((comStatus_ = getVal("GP", &val)))  {
-    isRot_ = 1;
-  }
+  checkType();
 
   // Query the sensor type
   if ((comStatus_ = getVal("GST", &sensorType_)))
@@ -389,32 +442,24 @@ SmarActMCSAxis::getAngle(int *val_p, int *rev_p)
 asynStatus
 SmarActMCSAxis::poll(bool *moving_p)
 {
-  int val;
-  int angle;
+  epicsInt32 pos;
+  epicsInt32 val;
+  epicsInt32 angle;
   int rev;
   enum SmarActMCSStatus status;
 
-  if (getEncoder())
-  {
-    if (isRot_)    {
-      if ((comStatus_ = getAngle(&angle, &rev)))
-        goto bail;
-      // Convert angle and revs to total angle
-      val = rev * UDEG_PER_REV + angle;
-    }
-    else {
-      if ((comStatus_ = getVal("GP", &val)))
-        goto bail;
-    }
+  if (isRot_){
+    if ((comStatus_ = getAngle(&angle, &rev)))
+      goto bail;
+    // Convert angle and revs to total angle
+    pos = rev * UDEG_PER_REV + angle;
   }
   else {
-    val = stepCount_;
+    if ((comStatus_ = getVal("GP", (int *)&pos)))
+      goto bail;
   }
-  setDoubleParam(c_p_->motorEncoderPosition_, (double)val);
-  setDoubleParam(c_p_->motorPosition_, (double)val);
-#ifdef DEBUG
-  printf("POLL (position %d)", val);
-#endif
+  setDoubleParam(c_p_->motorEncoderPosition_, (double)pos);
+  setDoubleParam(c_p_->motorPosition_, (double)pos);
 
   if ((comStatus_ = getVal("GS", &val)))
     goto bail;
@@ -422,19 +467,6 @@ SmarActMCSAxis::poll(bool *moving_p)
   status = (enum SmarActMCSStatus)val;
 
   switch (status) {
-  default:
-    *moving_p = false;
-    break;
-
-    /* If we use 'infinite' holding (until the next 'move' command)
-     * then the 'Holding' state must be considered 'not moving'. However,
-     * if we use a 'finite' holding time then we probably should consider
-     * the 'move' command incomplete until the holding time expires.
-     */
-  case Holding:
-    *moving_p = HOLD_FOREVER == holdTime_ ? false : true;
-    break;
-
   case Stepping:
   case Scanning:
   case Targeting:
@@ -442,6 +474,11 @@ SmarActMCSAxis::poll(bool *moving_p)
   case Calibrating:
   case FindRefMark:
     *moving_p = true;
+    break;
+
+  case Holding:
+  default:
+    *moving_p = false;
     break;
   }
 
@@ -455,18 +492,20 @@ SmarActMCSAxis::poll(bool *moving_p)
 
   setIntegerParam(c_p_->motorStatusHomed_, val ? 1 : 0);
 
-#ifdef DEBUG
-  printf(" status %u", status);
-#endif
+  // Get currently set positioner type
+  if ((comStatus_ = getVal("GST", &val)))
+    goto bail;
+  setIntegerParam(c_p_->ptyprb_, val);
+
+  if ((comStatus_ = getVal("GST", &val)))
+    goto bail;
 
 bail:
   setIntegerParam(c_p_->motorStatusProblem_, comStatus_ ? 1 : 0);
   setIntegerParam(c_p_->motorStatusCommsError_, comStatus_ ? 1 : 0);
-#ifdef DEBUG
-  printf("\n");
-#endif
 
   callParamCallbacks();
+  //DBG_PRINTF("SmarActMCSAxis::poll: position:%d status:%u", pos,status);
 
   return comStatus_;
 }
@@ -493,9 +532,6 @@ SmarActMCSAxis::moveCmd(const char *fmt, ...)
   }
 
 bail:
-#ifdef DEBUG
-  printf("\n");
-#endif
 
   return comStatus_;
 }
@@ -503,14 +539,14 @@ bail:
 asynStatus
 SmarActMCSAxis::setSpeed(double velocity)
 {
-  long vel;
+  epicsInt32 vel;
   asynStatus status;
 
   // ignore set speed commands if flag is set
   if (c_p_->disableSpeed_)
     return asynSuccess;
 
-  if ((vel = (long)rint(fabs(velocity))) != vel_) {
+  if ((vel = (epicsInt32)rint(fabs(velocity))) != vel_) {
     /* change speed */
     if (asynSuccess == (status = moveCmd(":SCLS%u,%ld", channel_, vel))) {
       vel_ = vel;
@@ -523,79 +559,43 @@ SmarActMCSAxis::setSpeed(double velocity)
 asynStatus
 SmarActMCSAxis::move(double position, int relative, double min_vel, double max_vel, double accel)
 {
+  int holdTime;
   const char *fmt_rot = relative ? ":MAR%u,%ld,%d,%d" : ":MAA%u,%ld,%d,%d";
   const char *fmt_lin = relative ? ":MPR%u,%ld,%d" : ":MPA%u,%ld,%d";
-  const char *fmt_step = ":MST%u,%ld,%d,%d"; // open loop move using step count, amplitude (0-4095; 0V-100V), frequency (1-18500 Hz)
   const char *fmt;
-  const int MAX_FREQ = 18500;                        // max allowed frequency
-  const int MAX_VOLTAGE = 100;                       // max voltage 100V
-  const double STEP_PER_VOLT = 4095.0 / MAX_VOLTAGE; // max voltage index, 4095=100V
-  double rpos;
-  long angle;
+  long int rpos;
+  epicsInt32 angle;
   int rev;
-#ifdef DEBUG
-  printf("Move to %f (speed %f - %f); accel %f\n", position, min_vel, max_vel, accel);
-#endif
-  if (getEncoder())
-  {
-    if (isRot_) {
-      fmt = fmt_rot;
-    }
-    else {
-      fmt = fmt_lin;
-    }
 
-    if ((comStatus_ = setSpeed(max_vel)))
-      goto bail;
-
-    /* cache 'closed-loop' setting until next move */
-    holdTime_ = getClosedLoop() ? HOLD_FOREVER : 0;
-
-    rpos = rint(position);
-
-    if (isRot_) {
-      angle = (long)rpos % UDEG_PER_REV;
-      rev = (int)(rpos / UDEG_PER_REV);
-      if (angle < 0) {
-        angle += UDEG_PER_REV;
-        rev -= 1;
-      }
-      comStatus_ = moveCmd(fmt, channel_, angle, rev, holdTime_);
-    }
-    else {
-      comStatus_ = moveCmd(fmt, channel_, (long)rpos, holdTime_);
-    }
+  if (isRot_) {
+    fmt = fmt_rot;
+  } else {
+    fmt = fmt_lin;
   }
-  else
-  {
-    fmt = fmt_step;
 
-    rpos = rint(position);
-    if (relative == 0) // absolute move
-    {
-      int diff = rpos - stepCount_;
-      stepCount_ = rpos;
-      rpos = diff; // subtract current step count to produce steps for this move
-    }
-    else
-    {
-      // relative move. the position value is the number of steps intended
-      stepCount_ += rpos;
-    }
-    // overload min_vel as amplitude
-    double piezoVoltage = (min_vel > MAX_VOLTAGE) ? (MAX_VOLTAGE) : ((min_vel < 1) ? (1) : (min_vel));
-    int amplitude = piezoVoltage * STEP_PER_VOLT;
-    // overload max_vel as frequency
-    int frequency = (max_vel > MAX_FREQ) ? (MAX_FREQ) : ((max_vel < 1) ? (1) : (max_vel));
+  DBG_PRINTF("SmarActMCSAxis::move: pos:%g min_vel:%g max_vel:%g\n", position, min_vel, max_vel);
 
-#ifdef DEBUG
-    printf("Open loop Step to %ld (piezo voltage %d ,frequency %d)\n", (long)rpos, amplitude, frequency);
-#endif
-    // overload accel as frequency
-    comStatus_ = moveCmd(fmt, channel_, (long)rpos, amplitude, frequency);
+  if ((comStatus_ = setSpeed(max_vel)))
+    goto bail;
+
+  rpos = lround(position);
+
+  c_p_->getIntegerParam(axisNo_, c_p_->holdTime_, &holdTime);
+
+  if (isRot_) {
+    angle = (epicsInt32)rpos % UDEG_PER_REV;
+    rev = (int)(rpos / UDEG_PER_REV);
+    if (angle < 0){
+      angle += UDEG_PER_REV;
+      rev -= 1;
+    }
+    comStatus_ = moveCmd(fmt, channel_, angle, rev, holdTime);
+  } else {
+    comStatus_ = moveCmd(fmt, channel_, rpos, holdTime);
   }
+
 bail:
-  if (comStatus_) {
+  if (comStatus_){
     setIntegerParam(c_p_->motorStatusProblem_, 1);
     setIntegerParam(c_p_->motorStatusCommsError_, 1);
     callParamCallbacks();
@@ -606,26 +606,17 @@ bail:
 asynStatus
 SmarActMCSAxis::home(double min_vel, double max_vel, double accel, int forwards)
 {
+  int holdTime;
+  int autoZero;
+  DBG_PRINTF("SmarActMCSAxis::home: forward:%u\n", forwards);
 
-#ifdef DEBUG
-  printf("Home %u\n", forwards);
-#endif
-  if (getEncoder())
-  {
+  if ((comStatus_ = setSpeed(max_vel)))
+    goto bail;
 
-    if ((comStatus_ = setSpeed(max_vel)))
-      goto bail;
+  c_p_->getIntegerParam(axisNo_, c_p_->autoZero_, &autoZero);
+  c_p_->getIntegerParam(axisNo_, c_p_->holdTime_, &holdTime);
 
-    // cache 'closed-loop' setting until next move
-    holdTime_ = getClosedLoop() ? HOLD_FOREVER : 0;
-
-    comStatus_ = moveCmd(":FRM%u,%u,%d,%d", channel_, forwards ? 0 : 1, holdTime_, isRot_ ? 1 : 0);
-  }
-  else
-  {
-    // no encoder, can't home. So just set current step count to 0
-    stepCount_ = 0;
-  }
+  comStatus_ = moveCmd(":FRM%u,%u,%d,%d", channel_, forwards ? 0 : 1, holdTime, autoZero);
 
 bail:
   if (comStatus_) {
@@ -639,9 +630,7 @@ bail:
 asynStatus
 SmarActMCSAxis::stop(double acceleration)
 {
-#ifdef DEBUG
-  printf("Stop\n");
-#endif
+  DBG_PRINTF("SmarActMCSAxis::stop:\n");
   comStatus_ = moveCmd(":S%u", channel_);
 
   if (comStatus_) {
@@ -658,25 +647,19 @@ SmarActMCSAxis::setPosition(double position)
   double rpos;
 
   rpos = rint(position);
-  if (getEncoder()) {
-    if (isRot_) {
-      // For rotation stages the revolution will always be set to zero
-      // Only set position if it is between zero an 360 degrees
-      if (rpos >= 0.0 && rpos < (double)UDEG_PER_REV) {
-        comStatus_ = moveCmd(":SP%u,%d", channel_, (long)rpos);
-      }
-      else {
-        comStatus_ = asynError;
-      }
+
+  if (isRot_){
+    // For rotation stages the revolution will always be set to zero
+    // Only set position if it is between zero an 360 degrees
+    if (rpos >= 0.0 && rpos < (double)UDEG_PER_REV) {
+      comStatus_ = moveCmd(":SP%u,%d", channel_, (epicsInt32)rpos);
+    } else {
+      comStatus_ = asynError;
     }
-    else {
-      comStatus_ = moveCmd(":SP%u,%d", channel_, (long)rpos);
-    }
+  } else {
+    comStatus_ = moveCmd(":SP%u,%d", channel_, (epicsInt32)rpos);
   }
-  else
-  {
-    stepCount_ = rpos;
-  }
+
   if (comStatus_) {
     setIntegerParam(c_p_->motorStatusProblem_, 1);
     setIntegerParam(c_p_->motorStatusCommsError_, 1);
@@ -688,18 +671,17 @@ SmarActMCSAxis::setPosition(double position)
 asynStatus
 SmarActMCSAxis::moveVelocity(double min_vel, double max_vel, double accel)
 {
-  long speed = (long)rint(fabs(max_vel));
-  long tgt_pos = FAR_AWAY;
+  epicsInt32 speed = (epicsInt32)rint(fabs(max_vel));
+  epicsInt32 tgt_pos;
+  signed char dir = 1;
 
   /* No MCS command we an use directly. Just use a 'relative move' to
    * very far target.
    */
 
-#ifdef DEBUG
-  printf("moveVelocity (%f - %f)\n", min_vel, max_vel);
-#endif
+  DBG_PRINTF("SmarActMCSAxis::moveVelocity: min_vel:%g max_vel:%g\n", min_vel, max_vel);
 
-  if (0 == speed) {
+  if (0 == speed){
     /* Here we are in a dilemma. If we set the MCS' speed to zero
      * then it will move at unlimited speed which is so fast that
      * 'JOG' makes no sense.
@@ -710,14 +692,20 @@ SmarActMCSAxis::moveVelocity(double min_vel, double max_vel, double accel)
     return asynSuccess;
   }
 
-  if (max_vel < 0) {
-    tgt_pos = -tgt_pos;
+  if (max_vel < 0){
+    dir = -1;
   }
 
   if ((comStatus_ = setSpeed(max_vel)))
     goto bail;
 
-  comStatus_ = moveCmd(":MPR%u,%ld,0", channel_, tgt_pos);
+  if (isRot_){
+    tgt_pos = FAR_AWAY_ROT * dir;
+    comStatus_ = moveCmd(":MAR%u,0,%ld,0", channel_, tgt_pos);
+  } else {
+    tgt_pos = FAR_AWAY_LIN * dir;
+    comStatus_ = moveCmd(":MPR%u,%ld,0", channel_, tgt_pos);
+  }
 
 bail:
   if (comStatus_) {
@@ -758,8 +746,7 @@ smarActMCSCreateController(
 #endif
     rval = new SmarActMCSController(motorPortName, ioPortName, numAxes, movingPollPeriod, idlePollPeriod, disableSpeed);
 #ifdef ASYN_CANDO_EXCEPTIONS
-  }
-  catch (SmarActMCSException &e) {
+  } catch (SmarActMCSException &e) {
     epicsPrintf("smarActMCSCreateController failed (exception caught):\n%s\n", e.what());
     rval = 0;
   }
@@ -830,8 +817,7 @@ smarActMCSCreateAxis(
     pC->unlock();
 
 #ifdef ASYN_CANDO_EXCEPTIONS
-  }
-  catch (SmarActMCSException &e) {
+  } catch (SmarActMCSException &e) {
     epicsPrintf("SmarActMCSAxis failed (exception caught):\n%s\n", e.what());
     rval = 0;
   }
