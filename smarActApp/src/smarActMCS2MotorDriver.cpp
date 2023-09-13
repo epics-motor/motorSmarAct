@@ -23,6 +23,12 @@ Jan 19, 2019
 #include <epicsExport.h>
 #include "smarActMCS2MotorDriver.h"
 
+#ifdef DEBUG
+  #define DBG_PRINTF(...) printf(__VA_ARGS__)
+#else
+  #define DBG_PRINTF(...)
+#endif
+
 static const char *driverName = "SmarActMCS2MotorDriver";
 
 /** Creates a new MCS2Controller object.
@@ -46,11 +52,11 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Controller::MCS2Controller: Creating controller\n");
 
   // Create controller-specific parameters
-  createParam(MCS2MclfString, asynParamInt32, &this->mclf_);
   createParam(MCS2PtypString, asynParamInt32, &this->ptyp_);
   createParam(MCS2PtypRbString, asynParamInt32, &this->ptyprb_);
   createParam(MCS2PstatString, asynParamInt32, &this->pstatrb_); // whole positioner status word
-  createParam(MCS2RefString, asynParamInt32, &this->ref_);
+  createParam(MCS2MclfString, asynParamInt32, &this->mclf_);
+  createParam(MCS2HoldString, asynParamInt32, &this->hold_);
   createParam(MCS2CalString, asynParamInt32, &this->cal_);
 
   // Connect to MCS2 controller
@@ -214,19 +220,25 @@ asynStatus MCS2Controller::writeInt32(asynUser *pasynUser, epicsInt32 value)
    * status at the end, but that's OK */
   status = setIntegerParam(pAxis->axisNo_, function, value);
 
-  if (function == mclf_) {
-    // set MCLF
-    sprintf(pAxis->pC_->outString_, ":CHAN%d:MCLF:CURR %d", pAxis->axisNo_, value);
-    status = pAxis->pC_->writeController();
-  }
-  else if (function == ptyp_) {
+  if (function == ptyp_) {
     // set positioner type
     sprintf(pAxis->pC_->outString_, ":CHAN%d:PTYP %d", pAxis->axisNo_, value);
+    status = pAxis->pC_->writeController();
+  }
+  else if (function == mclf_) {
+    // set piezo MaxClockFreq
+    sprintf(pAxis->pC_->outString_, ":CHAN%d:MCLF:CURR %d", pAxis->axisNo_, value);
     status = pAxis->pC_->writeController();
   }
   else if (function == cal_) {
     // send calibration command
     sprintf(pAxis->pC_->outString_, ":CAL%d", pAxis->axisNo_);
+    status = pAxis->pC_->writeController();
+  }
+  else if (function == hold_) {
+    // set holding time
+    sprintf(pAxis->pC_->outString_, ":CHAN%d:HOLD %d", pAxis->axisNo_, value);
+    puts(pAxis->pC_->outString_);
     status = pAxis->pC_->writeController();
   }
   else {
@@ -259,14 +271,8 @@ MCS2Axis::MCS2Axis(MCS2Controller *pC, int axisNo)
     : asynMotorAxis(pC, axisNo),
       pC_(pC)
 {
-  // asynStatus status;
-
   asynPrint(pC->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Axis::MCS2Axis: Creating axis %u\n", axisNo);
   channel_ = axisNo;
-
-  // Set hold time
-  sprintf(pC_->outString_, ":CHAN%d:HOLD %d", channel_, HOLD_FOREVER);
-  /*status = */ pC_->writeController();
   pC_->clearErrors();
   callParamCallbacks();
 }
@@ -346,14 +352,15 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
 {
   asynStatus status = asynSuccess;
 
-  /* MCS2 move mode is:
-   *	- absolute=0
-   *	- relative=1
-   *	- step=4
-   */
-  if(sensorPresent_) {
-    // closed loop move
-    // Set hold time
+  // MCS2 MMOD (move mode) values:
+  // 0: absolute (close loop)
+  // 1 relative (close loop)
+  // 4 relative steps (open loop)
+  int hasEnc;
+  pC_->getIntegerParam(channel_, pC_->motorStatusHasEncoder_, &hasEnc);
+  if(hasEnc)
+  {
+    DBG_PRINTF("MCS2Axis::move: closeloop: position: %g rel: %d\n",position,relative);
     sprintf(pC_->outString_, ":CHAN%d:MMOD %d", channel_, relative > 0 ? 1 : 0);
     status = pC_->writeController();
     // Set acceleration
@@ -366,33 +373,33 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
     sprintf(pC_->outString_, ":MOVE%d %f", channel_, position * PULSES_PER_STEP);
     status = pC_->writeController();
   }
-  else {
-    // open loop move
-    PositionType dtg = position - stepTarget_; // distance to go
-    stepTarget_ = (PositionType)position;      // store position in global scope
-    // Set mode; 4 == STEP
-    sprintf(pC_->outString_, ":CHAN%d:MMOD 4", channel_);
-    status = pC_->writeController();
-    // Set frequency; range 1..20000 Hz
-    unsigned short frequency = (unsigned short)maxVelocity;
-    if(frequency >= MAX_FREQUENCY) {
-      frequency = MAX_FREQUENCY;
-    }
-    sprintf(pC_->outString_, ":CHAN%d:STEP:FREQ %u", channel_, frequency);
-    status = pC_->writeController();
-    // Do move
-    sprintf(pC_->outString_, ":MOVE%d %lld", channel_, dtg);
-    status = pC_->writeController();
-    setDoubleParam(pC_->motorPosition_, (double)stepTarget_);
-  }
+  else
+  { // move relative in open loop
+    double curPos;
+    pC_->getDoubleParam(channel_, pC_->motorEncoderPosition_,&curPos);
+    //pC_->getDoubleParam(channel_, pC_->motorPosition_, &curPos);
+    if(!relative)
+      position=position-curPos;
+    curPos+=position;
+    DBG_PRINTF("MCS2Axis::move: openloop: new_pos: %g rel_move: %g\n",curPos,position);
+    //:STEP:FREQuency 1..20000, default:1000 Hz.
+    //:STEP:AMPLitude 1..65535, default:65535 (100 V).
+    setDoubleParam(pC_->motorEncoderPosition_, curPos);
+    setDoubleParam(pC_->motorPosition_, curPos);
 
+    sprintf(pC_->outString_, ":CHAN%d:MMOD %d", channel_, 4);
+    status = pC_->writeController();
+    DBG_PRINTF("MCS2Axis::move: %s ->status:%d\n",pC_->outString_,status);
+    sprintf(pC_->outString_, ":MOVE%d %f", channel_, position);
+    status = pC_->writeController();
+    DBG_PRINTF("MCS2Axis::move: %s ->status:%d\n",pC_->outString_,status);
+  }
   return status;
 }
 
 asynStatus MCS2Axis::home(double minVelocity, double maxVelocity, double acceleration, int forwards)
 {
   asynStatus status = asynSuccess;
-  printf("Home command received %d\n", forwards);
   unsigned short refOpt = 0;
 
   if (forwards==0){
@@ -401,13 +408,9 @@ asynStatus MCS2Axis::home(double minVelocity, double maxVelocity, double acceler
   refOpt |= AUTO_ZERO;
 
   // Set default reference options - direction and autozero
-  printf("ref opt: %d\n", refOpt);
   sprintf(pC_->outString_, ":CHAN%d:REF:OPT %d", channel_, refOpt);
-  status = pC_->writeController();
-  pC_->clearErrors();
+  DBG_PRINTF("MCS2Axis::home: %s",pC_->outString_);
 
-  // Set hold time
-  sprintf(pC_->outString_, ":CHAN%d:HOLD %d", channel_, HOLD_FOREVER);
   status = pC_->writeController();
   pC_->clearErrors();
   // Set acceleration
@@ -440,8 +443,8 @@ asynStatus MCS2Axis::setPosition(double position)
 {
   asynStatus status = asynSuccess;
 
-  printf("Set position receieved\n");
   sprintf(pC_->outString_, ":CHAN%d:POS %f", channel_, position * PULSES_PER_STEP);
+  DBG_PRINTF("MCS2Axis::setPosition: %s",pC_->outString_);
   status = pC_->writeController();
   return status;
 }
@@ -470,6 +473,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   double theoryPosition;
   int driveOn;
   int mclf;
+  int hold;
   asynStatus comStatus = asynSuccess;
 
   // Read the channel state
@@ -487,12 +491,16 @@ asynStatus MCS2Axis::poll(bool *moving)
   followLimitReached = (chanState & FOLLOWING_LIMIT_REACHED) ? 1 : 0;
   movementFailed = (chanState & MOVEMENT_FAILED) ? 1 : 0;
   refMark = (chanState & REFERENCE_MARK) ? 1 : 0;
-
+  //if (channel_==0)
+  //{ //debug code
+  //  int hasEnc; pC_->getIntegerParam(channel_, pC_->motorStatusHasEncoder_, &hasEnc);
+  //  printf("chanState:0x%x hasEnc:%d closedLoop:%d\n",chanState,hasEnc,closedLoop);
+  //}
   *moving = done ? false : true;
+  //https://epics.anl.gov/bcda/synApps/motor/R7-2-1/motorRecord.html#Fields_status
   setIntegerParam(pC_->motorStatusDone_, done);
-  setIntegerParam(pC_->motorClosedLoop_, closedLoop);
   setIntegerParam(pC_->motorStatusHasEncoder_, sensorPresent);
-  setIntegerParam(pC_->motorStatusGainSupport_, sensorPresent);
+  setIntegerParam(pC_->motorStatusGainSupport_, closedLoop);
   setIntegerParam(pC_->motorStatusHomed_, isReferenced);
   setIntegerParam(pC_->motorStatusHighLimit_, endStopReached);
   setIntegerParam(pC_->motorStatusLowLimit_, endStopReached);
@@ -500,9 +508,10 @@ asynStatus MCS2Axis::poll(bool *moving)
   setIntegerParam(pC_->motorStatusProblem_, movementFailed);
   setIntegerParam(pC_->motorStatusAtHome_, refMark);
 
-  // Read the current encoder position, if the positioner has a sensor
-  sensorPresent_ = sensorPresent;
-  if(sensorPresent){
+  if (sensorPresent)
+  {
+    // avoid pollong POS? if there is no sensor present. This would not return a value and block the polling for 1-2 sec
+  // Read the current encoder position
     sprintf(pC_->outString_, ":CHAN%d:POS?", channel_);
     comStatus = pC_->writeReadController();
     if (comStatus) goto skip;
@@ -525,7 +534,6 @@ asynStatus MCS2Axis::poll(bool *moving)
   if (comStatus) goto skip;
   driveOn = atoi(pC_->inString_) ? 1 : 0;
   setIntegerParam(pC_->motorStatusPowerOn_, driveOn);
-  setIntegerParam(pC_->motorStatusProblem_, 0);
 
   // Read the currently selected positioner type
   sprintf(pC_->outString_, ":CHAN%d:PTYP?", channel_);
@@ -534,16 +542,20 @@ asynStatus MCS2Axis::poll(bool *moving)
   positionerType = atoi(pC_->inString_);
   setIntegerParam(pC_->ptyprb_, positionerType);
 
-  // Read CAL/REF status and MCLF when idle
+  // Read CAL status MCLF HOLD when idle
   if (done)
   {
     setIntegerParam(pC_->cal_, isCalibrated);
-    setIntegerParam(pC_->ref_, isReferenced);
     sprintf(pC_->outString_, ":CHAN%d:MCLF?", channel_);
     comStatus = pC_->writeReadController();
         if (comStatus) goto skip;
     mclf = atoi(pC_->inString_);
     setIntegerParam(pC_->mclf_, mclf);
+    sprintf(pC_->outString_, ":CHAN%d:HOLD?", channel_);
+    comStatus = pC_->writeReadController();
+        if (comStatus) goto skip;
+    hold = atoi(pC_->inString_);
+    setIntegerParam(pC_->hold_, hold);
   }
 
 skip:
