@@ -13,6 +13,15 @@
 #include <asynMotorAxis.h>
 #include <stdarg.h>
 #include <exception>
+#include <epicsTypes.h>
+
+/** drvInfo strings for extra parameters that the MCS2 controller supports */
+#define MCSPtypString "PTYP"
+#define MCSPtypRbString "PTYP_RB"
+#define MCSAutoZeroString "AUTO_ZERO"
+#define MCSHoldTimeString "HOLD"
+#define MCSSclfString "MCLF"
+#define MCSCalString "CAL"
 
 enum SmarActMCSExceptionType {
   MCSUnknownError,
@@ -20,8 +29,7 @@ enum SmarActMCSExceptionType {
   MCSCommunicationError,
 };
 
-class SmarActMCSException : public std::exception
-{
+class SmarActMCSException : public std::exception {
 public:
   SmarActMCSException(SmarActMCSExceptionType t, const char *fmt, ...);
   SmarActMCSException(SmarActMCSExceptionType t)
@@ -55,8 +63,7 @@ public:
   virtual asynStatus getVal(const char *parm, int *val_p);
   virtual asynStatus getAngle(int *val_p, int *rev_p);
   virtual asynStatus moveCmd(const char *cmd, ...);
-  virtual int getClosedLoop();
-  int getEncoder();
+  virtual void checkType();
 
   int getVel() const { return vel_; }
 
@@ -66,12 +73,10 @@ protected:
 private:
   SmarActMCSController *c_p_; // pointer to asynMotorController for this axis
   asynStatus comStatus_;
-  int vel_;
-  unsigned holdTime_;
+  epicsInt32 vel_;
   int channel_;
   int sensorType_;
   int isRot_;
-  int stepCount_; // open loop current step count
 
   friend class SmarActMCSController;
 };
@@ -89,6 +94,7 @@ public:
   static int parseAngle(const char *reply, int *ax_p, int *val_p, int *rot_p);
 
   /* These are the methods that we override from asynMotorDriver */
+  asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value);
 
 protected:
   SmarActMCSAxis **pAxes_;
@@ -96,6 +102,17 @@ protected:
 private:
   asynUser *asynUserMot_p_;
   int disableSpeed_;
+
+  int ptyp_; /**< positioner type */
+#define FIRST_MCS_PARAM ptyp_
+  int ptyprb_; /**< positioner type readback */
+  int autoZero_;
+  int holdTime_;
+  int sclf_; /**< set maximum closed loop frequency */
+  int cal_;  /**< calibration command */
+#define LAST_MCS_PARAM cal_
+#define NUM_MCS_PARAMS (&LAST_MCS_PARAM - &FIRST_MCS_PARAM + 1)
+
   friend class SmarActMCSAxis;
 };
 
