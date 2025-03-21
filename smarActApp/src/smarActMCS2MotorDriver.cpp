@@ -791,6 +791,7 @@ asynStatus MCS2Axis::setIntegerParam(int function, epicsInt32  value) {
     status = pC_->writeController();
   }
   else if (function == pC_->cal_) {
+    asynMotorAxis::setIntegerParam(pC_->cal_, 0);
     /* send calibration command */
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CAL%d", axisNo_);
     return pC_->writeController();
