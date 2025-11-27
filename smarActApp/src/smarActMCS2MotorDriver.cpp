@@ -73,6 +73,8 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
 #endif
   createParam(MCS2ErrTxtString, asynParamOctet, &this->errTxt_);
 
+  createParam(MCS2SensorPowerModeString, asynParamInt32, &this->sensorPowerMode_);
+  createParam(MCS2SensorDelayString, asynParamInt32, &this->sensorDelay_);
   createParam(MCS2HoldString, asynParamInt32, &this->hold_);
   createParam(MCS2OpenloopString, asynParamInt32, &this->openLoop_);
   createParam(MCS2STEPFREQString, asynParamInt32, &this->stepfreq_);
@@ -206,50 +208,25 @@ asynStatus MCS2Controller::clearErrors()
 
   asynStatus comStatus;
   int numErrorMsgs;
-  char errorMsg[50];
-  int errorCode;
 
   // Read out error messages
   snprintf(this->outString_, sizeof(this->outString_)-1,":SYST:ERR:COUN?");
   comStatus = this->writeReadController();
-  if (comStatus) goto skip;
+  if (comStatus) {
+    asynPrint(pasynUserController_, ASYN_TRACE_INFO,
+              "MCS2Controller::clearErrors: skip1 comStatus=%d\n", comStatus);
+    goto skip;
+  }
   numErrorMsgs = atoi(this->inString_);
   for (int i=0; i<numErrorMsgs; i++){
     snprintf(this->outString_, sizeof(this->outString_)-1,":SYST:ERR?");
     comStatus = this->writeReadController();
-    if (comStatus) goto skip;
-    printf("%s", this->inString_);
-    errorCode = atoi(this->inString_);
-    switch (errorCode){
-      case 259:   snprintf(errorMsg,sizeof(errorMsg)-1, "No sensor present");
-            break;
-      case 34:    snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid channel index");
-            break;
-      case 0:   snprintf(errorMsg,sizeof(errorMsg)-1, "No error");
-            break;
-      case -101:  snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid character");
-            break;
-      case -103:  snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid seperator");
-            break;
-      case -104:  snprintf(errorMsg,sizeof(errorMsg)-1, "Data type error");
-            break;
-      case -108:  snprintf(errorMsg,sizeof(errorMsg)-1, "Parameter not allowed");
-            break;
-      case -109:    snprintf(errorMsg,sizeof(errorMsg)-1, "Missing parameter");
-            break;
-      case -113:  snprintf(errorMsg,sizeof(errorMsg)-1, "Command not exist");
-            break;
-      case -151:  snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid string");
-            break;
-      case -350:  snprintf(errorMsg,sizeof(errorMsg)-1, "Queue overflow");
-            break;
-      case -363:  snprintf(errorMsg,sizeof(errorMsg)-1, "Buffer overrun");
-            break;
-      default:      snprintf(errorMsg,sizeof(errorMsg)-1, "Unable to decode %d", errorCode);
-            break;
+    if (comStatus) {
+      asynPrint(pasynUserController_, ASYN_TRACE_INFO,
+                "MCS2Controller::clearErrors: skip2 comStatus=%d\n", comStatus);
+      goto skip;
     }
-    asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR,
-        "MCS2Controller::clearErrors: %s\n", errorMsg);
+    printOneError(atoi(this->inString_));
   }
 
   skip:
@@ -265,6 +242,43 @@ asynStatus MCS2Controller::clearErrors()
   return comStatus ? asynError : asynSuccess;
 }
 
+void MCS2Controller::printOneError(int errorCode)
+{
+  char errorMsg[50];
+  memset(errorMsg, 0, sizeof(errorMsg));
+  switch (errorCode){
+  case 260:
+    return; // The controller thinks this is an error. We don't
+  case 259:   snprintf(errorMsg,sizeof(errorMsg)-1, "No sensor present");
+    break;
+  case 34:    snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid channel index");
+    break;
+  case 0:   snprintf(errorMsg,sizeof(errorMsg)-1, "No error");
+    break;
+  case -101:  snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid character");
+    break;
+  case -103:  snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid seperator");
+    break;
+  case -104:  snprintf(errorMsg,sizeof(errorMsg)-1, "Data type error");
+    break;
+  case -108:  snprintf(errorMsg,sizeof(errorMsg)-1, "Parameter not allowed");
+    break;
+  case -109:    snprintf(errorMsg,sizeof(errorMsg)-1, "Missing parameter");
+    break;
+  case -113:  snprintf(errorMsg,sizeof(errorMsg)-1, "Command not exist");
+    break;
+  case -151:  snprintf(errorMsg,sizeof(errorMsg)-1, "Invalid string");
+    break;
+  case -350:  snprintf(errorMsg,sizeof(errorMsg)-1, "Queue overflow");
+    break;
+  case -363:  snprintf(errorMsg,sizeof(errorMsg)-1, "Buffer overrun");
+    break;
+  default:      snprintf(errorMsg,sizeof(errorMsg)-1, "Unable to decode %d", errorCode);
+    break;
+  }
+  asynPrint(pasynUserController_, ASYN_TRACE_ERROR,
+            "MCS2Controller::clearErrors: %s\n", errorMsg);
+}
 
 /** Reports on status of the driver
   * \param[in] fp The file pointer on which report information will be written
@@ -316,6 +330,7 @@ MCS2Axis::MCS2Axis(MCS2Controller *pC, int axisNo)
   stepTargetPos_nm_ = 0.0;
   initialPollDone_ = 0;
   openLoop_ = 0;
+  sensorIsDisabled_ = 0;
   stepsizef_ = 0.0;
   stepsizer_ = 0.0;
 
@@ -427,7 +442,8 @@ void MCS2Axis::report(FILE *fp, int level)
     fprintf(fp, "  axis %d\n"
                 " positioner type %d\n"
                 " positioner name %s\n"
-                " state %d 0x%X\n"
+                " STAT %d 0x%X\n"
+                " sensorIsDisabled %d\n"
                 " rlimit_current_min %s\n"
                 " rlimit_current_max %s\n"
                 " in_position_threshold %s\n"
@@ -445,6 +461,7 @@ void MCS2Axis::report(FILE *fp, int level)
                 " error %d\n"
                 " temp %d\n",
             axisNo_, pcode, buf.pname, channelState, channelState,
+            sensorIsDisabled_,
             buf.rlimit_current_min, buf.rlimit_current_max,
             buf.in_position_threshold,
             buf.in_position_delay,
@@ -456,6 +473,30 @@ void MCS2Axis::report(FILE *fp, int level)
             buf.diag_clf_aver,
             vel, acc, mclf, followError, error, temp);
     pC_->clearErrors();
+    if (level > 2) {
+      fprintf(fp, "  STAT=%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
+              (channelState & CH_STATE_ACTIVELY_MOVING         ) ? " ACTIVELY_MOVING" : "",
+              (channelState & CH_STATE_CLOSED_LOOP_ACTIVE      ) ? " CLOSED_LOOP_ACTIVE" : "",
+              (channelState & CH_STATE_CALIBRATING             ) ? " CALIBRATING" : "",
+              (channelState & CH_STATE_REFERENCING             ) ? " REFERENCING" : "",
+              (channelState & CH_STATE_MOVE_DELAYED            ) ? " MOVE_DELAYED" : "",
+              (channelState & CH_STATE_SENSOR_PRESENT          ) ? " SENSOR_PRESENT" : "",
+              (channelState & CH_STATE_IS_CALIBRATED           ) ? " IS_CALIBRATED" : "",
+              (channelState & CH_STATE_IS_REFERENCED           ) ? " IS_REFERENCED" : "",
+              (channelState & CH_STATE_END_STOP_REACHED        ) ? " END_STOP_REACHED" : "",
+              (channelState & CH_STATE_RANGE_LIMIT_REACHED     ) ? " RANGE_LIMIT_REACHED" : "",
+              (channelState & CH_STATE_FOLLOWING_LIMIT_REACHED ) ? " FOLLOWING_LIMIT_REACHED" : "",
+              (channelState & CH_STATE_MOVEMENT_FAILED         ) ? " MOVEMENT_FAILED" : "",
+              (channelState & CH_STATE_STREAMING               ) ? " STREAMING" : "",
+              (channelState & CH_STATE_POSITIONER_OVERLOAD     ) ? " POSITIONER_OVERLOAD" : "",
+              (channelState & CH_STATE_OVERTEMP                ) ? " OVERTEMP" : "",
+              (channelState & CH_STATE_REFERENCE_MARK          ) ? " REFERENCE_MARK" : "",
+              (channelState & CH_STATE_IS_PHASED               ) ? " IS_PHASED" : "",
+              (channelState & CH_STATE_POSITIONER_FAULT        ) ? " POSITIONER_FAULT" : "",
+              (channelState & CH_STATE_AMPLIFIER_ENABLED       ) ? " AMPLIFIER_ENABLED" : "",
+              (channelState & CH_STATE_IN_POSITION             ) ? " IN_POSITION" : "",
+              (channelState & CH_STATE_BRAKE_ENABLED           ) ? " BRAKE_ENABLED" : "");
+    }
   }
 
   // Call the base class method
@@ -483,12 +524,13 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
     stepTargetPos_nm_ = position;       // store position in global scope
   }
   asynPrint(pC_->pasynUserController_, traceMask,
-            "%smove(%d) position=%f relative=%d sensorPresent=%d openLoop=%d minVelocity=%f maxVelocity=%f"
+            "%smove(%d) position=%f relative=%d sensorPresent=%d sensorIsDisabled=%d openLoop=%d minVelocity=%f maxVelocity=%f"
             " acceleration=%f\n",
-            "MCS2Axis::", axisNo_, position, relative, sensorPresent_, openLoop_,
+            "MCS2Axis::", axisNo_, position, relative, sensorPresent_,
+            sensorIsDisabled_ , openLoop_,
             minVelocity, maxVelocity, acceleration);
 
-  if(sensorPresent_ && !openLoop_) {
+  if(sensorPresent_ && !sensorIsDisabled_ && !openLoop_) {
     // closed loop move
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:MMOD %d", axisNo_, relative > 0 ? 1 : 0);
     status = pC_->writeController();
@@ -646,6 +688,7 @@ asynStatus MCS2Axis::initialPoll(void)
   * \param[out] moving A flag that is set indicating that the axis is moving (1) or done (0). */
 asynStatus MCS2Axis::poll(bool *moving)
 {
+  static const char *functionName = "poll";
   int done;
   int chanState;
   int closedLoop;
@@ -662,13 +705,26 @@ asynStatus MCS2Axis::poll(bool *moving)
 
   if (!initialPollDone_) {
     comStatus = initialPoll();
-    if (comStatus) goto skip;
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+              "%s(%d)#%d comStatus=%d\n",
+              functionName, axisNo_, __LINE__, (int)comStatus);
+    if (comStatus) {
+      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                "%s(%d)#%d comStatus=%d\n",
+                functionName, axisNo_, __LINE__, (int)comStatus);
+      goto skip;
+    }
     initialPollDone_ = 1;
   }
   // Read the channel state
   snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:STAT?", axisNo_);
   comStatus = pC_->writeReadHandleDisconnect();
-  if (comStatus) goto skip;
+  if (comStatus) {
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+              "%s(%d)#%d comStatus=%d\n",
+              functionName, axisNo_, __LINE__, (int)comStatus);
+    goto skip;
+  }
   chanState = atoi(pC_->inString_);
   asynMotorAxis::setIntegerParam(pC_->pstatrb_, chanState);
   done               = (chanState & CH_STATE_ACTIVELY_MOVING)?0:1;
@@ -683,7 +739,6 @@ asynStatus MCS2Axis::poll(bool *moving)
   *moving = done ? false:true;
   asynMotorAxis::setIntegerParam(pC_->motorStatusDone_, done);
   asynMotorAxis::setIntegerParam(pC_->motorClosedLoop_, closedLoop);
-  asynMotorAxis::setIntegerParam(pC_->motorStatusHasEncoder_, sensorPresent_);
   asynMotorAxis::setIntegerParam(pC_->motorStatusHomed_, isReferenced);
   asynMotorAxis::setIntegerParam(pC_->motorStatusHighLimit_, endStopReached);
   asynMotorAxis::setIntegerParam(pC_->motorStatusLowLimit_, endStopReached);
@@ -691,11 +746,38 @@ asynStatus MCS2Axis::poll(bool *moving)
   asynMotorAxis::setIntegerParam(pC_->motorStatusAtHome_, (chanState & CH_STATE_REFERENCE_MARK)?1:0);
   asynMotorAxis::setIntegerParam(pC_->motorStatusPowerOn_, (chanState & CH_STATE_AMPLIFIER_ENABLED)?1:0);
 
+  /* Read sensor disabled/enabled/power save */
+  snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:SENS:MODE?", axisNo_);
+  comStatus = pC_->writeReadController();
+  if (comStatus) {
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+              "%s(%d)#%d comStatus=%d\n",
+              functionName, axisNo_, __LINE__, (int)comStatus);
+    goto skip;
+  }
+  {
+    int value = atoi(pC_->inString_);
+    int oldSensorIsDisabled = sensorIsDisabled_;
+    sensorIsDisabled_ = !value;
+    if (oldSensorIsDisabled != sensorIsDisabled_) {
+      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                "%s(%d)#%d oldSensorIsDisabled=%d sensorIsDisabled=%d\n",
+                functionName, axisNo_, __LINE__, oldSensorIsDisabled, sensorIsDisabled_);
+    }
+    asynMotorAxis::setIntegerParam(pC_->sensorPowerMode_, value);
+    asynMotorAxis::setIntegerParam(pC_->motorStatusHasEncoder_, sensorPresent_ && !sensorIsDisabled_);
+  }
+
   // Read the current encoder position, if the positioner has a sensor
-  if(sensorPresent_) {
+  if(sensorPresent_ && !sensorIsDisabled_) {
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS?", axisNo_);
     comStatus = pC_->writeReadHandleDisconnect();
-    if (comStatus) goto skip;
+    if (comStatus) {
+      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                "%s(%d)#%d sensorIsDisabled=%d comStatus=%d\n",
+                functionName, axisNo_, __LINE__, sensorIsDisabled_,(int)comStatus);
+      goto skip;
+    }
     encoderPosition = (double)strtod(pC_->inString_, NULL);
     asynMotorAxis::setDoubleParam(pC_->freadback_, encoderPosition);
     asynMotorAxis::setDoubleParam(pC_->motorEncoderPosition_, encoderPosition / PULSES_PER_STEP);
@@ -706,18 +788,31 @@ asynStatus MCS2Axis::poll(bool *moving)
       // Read the current theoretical position
       snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS:TARG?", axisNo_);
       comStatus = pC_->writeReadHandleDisconnect();
-      if (comStatus) goto skip;
+      if (comStatus) {
+        asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                  "%s(%d)#%d comStatus=%d\n",
+                  functionName, axisNo_, __LINE__, (int)comStatus);
+        goto skip;
+      }
       theoryPosition = (double)strtod(pC_->inString_, NULL);
       theoryPosition /= PULSES_PER_STEP;
       asynMotorAxis::setDoubleParam(pC_->motorPosition_, theoryPosition);
     }
+  } else {
+    asynMotorAxis::setDoubleParam(pC_->freadback_, 0.0);
+    asynMotorAxis::setDoubleParam(pC_->motorEncoderPosition_,  0.0);
   }
 
 
   // Read the currently selected positioner type
   snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:PTYP?", axisNo_);
   comStatus = pC_->writeReadHandleDisconnect();
-  if (comStatus) goto skip;
+  if (comStatus) {
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+              "%s(%d)#%d comStatus=%d\n",
+              functionName, axisNo_, __LINE__, (int)comStatus);
+    goto skip;
+  }
   positionerType = atoi(pC_->inString_);
   asynMotorAxis::setIntegerParam(pC_->ptyprb_, positionerType);
 
@@ -728,9 +823,26 @@ asynStatus MCS2Axis::poll(bool *moving)
         asynMotorAxis::setIntegerParam(pC_->ref_, isReferenced);
         snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:MCLF?", axisNo_);
         comStatus = pC_->writeReadHandleDisconnect();
-        if (comStatus) goto skip;
+        if (comStatus) {
+          asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                    "%s(%d)#%d comStatus=%d\n",
+                    functionName, axisNo_, __LINE__, (int)comStatus);
+          goto skip;
+        }
         mclf = atoi(pC_->inString_);
         asynMotorAxis::setIntegerParam(pC_->mclf_, mclf);
+        // Sensor delay
+        snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:SENS:DEL?", axisNo_);
+        comStatus = pC_->writeReadController();
+        if (comStatus) {
+          asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                    "%s(%d)#%d comStatus=%d\n",
+                    functionName, axisNo_, __LINE__, (int)comStatus);
+          goto skip;
+        } else {
+          int value = atoi(pC_->inString_);
+          asynMotorAxis::setIntegerParam(pC_->sensorDelay_, value);
+        }
   }
 
   skip:
@@ -796,11 +908,63 @@ asynStatus MCS2Axis::setIntegerParam(int function, epicsInt32  value) {
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CAL%d", axisNo_);
     return pC_->writeController();
   }
+  else if (function == pC_->sensorPowerMode_) {
+    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:SENS:MODE %d", axisNo_, value);
+    status = asynSuccess;
+    status = pC_->writeController();
+    if (status == asynSuccess) {
+      // Read out error messages
+      snprintf(pC_->outString_, sizeof(pC_->outString_)-1,":SYST:ERR:COUN?");
+      status = pC_->writeReadController();
+      if (status == asynSuccess) {
+        int numErrorMsgs = atoi(pC_->inString_);
+        if (numErrorMsgs) {
+          asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                    "%s(%d) SensorPowerMode numErrorMsgs=%d\n",
+                    functionName, axisNo_, numErrorMsgs);
+          pC_->clearErrors();
+          status = asynError; // we failed
+        }
+      }
+      sensorIsDisabled_ = !value;
+      /* Call base class method */
+      asynMotorAxis::setIntegerParam(function, value);
+    }
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+              "%s(%d) SensorPowerMode=%d status=%d\n",
+              functionName, axisNo_, value, (int)status);
+    return status;
+  }
+  else if (function == pC_->sensorDelay_) {
+    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:SENS:DEL %d", axisNo_, value);
+    status = asynSuccess;
+    status = pC_->writeController();
+    if (status == asynSuccess) {
+      // Read out error messages
+      snprintf(pC_->outString_, sizeof(pC_->outString_)-1,":SYST:ERR:COUN?");
+      status = pC_->writeReadController();
+      if (status == asynSuccess) {
+        int numErrorMsgs = atoi(pC_->inString_);
+        asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO, "%s(%d) SensorDelay=%d numErrorMsgs=%d\n",
+                  functionName, axisNo_, value, numErrorMsgs);
+        if (numErrorMsgs) {
+          pC_->clearErrors();
+          status = asynError; // we failed
+        }
+      }
+      /* Call base class method */
+      asynMotorAxis::setIntegerParam(function, value);
+    }
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+              "%s(%d) SensorDelay=%d status=%d\n",
+              functionName, axisNo_, value, (int)status);
+    return status;
+  }
   else if (function == pC_->hold_) {
-    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO, "%s(%d) hold=%d\n",
-              functionName, axisNo_, value);
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:HOLD %d", axisNo_, value);
     status = pC_->writeController();
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO, "%s(%d) hold=%d status=%d\n",
+              functionName, axisNo_, value, (int)status);
   }
   else if (function == pC_->openLoop_) {
     asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO, "%s(%d) openLoop=%d\n",

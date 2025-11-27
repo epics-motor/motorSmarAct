@@ -104,6 +104,8 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 #define MCS2STEPCNTString "STEPCNT"
 #define MCS2STEPSIZEFString "STEPSIZEF"
 #define MCS2STEPSIZERString "STEPSIZER"
+#define MCS2SensorPowerModeString "SensorPowerMode"
+#define MCS2SensorDelayString "SensorDelay"
 #define MCS2HoldString "HOLD"
 
 class epicsShareClass MCS2Axis : public asynMotorAxis
@@ -131,6 +133,7 @@ private:
   //asynStatus comStatus_;
   int initialPollDone_;
   int openLoop_;
+  int sensorIsDisabled_;
   double stepsizef_;
   double stepsizer_;
   asynStatus initialPoll(void);
@@ -147,7 +150,8 @@ public:
   MCS2Controller(const char *portName, const char *MCS2PortName, int numAxes, double movingPollPeriod, double idlePollPeriod, int unusedMask = 0);
   void handleStatusChange(asynStatus status);
   asynStatus writeReadHandleDisconnect(void);
-  virtual asynStatus clearErrors();
+  virtual asynStatus clearErrors(void);
+  virtual void printOneError(int errorCode);
 
   /* These are the methods that we override from asynMotorDriver */
   void report(FILE *fp, int level);
@@ -167,10 +171,13 @@ protected:
   int ireadback_; /** readback in picometer as integer */
   int errTxt_;
   int openLoop_;
+  int sensorIsDisabled_ ;
   int stepfreq_; /** step frequency */ /* 1 .. 20000 */
   int stepcnt_;  /** step count (to move) */ /* -100000 .. + 100000 */
   int stepsizef_; /** size of an open loop step, forward, in pm */
   int stepsizer_; /** size of an open loop step, reverse==backward, in pm */
+  int sensorPowerMode_; /** Sensor power mode */
+  int sensorDelay_; /** Sensor power save delay */
   int hold_; /** hold time */
 
 #define LAST_MCS2_PARAM hold_
