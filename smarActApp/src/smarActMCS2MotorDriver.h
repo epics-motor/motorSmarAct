@@ -38,8 +38,6 @@ The two that may be of significant interest are:
  * If this scaling was not implemented the maximum range would be ~2.147 mm/deg, now it's ~2147 mm/deg */
 #define PULSES_PER_STEP 1000
 
-typedef long long PositionType;
-
 /** MCS2 Axis status flags **/
 #define CH_STATE_ACTIVELY_MOVING         0x0001
 #define CH_STATE_CLOSED_LOOP_ACTIVE      0x0002
@@ -115,7 +113,7 @@ private:
                                 *   Abbreviated because it is used very frequently */
   int sensorPresent_;
   double stepTargetPos_nm_;
-  PositionType stepTargetSteps_;
+  double stepTargetSteps_;
   //asynStatus comStatus_;
   int initialPollDone_;
   int openLoop_;

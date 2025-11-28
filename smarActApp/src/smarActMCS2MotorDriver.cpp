@@ -315,7 +315,7 @@ MCS2Axis::MCS2Axis(MCS2Controller *pC, int axisNo)
     pC_(pC)
 {
   asynPrint(pC->pasynUserSelf, ASYN_TRACEIO_DRIVER, "MCS2Axis::MCS2Axis: Creating axis %u\n", axisNo);
-  stepTargetSteps_ = 0;
+  stepTargetSteps_ = 0.0;
   stepTargetPos_nm_ = 0.0;
   initialPollDone_ = 0;
   openLoop_ = 0;
@@ -535,7 +535,6 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
   } else {
     // open loop move
     double frequency = maxVelocity;
-    PositionType steps_to_go_i = 0;
     if (stepsizef_ && stepsizer_) {
       /*
        * This is the optional new handling of the driver, allowing a
@@ -556,7 +555,6 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
         steps_to_go_f /= stepsizer_; // step size in pm
         frequency = maxVelocity * PULSES_PER_STEP / stepsizer_;
       }
-      steps_to_go_i = (long long)steps_to_go_f;
     } else {
       /*
        * The "old" handling of the driver: the position is in steps
@@ -564,13 +562,13 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
        * to handle both absolute and relative movements
        */
       if (relative) {
-        steps_to_go_i = (PositionType)(position);
-        stepTargetSteps_ += steps_to_go_i;  // store position in global scope
+        steps_to_go_f = position;
+        stepTargetSteps_ += steps_to_go_f;  // store position in global scope
       } else {
-        steps_to_go_i = (PositionType)(position - stepTargetSteps_);
-        stepTargetSteps_ = (PositionType)position;       // store position in global scope
+        steps_to_go_f = (position - stepTargetSteps_);
+        stepTargetSteps_ = position;       // store position in global scope
       }
-      asynMotorAxis::setDoubleParam(pC_->motorPosition_, (double)stepTargetSteps_);
+      asynMotorAxis::setDoubleParam(pC_->motorPosition_, stepTargetSteps_);
     }
     // Set frequency; range 1..20000 Hz
     if(frequency >= MAX_FREQUENCY) {
@@ -578,10 +576,26 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
     }
     asynMotorAxis::setIntegerParam(pC_->stepfreq_, (int)frequency);
     asynPrint(pC_->pasynUserController_, traceMask,
-              "%smove(%d) frequency=%f steps_to_go_i=%lld\n",
-              "MCS2Axis::", axisNo_, frequency, steps_to_go_i);
-    if (!steps_to_go_i)
+              "%smove(%d) frequency=%f steps_to_go_f=%f\n",
+              "MCS2Axis::", axisNo_, frequency, steps_to_go_f);
+    /*
+     * Page 42 in MCS2ProgrammersGuide.pdf:
+     * The valid range for the step parameter is −100000 ...−1 and 1 . . . 100 000.
+     */
+    if (!steps_to_go_f) {
       return status;
+    } else if (steps_to_go_f > 100000.0) {
+      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                "%smove(%d) frequency=%f steps_to_go_f need to clip %f\n",
+                "MCS2Axis::", axisNo_, frequency, steps_to_go_f);
+      steps_to_go_f = 100000.0;
+    } else  if (steps_to_go_f > 100000.0) {
+      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                "%smove(%d) frequency=%f steps_to_go_f need to clipp %f\n",
+                "MCS2Axis::", axisNo_, frequency, steps_to_go_f);
+      steps_to_go_f = -100000.0;
+    }
+
     // Set mode; 4 == STEP
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:MMOD 4", axisNo_);
     status = pC_->writeController();
@@ -589,7 +603,7 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:STEP:FREQ %u", axisNo_, (unsigned short)frequency);
     status = pC_->writeController();
     // Do move
-    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":MOVE%d %lld", axisNo_, steps_to_go_i);
+    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":MOVE%d %d", axisNo_, (int)steps_to_go_f);
     status = pC_->writeController();
   }
 
