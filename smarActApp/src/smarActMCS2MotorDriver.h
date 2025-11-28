@@ -31,20 +31,6 @@ The two that may be of significant interest are:
 
 #include "asynMotorController.h"
 #include "asynMotorAxis.h"
-/* Need to find out, if we have asyn with support for 64 bit integers */
-#include "asynDriver.h"
-
-#ifndef VERSION_INT
-#define VERSION_INT(V, R, M, P) (((V) << 24) | ((R) << 16) | ((M) << 8) | (P))
-#endif
-
-#define VERSION_INT_4_38 VERSION_INT(4, 38, 0, 0)
-#define SMARACT_ASYN_VERSION_INT \
-  VERSION_INT(ASYN_VERSION, ASYN_REVISION, ASYN_MODIFICATION, 0)
-#if SMARACT_ASYN_VERSION_INT >= VERSION_INT_4_38
-#define SMARACT_ASYN_ASYNPARAMINT64
-#endif
-/* End asyn with support for 64 bit integers */
 
 /* This is the same for lin and rot positioners
  * lin: controller pm --> driver nm. Because of this the user can use the positioner for mm ranges
@@ -168,7 +154,6 @@ protected:
   int ref_;  /**< reference command */
   int cal_;  /**< calibration command */
   int freadback_; /** readback in picometer as floating point*/
-  int ireadback_; /** readback in picometer as integer */
   int errTxt_;
   int openLoop_;
   int sensorIsDisabled_ ;
