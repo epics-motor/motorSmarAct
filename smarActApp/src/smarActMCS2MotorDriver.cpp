@@ -784,20 +784,18 @@ asynStatus MCS2Axis::poll(bool *moving)
     encoderPosition = (double)strtod(pC_->inString_, NULL);
     asynMotorAxis::setDoubleParam(pC_->freadback_, encoderPosition);
     asynMotorAxis::setDoubleParam(pC_->motorEncoderPosition_, encoderPosition / PULSES_PER_STEP);
-    if (!openLoop_) {
-      // Read the current theoretical position
-      snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS:TARG?", axisNo_);
-      comStatus = pC_->writeReadHandleDisconnect();
-      if (comStatus) {
-        asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
-                  "%s(%d)#%d comStatus=%d\n",
-                  functionName, axisNo_, __LINE__, (int)comStatus);
-        goto skip;
-      }
-      theoryPosition = (double)strtod(pC_->inString_, NULL);
-      theoryPosition /= PULSES_PER_STEP;
-      asynMotorAxis::setDoubleParam(pC_->motorPosition_, theoryPosition);
+    // Read the current theoretical position
+    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS:TARG?", axisNo_);
+    comStatus = pC_->writeReadHandleDisconnect();
+    if (comStatus) {
+      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                "%s(%d)#%d comStatus=%d\n",
+                functionName, axisNo_, __LINE__, (int)comStatus);
+      goto skip;
     }
+    theoryPosition = (double)strtod(pC_->inString_, NULL);
+    theoryPosition /= PULSES_PER_STEP;
+    asynMotorAxis::setDoubleParam(pC_->motorPosition_, theoryPosition);
   } else {
     asynMotorAxis::setDoubleParam(pC_->freadback_, 0.0);
     asynMotorAxis::setDoubleParam(pC_->motorEncoderPosition_,  0.0);
