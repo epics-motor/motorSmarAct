@@ -81,7 +81,6 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 #define MCS2RefString "REF"
 #define MCS2CalString "CAL"
 #define MCS2FReadbackString "FREADBACK"
-#define MCS2IReadbackString "IREADBACK"
 #define MCS2ErrTxtString "ErrTxt"
 #define MCS2OpenloopString "OPENLOOP"
 #define MCS2STEPFREQString "STEPFREQ"
