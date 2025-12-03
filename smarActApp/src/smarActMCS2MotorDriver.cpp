@@ -983,11 +983,41 @@ asynStatus MCS2Axis::setIntegerParam(int function, epicsInt32  value) {
     // Set mode; 4 == STEP
     snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:MMOD 4", axisNo_);
     status = pC_->writeController();
-    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:STEP:FREQ %u", axisNo_, (unsigned short)frequency);
-    status = pC_->writeController();
-    // Do move
-    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":MOVE%d %d", axisNo_, value);
-    return pC_->writeController();
+    if (status == asynSuccess) {
+      snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:STEP:FREQ %u", axisNo_, (unsigned short)frequency);
+      status = pC_->writeController();
+    }
+    if (status == asynSuccess) {
+      // Do move
+      snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":MOVE%d %d", axisNo_, value);
+      status = pC_->writeController();
+    }
+    if (status == asynSuccess) {
+      // Need to update the theoretical motor position
+      // Inverted logic in the "if" statement.
+      // search for "(sensorPresent_ && !sensorIsDisabled_)"
+      if (!(sensorPresent_ && !sensorIsDisabled_)) {
+        double motorPosition;
+        asynStatus stat = pC_->getDoubleParam(axisNo_, pC_->motorPosition_,
+                                              &motorPosition);
+        if (stat == asynSuccess) {
+          if (stepsizef_ && stepsizer_) {
+            double delta;
+            // For the new position: We are doing a relative move
+            if (value >= 0) {
+              delta = (double)value * stepsizef_ / PULSES_PER_STEP;
+            } else {
+              delta = (double)value * stepsizer_ / PULSES_PER_STEP;
+            }
+            asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO, "%s(%d) move stepcnt=%d oldMotorPosition=%f delta=%f\n",
+                      functionName, axisNo_, value, motorPosition, delta);
+            motorPosition += delta;
+            asynMotorAxis::setDoubleParam(pC_->motorPosition_, motorPosition);
+          }
+        }
+      }
+    }
+    return status;
   }
   /* Call base class method */
   status = asynMotorAxis::setIntegerParam(function, value);
