@@ -701,8 +701,6 @@ asynStatus MCS2Axis::poll(bool *moving)
   int followLimitReached;
   int movementFailed = 0;
   int positionerType;
-  double encoderPosition;
-  double theoryPosition;
   int mclf;
   asynStatus comStatus = asynSuccess;
 
@@ -773,29 +771,36 @@ asynStatus MCS2Axis::poll(bool *moving)
 
   // Read the current encoder position, if the positioner has a sensor
   if(sensorPresent_ && !sensorIsDisabled_) {
-    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS?", axisNo_);
-    comStatus = pC_->writeReadHandleDisconnect();
-    if (comStatus) {
-      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
-                "%s(%d)#%d sensorIsDisabled=%d comStatus=%d\n",
-                functionName, axisNo_, __LINE__, sensorIsDisabled_,(int)comStatus);
-      goto skip;
+    {
+      // read the actual position as measured by the sensor
+      snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS?", axisNo_);
+      comStatus = pC_->writeReadHandleDisconnect();
+      if (comStatus) {
+        asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                  "%s(%d)#%d sensorIsDisabled=%d comStatus=%d\n",
+                  functionName, axisNo_, __LINE__, sensorIsDisabled_,(int)comStatus);
+        goto skip;
+      }
+      double encoderPosition;
+      encoderPosition = (double)strtod(pC_->inString_, NULL);
+      asynMotorAxis::setDoubleParam(pC_->freadback_, encoderPosition);
+      // The motorRecord himself uses a 32 bit integer for the position: pm -> nm
+      asynMotorAxis::setDoubleParam(pC_->motorEncoderPosition_, encoderPosition / PULSES_PER_STEP);
     }
-    encoderPosition = (double)strtod(pC_->inString_, NULL);
-    asynMotorAxis::setDoubleParam(pC_->freadback_, encoderPosition);
-    asynMotorAxis::setDoubleParam(pC_->motorEncoderPosition_, encoderPosition / PULSES_PER_STEP);
-    // Read the current theoretical position
-    snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS:TARG?", axisNo_);
-    comStatus = pC_->writeReadHandleDisconnect();
-    if (comStatus) {
-      asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
-                "%s(%d)#%d comStatus=%d\n",
-                functionName, axisNo_, __LINE__, (int)comStatus);
-      goto skip;
+    {
+      // Read the target position
+      snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS:TARG?", axisNo_);
+      comStatus = pC_->writeReadHandleDisconnect();
+      if (comStatus) {
+        asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+                  "%s(%d)#%d comStatus=%d\n",
+                  functionName, axisNo_, __LINE__, (int)comStatus);
+        goto skip;
+      }
+      double motorPosition;
+      motorPosition = (double)strtod(pC_->inString_, NULL);
+      asynMotorAxis::setDoubleParam(pC_->motorPosition_, motorPosition / PULSES_PER_STEP);
     }
-    theoryPosition = (double)strtod(pC_->inString_, NULL);
-    theoryPosition /= PULSES_PER_STEP;
-    asynMotorAxis::setDoubleParam(pC_->motorPosition_, theoryPosition);
   } else {
     asynMotorAxis::setDoubleParam(pC_->freadback_, 0.0);
     asynMotorAxis::setDoubleParam(pC_->motorEncoderPosition_,  0.0);
