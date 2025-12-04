@@ -89,6 +89,7 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 #define MCS2STEPSIZERString "STEPSIZER"
 #define MCS2SensorPowerModeString "SensorPowerMode"
 #define MCS2SensorDelayString "SensorDelay"
+#define MCS2MotorPosWhenDoneString "MotorPosWhenDone"
 #define MCS2HoldString "HOLD"
 
 class epicsShareClass MCS2Axis : public asynMotorAxis
@@ -160,6 +161,7 @@ protected:
   int stepsizer_; /** size of an open loop step, reverse==backward, in pm */
   int sensorPowerMode_; /** Sensor power mode */
   int sensorDelay_; /** Sensor power save delay */
+  int motorPosWhenDone_;  /** Theoretical position in open loop, step mode */
   int hold_; /** hold time */
 
 #define LAST_MCS2_PARAM hold_

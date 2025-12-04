@@ -64,6 +64,7 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
 
   createParam(MCS2SensorPowerModeString, asynParamInt32, &this->sensorPowerMode_);
   createParam(MCS2SensorDelayString, asynParamInt32, &this->sensorDelay_);
+  createParam(MCS2MotorPosWhenDoneString, asynParamFloat64, &this->motorPosWhenDone_);
   createParam(MCS2HoldString, asynParamInt32, &this->hold_);
   createParam(MCS2OpenloopString, asynParamInt32, &this->openLoop_);
   createParam(MCS2STEPFREQString, asynParamInt32, &this->stepfreq_);
@@ -702,6 +703,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   int movementFailed = 0;
   int positionerType;
   int mclf;
+  int oldDone = 0;
   asynStatus comStatus = asynSuccess;
 
   if (!initialPollDone_) {
@@ -717,6 +719,8 @@ asynStatus MCS2Axis::poll(bool *moving)
     }
     initialPollDone_ = 1;
   }
+  (void)pC_->getIntegerParam(axisNo_, pC_->motorStatusDone_,  &oldDone);
+
   // Read the channel state
   snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:STAT?", axisNo_);
   comStatus = pC_->writeReadHandleDisconnect();
@@ -819,6 +823,13 @@ asynStatus MCS2Axis::poll(bool *moving)
   positionerType = atoi(pC_->inString_);
   asynMotorAxis::setIntegerParam(pC_->ptyprb_, positionerType);
 
+  if (done && !oldDone) {
+    // Update
+    double motorPosition = 0.0;
+    (void)pC_->getDoubleParam(axisNo_, pC_->motorPosition_,
+                              &motorPosition);
+    asynMotorAxis::setDoubleParam(pC_->motorPosWhenDone_, motorPosition);
+  }
   // Read CAL/REF status and MCLF when idle
   if(done)
   {
