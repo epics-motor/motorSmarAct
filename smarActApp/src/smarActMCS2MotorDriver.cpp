@@ -769,6 +769,10 @@ asynStatus MCS2Axis::poll(bool *moving)
                 "%s(%d)#%d oldSensorIsDisabled=%d sensorIsDisabled=%d\n",
                 functionName, axisNo_, __LINE__, oldSensorIsDisabled, sensorIsDisabled_);
     }
+    if (sensorIsDisabled_) {
+      // Fall into open loop
+      asynMotorAxis::setIntegerParam(pC_->openLoop_, sensorIsDisabled_);
+    }
     asynMotorAxis::setIntegerParam(pC_->sensorPowerMode_, value);
     asynMotorAxis::setIntegerParam(pC_->motorStatusHasEncoder_, sensorPresent_ && !sensorIsDisabled_);
   }
