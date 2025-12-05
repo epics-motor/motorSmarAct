@@ -112,8 +112,6 @@ private:
   MCS2Controller *pC_;      /**< Pointer to the asynMotorController to which this axis belongs.
                                 *   Abbreviated because it is used very frequently */
   int sensorPresent_;
-  double stepTargetPos_nm_;
-  double stepTargetSteps_;
   //asynStatus comStatus_;
   int initialPollDone_;
   int openLoop_;
