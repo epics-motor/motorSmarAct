@@ -702,6 +702,7 @@ asynStatus MCS2Axis::poll(bool *moving)
   int positionerType;
   int mclf;
   int oldDone = 0;
+  int oldChanState = 0;
   asynStatus comStatus = asynSuccess;
 
   if (!initialPollDone_) {
@@ -728,6 +729,7 @@ asynStatus MCS2Axis::poll(bool *moving)
               functionName, axisNo_, __LINE__, (int)comStatus);
     goto skip;
   }
+  (void)pC_->getIntegerParam(axisNo_, pC_->pstatrb_,  &oldChanState);
   chanState = atoi(pC_->inString_);
   asynMotorAxis::setIntegerParam(pC_->pstatrb_, chanState);
   done               = (chanState & CH_STATE_ACTIVELY_MOVING)?0:1;
@@ -738,7 +740,35 @@ asynStatus MCS2Axis::poll(bool *moving)
   endStopReached     = (chanState & CH_STATE_END_STOP_REACHED)?1:0;
   followLimitReached = (chanState & CH_STATE_FOLLOWING_LIMIT_REACHED)?1:0;
   movementFailed     = (chanState & CH_STATE_MOVEMENT_FAILED)?1:0;
+  if (chanState != oldChanState ) {
+    int changed = chanState ^ oldChanState;
+    asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+              "%s(%d)#%d poll oldChanState=0x%05x chanState=0x%05x %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
+              functionName, axisNo_, __LINE__, oldChanState, chanState,
+              (changed & CH_STATE_ACTIVELY_MOVING) ? ((chanState & CH_STATE_ACTIVELY_MOVING) ? "+moving" : "-moving") : "",
+              (changed & CH_STATE_CLOSED_LOOP_ACTIVE) ? ((chanState & CH_STATE_CLOSED_LOOP_ACTIVE) ? "+closedLoop" : "-closedLoop") : "",
+              (changed & CH_STATE_MOVE_DELAYED) ? ((chanState & CH_STATE_MOVE_DELAYED) ? "+moveDelayed" : "-moveDelayed") : "",
+              (changed & CH_STATE_CALIBRATING) ? ((chanState & CH_STATE_CALIBRATING) ? "+calibrating" : "-calibrating") : "",
+              (changed & CH_STATE_REFERENCING) ? ((chanState & CH_STATE_REFERENCING) ? "+referencing" : "-referencing") : "",
+              (changed & CH_STATE_SENSOR_PRESENT) ? ((chanState & CH_STATE_SENSOR_PRESENT) ? "+SENSOR_PRESENT" : "-SENSOR_PRESENT") : "",
+              (changed & CH_STATE_IS_CALIBRATED) ? ((chanState &  CH_STATE_IS_CALIBRATED) ? "+IS_CALIBRATED" : "-IS_CALIBRATED") : "",
+              (changed & CH_STATE_IS_REFERENCED) ? ((chanState &  CH_STATE_IS_REFERENCED) ? "+IS_REFERENCED" : "-IS_REFERENCED") : "",
+              (changed & CH_STATE_END_STOP_REACHED) ? ((chanState & CH_STATE_END_STOP_REACHED) ? "+_END_STOP_REACHED" : "-_END_STOP_REACHED") : "",
+              (changed & CH_STATE_RANGE_LIMIT_REACHED) ? ((chanState & CH_STATE_RANGE_LIMIT_REACHED) ? "+RANGE_LIMIT_REACHED" : "RANGE_LIMIT_REACHED") : "",
+              (changed & CH_STATE_FOLLOWING_LIMIT_REACHED) ? ((chanState & CH_STATE_FOLLOWING_LIMIT_REACHED) ? "+FOLLOWING_LIMIT_REACHED" : "-FOLLOWING_LIMIT_REACHED") : "",
+              (changed & CH_STATE_MOVEMENT_FAILED) ? ((chanState & CH_STATE_MOVEMENT_FAILED) ? "+MOVEMENT_FAILED" : "-MOVEMENT_FAILED") : "",
+              (changed & CH_STATE_STREAMING) ? ((chanState & CH_STATE_STREAMING) ? "+STREAMING" : "-STREAMING") : "",
+              (changed & CH_STATE_POSITIONER_OVERLOAD) ? ((chanState & CH_STATE_POSITIONER_OVERLOAD) ? "+OVERLOAD" : "-OVERLOAD") : "",
+              (changed & CH_STATE_OVERTEMP) ? ((chanState &  CH_STATE_OVERTEMP) ? "+OVERTEMP" : "-OVERTEMP") : "",
+              (changed & CH_STATE_REFERENCE_MARK) ? ((chanState & CH_STATE_REFERENCE_MARK) ? "+REFERENCE_MARK" : "-REFERENCE_MARK") : "",
+              (changed & CH_STATE_IS_PHASED) ? ((chanState & CH_STATE_IS_PHASED) ? "+IS_PHASED" : "-IS_PHASED") : "",
+              (changed & CH_STATE_POSITIONER_FAULT) ? ((chanState & CH_STATE_POSITIONER_FAULT) ? "+POSITIONER_FAULT" : "-POSITIONER_FAULT") : "",
+              (changed & CH_STATE_AMPLIFIER_ENABLED) ? ((chanState & CH_STATE_AMPLIFIER_ENABLED) ? "+Amplifier" : "-Amplifier") : "",
+              (changed & CH_STATE_IN_POSITION) ? ((chanState & CH_STATE_IN_POSITION) ? "+InPosition" : "-InPosition") : "",
+              (changed & CH_STATE_BRAKE_ENABLED) ? ((chanState & CH_STATE_BRAKE_ENABLED) ? "+Brake" : "-Brake") : ""
+              );
 
+  }
   *moving = done ? false:true;
   asynMotorAxis::setIntegerParam(pC_->motorStatusDone_, done);
   asynMotorAxis::setIntegerParam(pC_->motorClosedLoop_, closedLoop);
