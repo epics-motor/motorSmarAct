@@ -658,10 +658,11 @@ asynStatus MCS2Axis::stop(double acceleration )
 asynStatus MCS2Axis::setPosition(double position)
 {
   asynStatus status=asynSuccess;
-
-  printf("Set position receieved\n");
   snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:POS %f", axisNo_, position*PULSES_PER_STEP);
   status = pC_->writeController();
+  asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+            "setPosition(%d) position=%f comStatus=%d\n",
+            axisNo_, position, (int)status);
   return status;
 }
 
@@ -862,6 +863,10 @@ asynStatus MCS2Axis::poll(bool *moving)
     (void)pC_->getDoubleParam(axisNo_, pC_->motorPosition_,
                               &motorPosition);
     asynMotorAxis::setDoubleParam(pC_->motorPosWhenDone_, motorPosition);
+    if (!sensorPresent_ || sensorIsDisabled_) {
+      /* Tell the controller, where we think we are */
+      setPosition(motorPosition);
+    }
   }
   // Read CAL/REF status and MCLF when idle
   if(done)
