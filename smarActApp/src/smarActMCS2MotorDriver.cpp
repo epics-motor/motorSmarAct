@@ -537,9 +537,10 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
     */
     if (relative) {
       steps_to_go = position;
+      motorPosition += position;
     } else {
       steps_to_go = (position - motorPosition);
-      motorPosition += position;
+      motorPosition = position;
     }
     if (stepsizef_ >= 0.0 && stepsizer_>= 0.0) {
       /*
