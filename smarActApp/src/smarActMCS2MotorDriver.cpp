@@ -745,11 +745,11 @@ asynStatus MCS2Axis::poll(bool *moving)
     asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
               "%s(%d)#%d poll oldChanState=0x%05x chanState=0x%05x %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
               functionName, axisNo_, __LINE__, oldChanState, chanState,
-              (changed & CH_STATE_ACTIVELY_MOVING) ? ((chanState & CH_STATE_ACTIVELY_MOVING) ? "+moving" : "-moving") : "",
-              (changed & CH_STATE_CLOSED_LOOP_ACTIVE) ? ((chanState & CH_STATE_CLOSED_LOOP_ACTIVE) ? "+closedLoop" : "-closedLoop") : "",
-              (changed & CH_STATE_MOVE_DELAYED) ? ((chanState & CH_STATE_MOVE_DELAYED) ? "+moveDelayed" : "-moveDelayed") : "",
-              (changed & CH_STATE_CALIBRATING) ? ((chanState & CH_STATE_CALIBRATING) ? "+calibrating" : "-calibrating") : "",
-              (changed & CH_STATE_REFERENCING) ? ((chanState & CH_STATE_REFERENCING) ? "+referencing" : "-referencing") : "",
+              (changed & CH_STATE_ACTIVELY_MOVING) ? ((chanState & CH_STATE_ACTIVELY_MOVING) ? "+MOVING" : "-MOVING") : "",
+              (changed & CH_STATE_CLOSED_LOOP_ACTIVE) ? ((chanState & CH_STATE_CLOSED_LOOP_ACTIVE) ? "+CLOSEDLOOP" : "-CLOSEDLOOP") : "",
+              (changed & CH_STATE_MOVE_DELAYED) ? ((chanState & CH_STATE_MOVE_DELAYED) ? "+MOVEDELAYED" : "-MOVEDELAYED") : "",
+              (changed & CH_STATE_CALIBRATING) ? ((chanState & CH_STATE_CALIBRATING) ? "+CALIBRATING" : "-CALIBRATING") : "",
+              (changed & CH_STATE_REFERENCING) ? ((chanState & CH_STATE_REFERENCING) ? "+REFERENCING" : "-REFERENCING") : "",
               (changed & CH_STATE_SENSOR_PRESENT) ? ((chanState & CH_STATE_SENSOR_PRESENT) ? "+SENSOR_PRESENT" : "-SENSOR_PRESENT") : "",
               (changed & CH_STATE_IS_CALIBRATED) ? ((chanState &  CH_STATE_IS_CALIBRATED) ? "+IS_CALIBRATED" : "-IS_CALIBRATED") : "",
               (changed & CH_STATE_IS_REFERENCED) ? ((chanState &  CH_STATE_IS_REFERENCED) ? "+IS_REFERENCED" : "-IS_REFERENCED") : "",
@@ -763,9 +763,9 @@ asynStatus MCS2Axis::poll(bool *moving)
               (changed & CH_STATE_REFERENCE_MARK) ? ((chanState & CH_STATE_REFERENCE_MARK) ? "+REFERENCE_MARK" : "-REFERENCE_MARK") : "",
               (changed & CH_STATE_IS_PHASED) ? ((chanState & CH_STATE_IS_PHASED) ? "+IS_PHASED" : "-IS_PHASED") : "",
               (changed & CH_STATE_POSITIONER_FAULT) ? ((chanState & CH_STATE_POSITIONER_FAULT) ? "+POSITIONER_FAULT" : "-POSITIONER_FAULT") : "",
-              (changed & CH_STATE_AMPLIFIER_ENABLED) ? ((chanState & CH_STATE_AMPLIFIER_ENABLED) ? "+Amplifier" : "-Amplifier") : "",
-              (changed & CH_STATE_IN_POSITION) ? ((chanState & CH_STATE_IN_POSITION) ? "+InPosition" : "-InPosition") : "",
-              (changed & CH_STATE_BRAKE_ENABLED) ? ((chanState & CH_STATE_BRAKE_ENABLED) ? "+Brake" : "-Brake") : ""
+              (changed & CH_STATE_AMPLIFIER_ENABLED) ? ((chanState & CH_STATE_AMPLIFIER_ENABLED) ? "+AMPLIFIER" : "-AMPLIFIER") : "",
+              (changed & CH_STATE_IN_POSITION) ? ((chanState & CH_STATE_IN_POSITION) ? "+INPOSITION" : "-INPOSITION") : "",
+              (changed & CH_STATE_BRAKE_ENABLED) ? ((chanState & CH_STATE_BRAKE_ENABLED) ? "+BRAKE" : "-BRAKE") : ""
               );
 
   }
