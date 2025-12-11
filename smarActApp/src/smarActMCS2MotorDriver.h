@@ -81,7 +81,6 @@ const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 #define MCS2RefString "REF"
 #define MCS2CalString "CAL"
 #define MCS2FReadbackString "FREADBACK"
-#define MCS2ErrTxtString "ErrTxt"
 #define MCS2OpenloopString "OPENLOOP"
 #define MCS2STEPFREQString "STEPFREQ"
 #define MCS2STEPCNTString "STEPCNT"
@@ -150,7 +149,6 @@ protected:
   int ref_;  /**< reference command */
   int cal_;  /**< calibration command */
   int freadback_; /** readback in picometer as floating point*/
-  int errTxt_;
   int openLoop_;
   int sensorIsDisabled_ ;
   int stepfreq_; /** step frequency */ /* 1 .. 20000 */

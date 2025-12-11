@@ -60,7 +60,6 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   createParam(MCS2RefString, asynParamInt32, &this->ref_);
   createParam(MCS2CalString, asynParamInt32, &this->cal_);
   createParam(MCS2FReadbackString, asynParamFloat64, &this->freadback_);
-  createParam(MCS2ErrTxtString, asynParamOctet, &this->errTxt_);
 
   createParam(MCS2SensorPowerModeString, asynParamInt32, &this->sensorPowerMode_);
   createParam(MCS2SensorDelayString, asynParamInt32, &this->sensorDelay_);
@@ -918,8 +917,6 @@ asynStatus MCS2Axis::poll(bool *moving)
       strErrorMessage = "positioner overload";
     else if (chanState & CH_STATE_OVERTEMP)
       strErrorMessage = "overtemperature";
-
-    setStringParam(pC_->errTxt_, strErrorMessage);
     /* ESS motor has a MsgTxt variable */
 #ifdef motorMessageTextString
     updateMsgTxtFromDriver(strErrorMessage);
