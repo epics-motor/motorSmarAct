@@ -55,7 +55,6 @@ MCS2Controller::MCS2Controller(const char *portName, const char *MCS2PortName, i
   // Create controller-specific parameters
   createParam(MCS2MclfString, asynParamInt32, &this->mclf_);
   createParam(MCS2PtypString, asynParamInt32, &this->ptyp_);
-  createParam(MCS2PtypRbString, asynParamInt32, &this->ptyprb_);
   createParam(MCS2PstatString, asynParamInt32, &this->pstatrb_);   // whole positioner status word
   createParam(MCS2RefString, asynParamInt32, &this->ref_);
   createParam(MCS2CalString, asynParamInt32, &this->cal_);
@@ -700,7 +699,6 @@ asynStatus MCS2Axis::poll(bool *moving)
   int endStopReached;
   int followLimitReached;
   int movementFailed = 0;
-  int positionerType;
   int mclf;
   int oldDone = 0;
   int oldChanState = 0;
@@ -853,8 +851,7 @@ asynStatus MCS2Axis::poll(bool *moving)
               functionName, axisNo_, __LINE__, (int)comStatus);
     goto skip;
   }
-  positionerType = atoi(pC_->inString_);
-  asynMotorAxis::setIntegerParam(pC_->ptyprb_, positionerType);
+  asynMotorAxis::setIntegerParam(pC_->ptyp_, atoi(pC_->inString_));
 
   if (done && !oldDone) {
     // Update
