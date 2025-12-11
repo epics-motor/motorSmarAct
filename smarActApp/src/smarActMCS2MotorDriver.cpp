@@ -742,8 +742,8 @@ asynStatus MCS2Axis::poll(bool *moving)
   if (chanState != oldChanState ) {
     int changed = chanState ^ oldChanState;
     asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
-              "%s(%d)#%d poll oldChanState=0x%05x chanState=0x%05x %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
-              functionName, axisNo_, __LINE__, oldChanState, chanState,
+              "%s(%d) oldChanState=0x%05x chanState=0x%05x %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
+              functionName, axisNo_,oldChanState, chanState,
               (changed & CH_STATE_ACTIVELY_MOVING) ? ((chanState & CH_STATE_ACTIVELY_MOVING) ? "+MOVING" : "-MOVING") : "",
               (changed & CH_STATE_CLOSED_LOOP_ACTIVE) ? ((chanState & CH_STATE_CLOSED_LOOP_ACTIVE) ? "+CLOSEDLOOP" : "-CLOSEDLOOP") : "",
               (changed & CH_STATE_MOVE_DELAYED) ? ((chanState & CH_STATE_MOVE_DELAYED) ? "+MOVEDELAYED" : "-MOVEDELAYED") : "",
