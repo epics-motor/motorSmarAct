@@ -699,7 +699,6 @@ asynStatus MCS2Axis::poll(bool *moving)
   int endStopReached;
   int followLimitReached;
   int movementFailed = 0;
-  int mclf;
   int oldDone = 0;
   int oldChanState = 0;
   asynStatus comStatus = asynSuccess;
@@ -864,7 +863,7 @@ asynStatus MCS2Axis::poll(bool *moving)
       setPosition(motorPosition);
     }
   }
-  // Read CAL/REF status and MCLF when idle
+  // Read MCLF and sensor delay when idle
   if(done)
   {
         asynMotorAxis::setIntegerParam(pC_->cal_, isCalibrated);
@@ -877,8 +876,7 @@ asynStatus MCS2Axis::poll(bool *moving)
                     functionName, axisNo_, __LINE__, (int)comStatus);
           goto skip;
         }
-        mclf = atoi(pC_->inString_);
-        asynMotorAxis::setIntegerParam(pC_->mclf_, mclf);
+        asynMotorAxis::setIntegerParam(pC_->mclf_, atoi(pC_->inString_));
         // Sensor delay
         snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:SENS:DEL?", axisNo_);
         comStatus = pC_->writeReadController();
@@ -888,8 +886,7 @@ asynStatus MCS2Axis::poll(bool *moving)
                     functionName, axisNo_, __LINE__, (int)comStatus);
           goto skip;
         } else {
-          int value = atoi(pC_->inString_);
-          asynMotorAxis::setIntegerParam(pC_->sensorDelay_, value);
+          asynMotorAxis::setIntegerParam(pC_->sensorDelay_,  atoi(pC_->inString_));
         }
   }
 
