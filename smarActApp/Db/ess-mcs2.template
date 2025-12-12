@@ -1,0 +1,291 @@
+############################
+# motor Record
+# Since JOG is not supported by the driver yet, 0.0
+# is a good value. However, 0.0 will fall back to VELO
+# In other words: JVEL < 0 is a good value here
+record(motor,"$(P)$(M)")
+{
+	field(DESC,"$(DESC)")
+	field(EGU, "mm")
+	field(DTYP,"asynMotor")
+	field(OUT,"@asyn($(PORT),$(ADDR))")
+	field(VELO,"$(VELO=1)")
+	field(JVEL,"$(JVEL=-1)")
+	field(ACCL,"$(ACCL=0)")
+	field(JAR, "$(JAR=0)")
+	field(MRES,"$(MRES=1.e-6)")
+	field(ERES,"$(ERES=0)")
+	field(PREC,"$(PREC=6)")
+	field(EGU,"$(EGU=mm)")
+	field(RDBL,"$(P)$(M)-MotorPosWhenDone")
+	field(RRES,"1.0")
+	field(URIP,"$(URIP=1)")
+	field(RDBD,"$(RDBD=0.01)")
+	field(RDBD,"$(SPBD=0.01)")
+	field(ADEL,"$(ADEL=0.00001)")
+	field(MDEL,"$(MDEL=0.00001)")
+	field(RTRY,"$(RTRY=5)")
+	field(RMOD,"$(RMOD=0)")
+	field(DLY,"$(DLY=0.1)")
+	field(FOFF,"$(FOFF=0)")
+	field(NTM,"0")
+	field(TWV,"$(TWV=1)")
+	field(DLLM,"$(DLLM=0)")
+	field(DHLM,"$(DHLM=0)")
+}
+
+
+############################
+# Stuff from MCS2_Extra.db
+# Calibrate, even readback
+record(bo, "$(P)$(M)-cmdCal") {
+    field(DESC,"cmd calibration")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))CAL")
+    field(ZNAM, "Not calibrated")
+    field(ONAM, "Calibrated")
+    info(asyn:READBACK,"1")
+    info(asyn:INITIAL_READBACK,"1")
+}
+
+record(longout, "$(P)$(M)-setMclFreq") {
+    field(DESC,"MCL Frequency")
+    field(EGU, "Hz")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MCLF")
+    field(VAL, "5000")
+    field(HOPR,"20000")
+    field(LOPR,"50")
+    field(PINI,"RUNNING")
+    info(asyn:READBACK,"1")
+}
+
+
+record(mbbo, "$(P)$(M)-SensorPowerMode") {
+    field(DESC,"Sensor Power Mode")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))SensorPowerMode")
+    field(VAL, "2")
+    field(PINI,"RUNNING")
+    field(ZRVL,  "0")
+    field(ONVL,  "1")
+    field(TWVL,  "2")
+    field(ZRST, "Disabled")
+    field(ONST, "Enabled")
+    field(TWST, "PowerSave")
+    info(asyn:READBACK,"1")
+}
+
+# Sensor power save delay
+# Value is saved in non-volatile memory
+# read back what we have at the beginning
+record(longout, "$(P)$(M)-SensorDelay") {
+    field(DESC,"Sensor Power Save Delay")
+    field(EGU, "ms")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))SensorDelay")
+    field(VAL, "100")
+    field(HOPR,"5000")
+    field(LOPR,"0")
+    info(asyn:READBACK,"1")
+    info(asyn:INITIAL_READBACK,"1")
+}
+
+# hold time after positioning
+# Use 2000000000 as a maximum value to simplify things
+# and to avoid possible integer overflow in range checking.
+# To be checked in the C code
+record(longout, "$(P)$(M)-hold") {
+    field(DESC,"hold time")
+    field(EGU, "ms")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))HOLD")
+    field(VAL, "-1")
+    field(HOPR,"2000000000")
+    field(LOPR,"-1")
+    field(PINI,"RUNNING")
+}
+
+# open loop for the piezo controller
+record(bo, "$(P)$(M)-openLoop") {
+    field(DESC,"openLoop")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))OPENLOOP")
+    info(asyn:READBACK,"1")
+    info(asyn:INITIAL_READBACK,"1")
+}
+
+#
+# Open loop needs a step size, calculated in pm
+# Actually 2 step size, forward and reverse
+# The controller uses picometer, we use millimeter here
+#
+
+record(ao, "$(P)$(M)-STEPSIZEF") {
+    field(DESC,"Step size forward")
+    field(EGU,  "mm")
+    field(PREC, "6")
+    field(ASLO, "$(ASLO=0.000000001)")
+    field(DTYP,"asynFloat64")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))STEPSIZEF")
+    field(VAL, "$(STEPSIZEF=1)")
+    field(PINI,"YES")
+}
+
+record(ao, "$(P)$(M)-STEPSIZER") {
+    field(DESC,"Step size reverse")
+    field(EGU,  "mm")
+    field(PREC, "6")
+    field(ASLO, "$(ASLO=0.000000001)")
+    field(DTYP,"asynFloat64")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))STEPSIZER")
+    field(VAL, "$(STEPSIZER=1)")
+    field(PINI,"YES")
+}
+
+
+
+
+record(mbbo, "$(P)$(M)-PositionerType"){
+  field(DESC, "set positioner type")
+  field(DTYP, "asynInt32")
+  field(SCAN, "Passive")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PTYP")
+  field(NOBT, "11")
+  field(ZRVL, "300")
+  field(ONVL, "312")
+  field(TWVL, "302")
+  field(THVL, "303")
+  field(FRVL, "309")
+  field(FVVL, "357")
+  field(SXVL, "301")
+  field(SVVL, "313")
+  field(EIVL, "358")
+  field(NIVL, "307")
+  field(TEVL, "1")
+  field(ZRST, "S")
+  field(ONST, "SR")
+  field(TWST, "SP")
+  field(THST, "SC")
+  field(FRST, "SR20")
+  field(FVST, "M")
+  field(SXST, "SD")
+  field(SVST, "SR2")
+  field(EIST, "MD")
+  field(NIST, "SC500")
+  field(TEST, "None")
+  field(TVST, "LC")
+  field(TTST, "L")
+  field(VAL,  "0")
+  info(asyn:READBACK,"1")
+  info(asyn:INITIAL_READBACK,"1")
+}
+
+record(longin, "$(P)$(M)-Freq-MCL-RB") {
+    field(DESC,"MCL Frequency")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MCLF")
+    field(SCAN, "I/O Intr")
+    field(EGU, "Hz")
+}
+
+record(bi, "$(P)$(M)Ref-Sts") {
+    field(DESC,"Reference")
+    field(DTYP,"asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))REF")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Not Referenced")
+    field(ONAM, "Referenced")
+}
+
+record(longin, "$(P)$(M)positionerStatusRb") {
+  field(DESC, "positioner status word")
+  field(DTYP, "asynInt32")
+  field(SCAN, "I/O Intr")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PSTAT")
+}
+
+# The message text
+record(stringin, "$(P)$(M)-MsgTxt") {
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT),$(ADDR))MOTOR_MESSAGE_TEXT")
+    field(SCAN, "I/O Intr")
+}
+
+#####
+# Manual moves with steps
+#
+record(longout, "$(P)$(M)-STEPCNT") {
+    field(DTYP,"asynInt32")
+    field(DESC,"step count to move")
+    field(EGU, "steps")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))STEPCNT")
+    field(VAL, "0")
+}
+
+record(longout, "$(P)$(M)-STEPFREQ") {
+    field(DTYP,"asynInt32")
+    field(DESC,"step frequency")
+    field(EGU, "Hz")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))STEPFREQ")
+    field(VAL, "300")
+    field(PINI, "YES")
+}
+
+
+############################
+# Positioner status word
+record(longin, "$(P)$(M)-PSTAT") {
+  field(DESC, "positioner status word")
+  field(DTYP, "asynInt32")
+  field(SCAN, "I/O Intr")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PSTAT")
+}
+
+
+
+# The position where the "motor" should be
+# convert from nm into mm
+
+record(ai, "$(P)$(M)-CommandedPos")
+{
+    field(DTYP, "asynFloat64")
+    field(DESC, "CommandedPos")
+    field(INP,  "@asyn($(PORT),$(ADDR))MOTOR_POSITION")
+    field(EGU,  "mm")
+    field(PREC, "6")
+    field(ASLO, "$(ASLO=0.000001)")
+    field(ADEL, "$(ADEL=0.000001)")
+    field(MDEL, "$(MDEL=0.000001)")
+    field(SCAN, "I/O Intr")
+}
+
+# The sensor. What the motor driver sees as encoder
+# convert from nm into mm
+record(ai, "$(P)$(M)-SensorPos")
+{
+    field(DTYP, "asynFloat64")
+    field(DESC, "SensorPos")
+    field(INP,  "@asyn($(PORT),$(ADDR))MOTOR_ENCODER_POSITION")
+    field(EGU,  "mm")
+    field(PREC, "6")
+    field(ASLO, "$(ASLO=0.000001)")
+    field(ADEL, "$(RAWENCSTEP_ADEL=0.000001)")
+    field(MDEL, "$(RAWENCSTEP_MDEL=0.000001)")
+    field(SCAN, "I/O Intr")
+}
+
+# When open loop, update this when DONE
+record(ai, "$(P)$(M)-MotorPosWhenDone")
+{
+    field(DTYP, "asynFloat64")
+    field(DESC, "MotorPosWhenDone")
+    field(INP,  "@asyn($(PORT),$(ADDR))MotorPosWhenDone")
+    field(EGU,  "mm")
+    field(PREC, "6")
+    field(ASLO, "$(ASLO=0.000001)")
+    field(ADEL, "$(RAWENCSTEP_ADEL=0.000001)")
+    field(MDEL, "$(RAWENCSTEP_MDEL=0.000001)")
+    field(SCAN, "I/O Intr")
+}
+
