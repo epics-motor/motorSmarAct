@@ -1,0 +1,8 @@
+*.swp
+*~
+.iocsh_history
+\#*
+auto_positions.sav*
+auto_settings.sav*
+log-*.txt
+logs/
