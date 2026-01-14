@@ -3595,7 +3595,7 @@ $(pv_value)</tooltip>
     <on_label>CAL</on_label>
     <password></password>
     <push_action_index>0</push_action_index>
-    <pv_name>$(P)$(M)-cmdCal</pv_name>
+    <pv_name>$(P)$(M)Calibrate-Cmd</pv_name>
     <pv_value />
     <released_action_index>0</released_action_index>
     <scale_options>
@@ -3943,7 +3943,7 @@ $(pv_value)</tooltip>
     <on_label>openloop</on_label>
     <password></password>
     <push_action_index>0</push_action_index>
-    <pv_name>$(P)$(M)-openLoop</pv_name>
+    <pv_name>$(P)$(M)OpenLoop</pv_name>
     <pv_value />
     <released_action_index>0</released_action_index>
     <scale_options>
@@ -4467,7 +4467,7 @@ $(pv_value)</tooltip>
     <name>Text Input</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPCNT</pv_name>
+    <pv_name>$(P)$(M)StepCnt</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
      <rules>
@@ -4525,7 +4525,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPCNT.DESC</pv_name>
+    <pv_name>$(P)$(M)StepCnt.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -4582,7 +4582,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPCNT.EGU</pv_name>
+    <pv_name>$(P)$(M)StepCnt.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -4639,7 +4639,7 @@ $(pv_value)</tooltip>
     <name>Text Input</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPFREQ</pv_name>
+    <pv_name>$(P)$(M)StepFreq</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
      <rules>
@@ -4697,7 +4697,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPFREQ.DESC</pv_name>
+    <pv_name>$(P)$(M)StepFreq.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -4754,7 +4754,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPFREQ.EGU</pv_name>
+    <pv_name>$(P)$(M)StepFreq.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -4811,7 +4811,7 @@ $(pv_value)</tooltip>
     <name>Text Input</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPSIZEF</pv_name>
+    <pv_name>$(P)$(M)StepSizeFwd</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
      <rules>
@@ -4869,7 +4869,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPSIZEF.DESC</pv_name>
+    <pv_name>$(P)$(M)StepSizeFwd.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -4926,7 +4926,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPSIZEF.EGU</pv_name>
+    <pv_name>$(P)$(M)StepSizeFwd.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -4983,7 +4983,7 @@ $(pv_value)</tooltip>
     <name>Text Input</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPSIZER</pv_name>
+    <pv_name>$(P)$(M)StepSizeRev</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
      <rules>
@@ -5041,7 +5041,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPSIZER.DESC</pv_name>
+    <pv_name>$(P)$(M)StepSizeRev.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5098,7 +5098,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-STEPSIZER.EGU</pv_name>
+    <pv_name>$(P)$(M)StepSizeRev.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5155,7 +5155,7 @@ $(pv_value)</tooltip>
     <name>Text Input</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorPowerMode</pv_name>
+    <pv_name>$(P)$(M)SensPwrMode</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
      <rules>
@@ -5213,7 +5213,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorPowerMode.DESC</pv_name>
+    <pv_name>$(P)$(M)SensPwrMode.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5270,7 +5270,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorPowerMode.EGU</pv_name>
+    <pv_name>$(P)$(M)SensPwrMode.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5327,7 +5327,7 @@ $(pv_value)</tooltip>
     <name>Text Input</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorDelay</pv_name>
+    <pv_name>$(P)$(M)SensPwrSavDly</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
      <rules>
@@ -5385,7 +5385,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorDelay.DESC</pv_name>
+    <pv_name>$(P)$(M)SensPwrSavDly.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5442,7 +5442,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorDelay.EGU</pv_name>
+    <pv_name>$(P)$(M)SensPwrSavDly.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5499,7 +5499,7 @@ $(pv_value)</tooltip>
     <name>Text Input</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-hold</pv_name>
+    <pv_name>$(P)$(M)HoldTime</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
      <rules>
@@ -5557,7 +5557,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-hold.DESC</pv_name>
+    <pv_name>$(P)$(M)HoldTime.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5614,7 +5614,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-hold.EGU</pv_name>
+    <pv_name>$(P)$(M)HoldTime.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5667,7 +5667,7 @@ $(pv_value)</tooltip>
     <name>Text Update</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-CommandedPos</pv_name>
+    <pv_name>$(P)$(M)CommandedPos</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
     <scale_options>
@@ -5725,7 +5725,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-CommandedPos.DESC</pv_name>
+    <pv_name>$(P)$(M)CommandedPos.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5782,7 +5782,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-CommandedPos.EGU</pv_name>
+    <pv_name>$(P)$(M)CommandedPos.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5835,7 +5835,7 @@ $(pv_value)</tooltip>
     <name>Text Update</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorPos</pv_name>
+    <pv_name>$(P)$(M)EncoderPos</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
     <scale_options>
@@ -5893,7 +5893,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorPos.DESC</pv_name>
+    <pv_name>$(P)$(M)EncoderPos.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -5950,7 +5950,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-SensorPos.EGU</pv_name>
+    <pv_name>$(P)$(M)EncoderPos.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -6003,7 +6003,7 @@ $(pv_value)</tooltip>
     <name>Text Update</name>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-MotorPosWhenDone</pv_name>
+    <pv_name>$(P)$(M)PosWhenDone</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
     <scale_options>
@@ -6061,7 +6061,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-MotorPosWhenDone.DESC</pv_name>
+    <pv_name>$(P)$(M)PosWhenDone.DESC</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -6118,7 +6118,7 @@ $(pv_value)</tooltip>
     <password_input>false</password_input>
     <precision>0</precision>
     <precision_from_pv>true</precision_from_pv>
-    <pv_name>$(P)$(M)-MotorPosWhenDone.EGU</pv_name>
+    <pv_name>$(P)$(M)PosWhenDone.EGU</pv_name>
     <pv_value />
     <read_only>false</read_only>
     <rules>
@@ -6180,7 +6180,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6279,7 +6279,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6378,7 +6378,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6477,7 +6477,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6576,7 +6576,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6675,7 +6675,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6774,7 +6774,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6873,7 +6873,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -6972,7 +6972,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7071,7 +7071,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7170,7 +7170,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7269,7 +7269,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7368,7 +7368,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7467,7 +7467,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7566,7 +7566,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7665,7 +7665,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7764,7 +7764,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7863,7 +7863,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -7962,7 +7962,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -8061,7 +8061,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>
@@ -8160,7 +8160,7 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="255" />
     </on_color>
     <on_label></on_label>
-    <pv_name>$(P)$(M)-PSTAT</pv_name>
+    <pv_name>$(P)$(M)#PosStat-R</pv_name>
     <pv_value />
     <rules>
     </rules>

@@ -98,7 +98,7 @@ $(pv_value)</tooltip>
     <on_label>CAL</on_label>
     <password></password>
     <push_action_index>0</push_action_index>
-    <pv_name>$(P)$(M)-cmdCal</pv_name>
+    <pv_name>$(P)$(M)Calibrate-Cmd</pv_name>
     <pv_value />
     <released_action_index>0</released_action_index>
     <scale_options>

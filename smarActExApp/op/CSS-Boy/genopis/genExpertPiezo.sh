@@ -14,8 +14,8 @@ yauxright=396
 
 MOTORRECORDFIELDS=".SPDB .RDBD .MDEL"
 #ANALOGINS="-RawEncStep"
-ANALOGINS="-CommandedPos -SensorPos -MotorPosWhenDone"
-ANALOGOUTS="-STEPCNT -STEPFREQ -STEPSIZEF -STEPSIZER -SensorPowerMode -SensorDelay -hold"
+ANALOGINS="CommandedPos EncoderPos PosWhenDone"
+ANALOGOUTS="StepCnt StepFreq StepSizeFwd StepSizeRev SensPwrMode SensPwrSavDly HoldTime"
 
 # Names of the status bits in PSTAT for a piezo motor
 # Start with bit 0 going upward

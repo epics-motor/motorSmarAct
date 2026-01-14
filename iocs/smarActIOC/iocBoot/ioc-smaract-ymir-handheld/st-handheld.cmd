@@ -7,8 +7,6 @@ dbLoadDatabase  "../../../../iocs/smarActIOC/dbd/smarAct.dbd"
 smarAct_registerRecordDeviceDriver pdbbase
 
 #
-#172.30.41.79
-#drvAsynIPPortConfigure("MCS2_ETH", "mcs2-handheld-piezo-drive.cslab.esss.lu.se:55551", 0, 0, 0)
 drvAsynIPPortConfigure("MCS2_ETH", "ymir-mcs2-piezo-uf601.cslab.esss.lu.se:55551", 0, 0, 0)
 ##asynSetOption "MCS2_ETH" -1 disconnectOnReadTimeout Y
 
