@@ -926,7 +926,7 @@ asynStatus MCS2Axis::setClosedLoop(bool closedLoop) {
   int value = closedLoop ? 1 : 0;
   snprintf(pC_->outString_,sizeof(pC_->outString_)-1, "CHAN%d:AMPL %d", axisNo_, value);
   asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
-            "%ssetClosedLoop(%d)=%d '%s'\n", functionName, axisNo_, value,
+            "%s(%d)=%d '%s'\n", functionName, axisNo_, value,
             pC_->outString_);
   return pC_->writeController();
 }
