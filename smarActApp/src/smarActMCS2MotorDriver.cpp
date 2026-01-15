@@ -611,17 +611,18 @@ asynStatus MCS2Axis::move(double position, int relative, double minVelocity, dou
 asynStatus MCS2Axis::home(double minVelocity, double maxVelocity, double acceleration, int forwards)
 {
   asynStatus status=asynSuccess;
-  //static const char *functionName = "homeAxis";
-  printf("Home command received %d\n", forwards);
+  static const char *functionName = "homeAxis";
   unsigned short refOpt = 0;
 
   if (forwards==0){
     refOpt |= START_DIRECTION;
   }
   refOpt |= AUTO_ZERO;
+  asynPrint(pC_->pasynUserController_, ASYN_TRACE_INFO,
+            "%s(%d) maxVelocity=%f acceleration=%f forwards=%d refOpt=0x%x\n",
+            functionName, axisNo_, maxVelocity, acceleration, forwards, refOpt);
 
   // Set default reference options - direction and autozero
-  printf("ref opt: %d\n", refOpt);
   snprintf(pC_->outString_,sizeof(pC_->outString_)-1, ":CHAN%d:REF:OPT %d", axisNo_, refOpt);
   status = pC_->writeController();
   pC_->clearErrors();
