@@ -237,6 +237,7 @@ record(ao, "$(P)$(M)StepSizeFwd") {
     field(ASLO, "$(ASLO=0.000000001)")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))STEPSIZEF")
+    field(VAL,  "$(STEPSIZEF=0)")
     field(PINI, "YES")
 
     info(asyn:READBACK, "1")
@@ -249,6 +250,7 @@ record(ao, "$(P)$(M)StepSizeRev") {
     field(ASLO, "$(ASLO=0.000000001)")
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))STEPSIZER")
+    field(VAL,  "$(STEPSIZER=0)")
     field(PINI, "YES")
 
     info(asyn:READBACK, "1")
