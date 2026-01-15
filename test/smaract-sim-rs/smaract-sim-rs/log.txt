@@ -1,0 +1,861 @@
+rustfmt src/*.rs src/netcommand/*.rs
+cargo build
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.94s
+Accepted: TcpStream { addr: 127.0.0.1:55551, peer: 127.0.0.1:51519, fd: 4 }
+mcs2axis::set_hold_time[1] old=0 new=-1
+RX122 not handled: re_cmd_axis_nr_match=true
+RX33: ch_no_asc="0" ch_cmd="CAL"
+mcs2axis::do_cal[1]
+mcs2axis::state_calibrating_counter elapsed time_msec=714
+mcs2axis::state_calibrating_counter elapsed time_msec=819
+mcs2axis::state_calibrating_counter elapsed time_msec=922
+mcs2axis::state_calibrating_counter elapsed time_msec=1026
+mcs2axis::state_calibrating_counter elapsed time_msec=1129
+mcs2axis::state_calibrating_counter elapsed time_msec=1231
+mcs2axis::state_calibrating_counter elapsed time_msec=1338
+mcs2axis::state_calibrating_counter elapsed time_msec=1445
+mcs2axis::state_calibrating_counter elapsed time_msec=1551
+mcs2axis::state_calibrating_counter elapsed time_msec=1653
+mcs2axis::state_calibrating_counter elapsed time_msec=1759
+mcs2axis::state_calibrating_counter elapsed time_msec=1861
+mcs2axis::state_calibrating_counter elapsed time_msec=1968
+mcs2axis::state_calibrating_counter elapsed time_msec=2074
+mcs2axis::state_calibrating_counter elapsed time_msec=2180
+mcs2axis::state_calibrating_counter elapsed time_msec=2284
+mcs2axis::state_calibrating_counter elapsed time_msec=2391
+mcs2axis::state_calibrating_counter elapsed time_msec=2497
+mcs2axis::state_calibrating_counter elapsed time_msec=2601
+mcs2axis::state_calibrating_counter elapsed time_msec=2707
+mcs2axis::state_calibrating_counter elapsed time_msec=2814
+mcs2axis::state_calibrating_counter elapsed time_msec=2917
+mcs2axis::state_calibrating_counter elapsed time_msec=3021
+RX122 not handled: re_cmd_axis_nr_match=true
+RX33: ch_no_asc="0" ch_cmd="CAL"
+mcs2axis::do_cal[1]
+mcs2axis::state_calibrating_counter elapsed time_msec=140
+mcs2axis::state_calibrating_counter elapsed time_msec=247
+mcs2axis::state_calibrating_counter elapsed time_msec=352
+mcs2axis::state_calibrating_counter elapsed time_msec=457
+mcs2axis::state_calibrating_counter elapsed time_msec=561
+mcs2axis::state_calibrating_counter elapsed time_msec=668
+mcs2axis::state_calibrating_counter elapsed time_msec=773
+mcs2axis::state_calibrating_counter elapsed time_msec=880
+mcs2axis::state_calibrating_counter elapsed time_msec=987
+mcs2axis::state_calibrating_counter elapsed time_msec=1092
+mcs2axis::state_calibrating_counter elapsed time_msec=1196
+mcs2axis::state_calibrating_counter elapsed time_msec=1300
+mcs2axis::state_calibrating_counter elapsed time_msec=1404
+mcs2axis::state_calibrating_counter elapsed time_msec=1511
+mcs2axis::state_calibrating_counter elapsed time_msec=1617
+mcs2axis::state_calibrating_counter elapsed time_msec=1724
+mcs2axis::state_calibrating_counter elapsed time_msec=1831
+mcs2axis::state_calibrating_counter elapsed time_msec=1937
+mcs2axis::state_calibrating_counter elapsed time_msec=2043
+mcs2axis::state_calibrating_counter elapsed time_msec=2148
+mcs2axis::state_calibrating_counter elapsed time_msec=2252
+mcs2axis::state_calibrating_counter elapsed time_msec=2356
+mcs2axis::state_calibrating_counter elapsed time_msec=2460
+mcs2axis::state_calibrating_counter elapsed time_msec=2566
+mcs2axis::state_calibrating_counter elapsed time_msec=2669
+mcs2axis::state_calibrating_counter elapsed time_msec=2775
+mcs2axis::state_calibrating_counter elapsed time_msec=2881
+mcs2axis::state_calibrating_counter elapsed time_msec=2989
+mcs2axis::state_calibrating_counter elapsed time_msec=3095
+RX122 not handled: re_cmd_axis_nr_match=true
+RX33: ch_no_asc="0" ch_cmd="CAL"
+mcs2axis::do_cal[1]
+mcs2axis::state_calibrating_counter elapsed time_msec=206
+mcs2axis::state_calibrating_counter elapsed time_msec=309
+mcs2axis::state_calibrating_counter elapsed time_msec=415
+mcs2axis::state_calibrating_counter elapsed time_msec=520
+mcs2axis::state_calibrating_counter elapsed time_msec=626
+mcs2axis::state_calibrating_counter elapsed time_msec=733
+mcs2axis::state_calibrating_counter elapsed time_msec=840
+mcs2axis::state_calibrating_counter elapsed time_msec=943
+mcs2axis::state_calibrating_counter elapsed time_msec=1050
+mcs2axis::state_calibrating_counter elapsed time_msec=1156
+mcs2axis::state_calibrating_counter elapsed time_msec=1258
+mcs2axis::state_calibrating_counter elapsed time_msec=1365
+mcs2axis::state_calibrating_counter elapsed time_msec=1470
+mcs2axis::state_calibrating_counter elapsed time_msec=1574
+mcs2axis::state_calibrating_counter elapsed time_msec=1679
+mcs2axis::state_calibrating_counter elapsed time_msec=1786
+mcs2axis::state_calibrating_counter elapsed time_msec=1893
+mcs2axis::state_calibrating_counter elapsed time_msec=1999
+mcs2axis::state_calibrating_counter elapsed time_msec=2106
+mcs2axis::state_calibrating_counter elapsed time_msec=2211
+mcs2axis::state_calibrating_counter elapsed time_msec=2315
+mcs2axis::state_calibrating_counter elapsed time_msec=2419
+mcs2axis::state_calibrating_counter elapsed time_msec=2523
+mcs2axis::state_calibrating_counter elapsed time_msec=2629
+mcs2axis::state_calibrating_counter elapsed time_msec=2735
+mcs2axis::state_calibrating_counter elapsed time_msec=2841
+mcs2axis::state_calibrating_counter elapsed time_msec=2947
+mcs2axis::state_calibrating_counter elapsed time_msec=3052
+mcs2axis::set_mmod1] old=0 new=0
+mcs2axis::set_acc[1] old=0 new=10000000000
+mcs2axis::set_vel[1] old=0 new=1000000000
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=1000000000
+mcs2axis::set_pos_targ[1] old=0 new=1000000000
+mcs2axis::status_do_move elapsed time_usec=28 vel=1000000000.0 pos=0 pos_targ=1000000000 travel_distance=28000
+mcs2axis::status_do_move elapsed time_usec=102558 vel=1000000000.0 pos=28000 pos_targ=1000000000 travel_distance=102558000
+mcs2axis::status_do_move elapsed time_usec=105903 vel=1000000000.0 pos=102586000 pos_targ=1000000000 travel_distance=105903000
+mcs2axis::status_do_move elapsed time_usec=105489 vel=1000000000.0 pos=208489000 pos_targ=1000000000 travel_distance=105489000
+mcs2axis::status_do_move elapsed time_usec=109013 vel=1000000000.0 pos=313978000 pos_targ=1000000000 travel_distance=109013000
+mcs2axis::status_do_move elapsed time_usec=106732 vel=1000000000.0 pos=422991000 pos_targ=1000000000 travel_distance=106732000
+mcs2axis::status_do_move elapsed time_usec=104605 vel=1000000000.0 pos=529723000 pos_targ=1000000000 travel_distance=104605000
+mcs2axis::status_do_move elapsed time_usec=103006 vel=1000000000.0 pos=634328000 pos_targ=1000000000 travel_distance=103006000
+mcs2axis::status_do_move elapsed time_usec=106139 vel=1000000000.0 pos=737334000 pos_targ=1000000000 travel_distance=106139000
+mcs2axis::status_do_move elapsed time_usec=103979 vel=1000000000.0 pos=843473000 pos_targ=1000000000 travel_distance=103979000
+mcs2axis::status_do_move elapsed time_usec=104746 vel=1000000000.0 pos=947452000 pos_targ=1000000000 travel_distance=104746000
+mcs2axis::set_mmod1] old=0 new=0
+mcs2axis::set_acc[1] old=10000000000 new=10000000000
+mcs2axis::set_vel[1] old=1000000000 new=1000000000
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=2000000000
+mcs2axis::set_pos_targ[1] old=1000000000 new=2000000000
+mcs2axis::status_do_move elapsed time_usec=16 vel=1000000000.0 pos=1001000000 pos_targ=2000000000 travel_distance=16000
+mcs2axis::status_do_move elapsed time_usec=113666 vel=1000000000.0 pos=1001016000 pos_targ=2000000000 travel_distance=113666000
+mcs2axis::status_do_move elapsed time_usec=103929 vel=1000000000.0 pos=1114682000 pos_targ=2000000000 travel_distance=103929000
+mcs2axis::status_do_move elapsed time_usec=104680 vel=1000000000.0 pos=1218611000 pos_targ=2000000000 travel_distance=104680000
+mcs2axis::status_do_move elapsed time_usec=104080 vel=1000000000.0 pos=1323291000 pos_targ=2000000000 travel_distance=104080000
+mcs2axis::status_do_move elapsed time_usec=107369 vel=1000000000.0 pos=1427371000 pos_targ=2000000000 travel_distance=107369000
+mcs2axis::status_do_move elapsed time_usec=102717 vel=1000000000.0 pos=1534740000 pos_targ=2000000000 travel_distance=102717000
+mcs2axis::status_do_move elapsed time_usec=106264 vel=1000000000.0 pos=1637457000 pos_targ=2000000000 travel_distance=106264000
+mcs2axis::status_do_move elapsed time_usec=104224 vel=1000000000.0 pos=1743721000 pos_targ=2000000000 travel_distance=104224000
+mcs2axis::status_do_move elapsed time_usec=105179 vel=1000000000.0 pos=1847945000 pos_targ=2000000000 travel_distance=105179000
+mcs2axis::status_do_move elapsed time_usec=106084 vel=1000000000.0 pos=1953124000 pos_targ=2000000000 travel_distance=106084000
+mcs2axis::set_mmod1] old=0 new=4
+mcs2axis::set_step_freq[1] old=0 new=833
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=832
+mcs2axis::set_pos_targ[1] step mode new_pos=832
+mcs2axis::set_pos_targ[1] step mode steps=832 old_pos_targ=2000000000 new_pos_targ=4421120000 step_freq=833 vel=2424030000
+mcs2axis::status_do_move elapsed time_usec=1158 vel=2424030000.0 pos=2001000000 pos_targ=4421120000 travel_distance=2807026
+mcs2axis::status_do_move elapsed time_usec=110485 vel=2424030000.0 pos=2003807026 pos_targ=4421120000 travel_distance=267818954
+mcs2axis::status_do_move elapsed time_usec=104035 vel=2424030000.0 pos=2271625980 pos_targ=4421120000 travel_distance=252183961
+mcs2axis::status_do_move elapsed time_usec=103907 vel=2424030000.0 pos=2523809941 pos_targ=4421120000 travel_distance=251873685
+mcs2axis::status_do_move elapsed time_usec=105398 vel=2424030000.0 pos=2775683626 pos_targ=4421120000 travel_distance=255487913
+mcs2axis::status_do_move elapsed time_usec=106568 vel=2424030000.0 pos=3031171539 pos_targ=4421120000 travel_distance=258324029
+mcs2axis::status_do_move elapsed time_usec=106427 vel=2424030000.0 pos=3289495568 pos_targ=4421120000 travel_distance=257982240
+mcs2axis::status_do_move elapsed time_usec=106574 vel=2424030000.0 pos=3547477808 pos_targ=4421120000 travel_distance=258338573
+mcs2axis::status_do_move elapsed time_usec=106136 vel=2424030000.0 pos=3805816381 pos_targ=4421120000 travel_distance=257276848
+mcs2axis::status_do_move elapsed time_usec=105469 vel=2424030000.0 pos=4063093229 pos_targ=4421120000 travel_distance=255660020
+mcs2axis::status_do_move elapsed time_usec=105380 vel=2424030000.0 pos=4318753249 pos_targ=4421120000 travel_distance=255444281
+mcs2axis::set_mmod1] old=4 new=4
+mcs2axis::set_step_freq[1] old=833 new=855
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=-1216
+mcs2axis::set_pos_targ[1] step mode new_pos=-1216
+mcs2axis::set_pos_targ[1] step mode steps=-1216 old_pos_targ=4421120000 new_pos_targ=286720000 step_freq=855 vel=2907000000
+mcs2axis::status_do_move elapsed time_usec=539 vel=2907000000.0 pos=4422120000 pos_targ=286720000 travel_distance=1566873
+mcs2axis::status_do_move elapsed time_usec=107909 vel=2907000000.0 pos=4420553127 pos_targ=286720000 travel_distance=313691463
+mcs2axis::status_do_move elapsed time_usec=103074 vel=2907000000.0 pos=4106861664 pos_targ=286720000 travel_distance=299636118
+mcs2axis::status_do_move elapsed time_usec=105958 vel=2907000000.0 pos=3807225546 pos_targ=286720000 travel_distance=308019906
+mcs2axis::status_do_move elapsed time_usec=106175 vel=2907000000.0 pos=3499205640 pos_targ=286720000 travel_distance=308650725
+mcs2axis::status_do_move elapsed time_usec=107463 vel=2907000000.0 pos=3190554915 pos_targ=286720000 travel_distance=312394941
+mcs2axis::status_do_move elapsed time_usec=106238 vel=2907000000.0 pos=2878159974 pos_targ=286720000 travel_distance=308833866
+mcs2axis::status_do_move elapsed time_usec=106557 vel=2907000000.0 pos=2569326108 pos_targ=286720000 travel_distance=309761199
+mcs2axis::status_do_move elapsed time_usec=106918 vel=2907000000.0 pos=2259564909 pos_targ=286720000 travel_distance=310810626
+mcs2axis::status_do_move elapsed time_usec=106490 vel=2907000000.0 pos=1948754283 pos_targ=286720000 travel_distance=309566430
+mcs2axis::status_do_move elapsed time_usec=107648 vel=2907000000.0 pos=1639187853 pos_targ=286720000 travel_distance=312932736
+mcs2axis::status_do_move elapsed time_usec=102484 vel=2907000000.0 pos=1326255117 pos_targ=286720000 travel_distance=297920988
+mcs2axis::status_do_move elapsed time_usec=109525 vel=2907000000.0 pos=1028334129 pos_targ=286720000 travel_distance=318389175
+mcs2axis::status_do_move elapsed time_usec=105853 vel=2907000000.0 pos=709944954 pos_targ=286720000 travel_distance=307714671
+mcs2axis::status_do_move elapsed time_usec=104578 vel=2907000000.0 pos=402230283 pos_targ=286720000 travel_distance=304008246
+mcs2axis::set_mmod1] old=4 new=4
+mcs2axis::set_step_freq[1] old=855 new=833
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=2263
+mcs2axis::set_pos_targ[1] step mode new_pos=2263
+mcs2axis::set_pos_targ[1] step mode steps=2263 old_pos_targ=286720000 new_pos_targ=6872050000 step_freq=833 vel=2424030000
+mcs2axis::status_do_move elapsed time_usec=203 vel=2424030000.0 pos=285720000 pos_targ=6872050000 travel_distance=492078
+mcs2axis::status_do_move elapsed time_usec=105132 vel=2424030000.0 pos=286212078 pos_targ=6872050000 travel_distance=254843121
+mcs2axis::status_do_move elapsed time_usec=105911 vel=2424030000.0 pos=541055199 pos_targ=6872050000 travel_distance=256731441
+mcs2axis::status_do_move elapsed time_usec=104171 vel=2424030000.0 pos=797786640 pos_targ=6872050000 travel_distance=252513629
+mcs2axis::status_do_move elapsed time_usec=102551 vel=2424030000.0 pos=1050300269 pos_targ=6872050000 travel_distance=248586700
+mcs2axis::status_do_move elapsed time_usec=104680 vel=2424030000.0 pos=1298886969 pos_targ=6872050000 travel_distance=253747460
+mcs2axis::status_do_move elapsed time_usec=104818 vel=2424030000.0 pos=1552634429 pos_targ=6872050000 travel_distance=254081976
+mcs2axis::status_do_move elapsed time_usec=111465 vel=2424030000.0 pos=1806716405 pos_targ=6872050000 travel_distance=270194503
+mcs2axis::status_do_move elapsed time_usec=105568 vel=2424030000.0 pos=2076910908 pos_targ=6872050000 travel_distance=255899999
+mcs2axis::status_do_move elapsed time_usec=105680 vel=2424030000.0 pos=2332810907 pos_targ=6872050000 travel_distance=256171490
+mcs2axis::status_do_move elapsed time_usec=104575 vel=2424030000.0 pos=2588982397 pos_targ=6872050000 travel_distance=253492937
+mcs2axis::status_do_move elapsed time_usec=106092 vel=2424030000.0 pos=2842475334 pos_targ=6872050000 travel_distance=257170190
+mcs2axis::status_do_move elapsed time_usec=103485 vel=2424030000.0 pos=3099645524 pos_targ=6872050000 travel_distance=250850744
+mcs2axis::status_do_move elapsed time_usec=104376 vel=2424030000.0 pos=3350496268 pos_targ=6872050000 travel_distance=253010555
+mcs2axis::status_do_move elapsed time_usec=104903 vel=2424030000.0 pos=3603506823 pos_targ=6872050000 travel_distance=254288019
+mcs2axis::status_do_move elapsed time_usec=106110 vel=2424030000.0 pos=3857794842 pos_targ=6872050000 travel_distance=257213823
+mcs2axis::status_do_move elapsed time_usec=104088 vel=2424030000.0 pos=4115008665 pos_targ=6872050000 travel_distance=252312434
+mcs2axis::status_do_move elapsed time_usec=106122 vel=2424030000.0 pos=4367321099 pos_targ=6872050000 travel_distance=257242911
+mcs2axis::status_do_move elapsed time_usec=106087 vel=2424030000.0 pos=4624564010 pos_targ=6872050000 travel_distance=257158070
+mcs2axis::status_do_move elapsed time_usec=104144 vel=2424030000.0 pos=4881722080 pos_targ=6872050000 travel_distance=252448180
+mcs2axis::status_do_move elapsed time_usec=106119 vel=2424030000.0 pos=5134170260 pos_targ=6872050000 travel_distance=257235639
+mcs2axis::status_do_move elapsed time_usec=106056 vel=2424030000.0 pos=5391405899 pos_targ=6872050000 travel_distance=257082925
+mcs2axis::status_do_move elapsed time_usec=103416 vel=2424030000.0 pos=5648488824 pos_targ=6872050000 travel_distance=250683486
+mcs2axis::status_do_move elapsed time_usec=106168 vel=2424030000.0 pos=5899172310 pos_targ=6872050000 travel_distance=257354417
+mcs2axis::status_do_move elapsed time_usec=106679 vel=2424030000.0 pos=6156526727 pos_targ=6872050000 travel_distance=258593096
+mcs2axis::status_do_move elapsed time_usec=107229 vel=2424030000.0 pos=6415119823 pos_targ=6872050000 travel_distance=259926312
+mcs2axis::status_do_move elapsed time_usec=106458 vel=2424030000.0 pos=6675046135 pos_targ=6872050000 travel_distance=258057385
+mcs2axis::set_mmod1] old=4 new=4
+mcs2axis::set_step_freq[1] old=833 new=855
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=-3313
+mcs2axis::set_pos_targ[1] step mode new_pos=-3313
+mcs2axis::set_pos_targ[1] step mode steps=-3313 old_pos_targ=6872050000 new_pos_targ=-4392150000 step_freq=855 vel=2907000000
+mcs2axis::status_do_move elapsed time_usec=147 vel=2907000000.0 pos=6873050000 pos_targ=-4392150000 travel_distance=427329
+mcs2axis::status_do_move elapsed time_usec=105943 vel=2907000000.0 pos=6872622671 pos_targ=-4392150000 travel_distance=307976301
+mcs2axis::status_do_move elapsed time_usec=106750 vel=2907000000.0 pos=6564646370 pos_targ=-4392150000 travel_distance=310322250
+mcs2axis::status_do_move elapsed time_usec=107686 vel=2907000000.0 pos=6254324120 pos_targ=-4392150000 travel_distance=313043202
+mcs2axis::status_do_move elapsed time_usec=106554 vel=2907000000.0 pos=5941280918 pos_targ=-4392150000 travel_distance=309752478
+mcs2axis::status_do_move elapsed time_usec=106607 vel=2907000000.0 pos=5631528440 pos_targ=-4392150000 travel_distance=309906549
+mcs2axis::status_do_move elapsed time_usec=107071 vel=2907000000.0 pos=5321621891 pos_targ=-4392150000 travel_distance=311255397
+mcs2axis::status_do_move elapsed time_usec=106239 vel=2907000000.0 pos=5010366494 pos_targ=-4392150000 travel_distance=308836773
+mcs2axis::status_do_move elapsed time_usec=106859 vel=2907000000.0 pos=4701529721 pos_targ=-4392150000 travel_distance=310639113
+mcs2axis::status_do_move elapsed time_usec=105987 vel=2907000000.0 pos=4390890608 pos_targ=-4392150000 travel_distance=308104209
+mcs2axis::status_do_move elapsed time_usec=104988 vel=2907000000.0 pos=4082786399 pos_targ=-4392150000 travel_distance=305200116
+mcs2axis::status_do_move elapsed time_usec=103226 vel=2907000000.0 pos=3777586283 pos_targ=-4392150000 travel_distance=300077982
+mcs2axis::status_do_move elapsed time_usec=105416 vel=2907000000.0 pos=3477508301 pos_targ=-4392150000 travel_distance=306444312
+mcs2axis::status_do_move elapsed time_usec=105004 vel=2907000000.0 pos=3171063989 pos_targ=-4392150000 travel_distance=305246628
+mcs2axis::status_do_move elapsed time_usec=105258 vel=2907000000.0 pos=2865817361 pos_targ=-4392150000 travel_distance=305985006
+mcs2axis::status_do_move elapsed time_usec=101496 vel=2907000000.0 pos=2559832355 pos_targ=-4392150000 travel_distance=295048872
+mcs2axis::status_do_move elapsed time_usec=105233 vel=2907000000.0 pos=2264783483 pos_targ=-4392150000 travel_distance=305912331
+mcs2axis::status_do_move elapsed time_usec=105980 vel=2907000000.0 pos=1958871152 pos_targ=-4392150000 travel_distance=308083860
+mcs2axis::status_do_move elapsed time_usec=104388 vel=2907000000.0 pos=1650787292 pos_targ=-4392150000 travel_distance=303455916
+mcs2axis::status_do_move elapsed time_usec=105615 vel=2907000000.0 pos=1347331376 pos_targ=-4392150000 travel_distance=307022805
+mcs2axis::status_do_move elapsed time_usec=106354 vel=2907000000.0 pos=1040308571 pos_targ=-4392150000 travel_distance=309171078
+mcs2axis::status_do_move elapsed time_usec=105727 vel=2907000000.0 pos=731137493 pos_targ=-4392150000 travel_distance=307348389
+mcs2axis::status_do_move elapsed time_usec=106382 vel=2907000000.0 pos=423789104 pos_targ=-4392150000 travel_distance=309252474
+mcs2axis::status_do_move elapsed time_usec=102180 vel=2907000000.0 pos=114536630 pos_targ=-4392150000 travel_distance=297037260
+mcs2axis::status_do_move elapsed time_usec=105734 vel=2907000000.0 pos=-182500630 pos_targ=-4392150000 travel_distance=307368738
+mcs2axis::status_do_move elapsed time_usec=101986 vel=2907000000.0 pos=-489869368 pos_targ=-4392150000 travel_distance=296473302
+mcs2axis::status_do_move elapsed time_usec=108062 vel=2907000000.0 pos=-786342670 pos_targ=-4392150000 travel_distance=314136234
+mcs2axis::status_do_move elapsed time_usec=104438 vel=2907000000.0 pos=-1100478904 pos_targ=-4392150000 travel_distance=303601266
+mcs2axis::status_do_move elapsed time_usec=105760 vel=2907000000.0 pos=-1404080170 pos_targ=-4392150000 travel_distance=307444320
+mcs2axis::status_do_move elapsed time_usec=101583 vel=2907000000.0 pos=-1711524490 pos_targ=-4392150000 travel_distance=295301781
+mcs2axis::status_do_move elapsed time_usec=106226 vel=2907000000.0 pos=-2006826271 pos_targ=-4392150000 travel_distance=308798982
+mcs2axis::status_do_move elapsed time_usec=103940 vel=2907000000.0 pos=-2315625253 pos_targ=-4392150000 travel_distance=302153580
+mcs2axis::status_do_move elapsed time_usec=106257 vel=2907000000.0 pos=-2617778833 pos_targ=-4392150000 travel_distance=308889099
+mcs2axis::status_do_move elapsed time_usec=106520 vel=2907000000.0 pos=-2926667932 pos_targ=-4392150000 travel_distance=309653640
+mcs2axis::status_do_move elapsed time_usec=106196 vel=2907000000.0 pos=-3236321572 pos_targ=-4392150000 travel_distance=308711772
+mcs2axis::status_do_move elapsed time_usec=106416 vel=2907000000.0 pos=-3545033344 pos_targ=-4392150000 travel_distance=309351312
+mcs2axis::status_do_move elapsed time_usec=105335 vel=2907000000.0 pos=-3854384656 pos_targ=-4392150000 travel_distance=306208845
+mcs2axis::status_do_move elapsed time_usec=105093 vel=2907000000.0 pos=-4160593501 pos_targ=-4392150000 travel_distance=305505351
+mcs2axis::set_mmod1] old=4 new=4
+mcs2axis::set_step_freq[1] old=855 new=833
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=6164
+mcs2axis::set_pos_targ[1] step mode new_pos=6164
+mcs2axis::set_pos_targ[1] step mode steps=6164 old_pos_targ=-4392150000 new_pos_targ=13545090000 step_freq=833 vel=2424030000
+mcs2axis::status_do_move elapsed time_usec=268 vel=2424030000.0 pos=-4393150000 pos_targ=13545090000 travel_distance=649640
+mcs2axis::status_do_move elapsed time_usec=103606 vel=2424030000.0 pos=-4392500360 pos_targ=13545090000 travel_distance=251144052
+mcs2axis::status_do_move elapsed time_usec=106423 vel=2424030000.0 pos=-4141356308 pos_targ=13545090000 travel_distance=257972544
+mcs2axis::status_do_move elapsed time_usec=106783 vel=2424030000.0 pos=-3883383764 pos_targ=13545090000 travel_distance=258845195
+mcs2axis::status_do_move elapsed time_usec=106490 vel=2424030000.0 pos=-3624538569 pos_targ=13545090000 travel_distance=258134954
+mcs2axis::status_do_move elapsed time_usec=105749 vel=2424030000.0 pos=-3366403615 pos_targ=13545090000 travel_distance=256338748
+mcs2axis::status_do_move elapsed time_usec=105725 vel=2424030000.0 pos=-3110064867 pos_targ=13545090000 travel_distance=256280571
+mcs2axis::status_do_move elapsed time_usec=106186 vel=2424030000.0 pos=-2853784296 pos_targ=13545090000 travel_distance=257398049
+mcs2axis::status_do_move elapsed time_usec=105182 vel=2424030000.0 pos=-2596386247 pos_targ=13545090000 travel_distance=254964323
+mcs2axis::status_do_move elapsed time_usec=105091 vel=2424030000.0 pos=-2341421924 pos_targ=13545090000 travel_distance=254743736
+mcs2axis::status_do_move elapsed time_usec=106229 vel=2424030000.0 pos=-2086678188 pos_targ=13545090000 travel_distance=257502282
+mcs2axis::status_do_move elapsed time_usec=107061 vel=2424030000.0 pos=-1829175906 pos_targ=13545090000 travel_distance=259519075
+mcs2axis::status_do_move elapsed time_usec=106621 vel=2424030000.0 pos=-1569656831 pos_targ=13545090000 travel_distance=258452502
+mcs2axis::status_do_move elapsed time_usec=106132 vel=2424030000.0 pos=-1311204329 pos_targ=13545090000 travel_distance=257267151
+mcs2axis::status_do_move elapsed time_usec=101810 vel=2424030000.0 pos=-1053937178 pos_targ=13545090000 travel_distance=246790494
+mcs2axis::status_do_move elapsed time_usec=107760 vel=2424030000.0 pos=-807146684 pos_targ=13545090000 travel_distance=261213472
+mcs2axis::status_do_move elapsed time_usec=104994 vel=2424030000.0 pos=-545933212 pos_targ=13545090000 travel_distance=254508605
+mcs2axis::status_do_move elapsed time_usec=106187 vel=2424030000.0 pos=-291424607 pos_targ=13545090000 travel_distance=257400473
+mcs2axis::status_do_move elapsed time_usec=107924 vel=2424030000.0 pos=-34024134 pos_targ=13545090000 travel_distance=261611013
+mcs2axis::status_do_move elapsed time_usec=107669 vel=2424030000.0 pos=227586879 pos_targ=13545090000 travel_distance=260992886
+mcs2axis::status_do_move elapsed time_usec=107720 vel=2424030000.0 pos=488579765 pos_targ=13545090000 travel_distance=261116511
+mcs2axis::status_do_move elapsed time_usec=104106 vel=2424030000.0 pos=749696276 pos_targ=13545090000 travel_distance=252356067
+mcs2axis::status_do_move elapsed time_usec=102130 vel=2424030000.0 pos=1002052343 pos_targ=13545090000 travel_distance=247566183
+mcs2axis::status_do_move elapsed time_usec=105706 vel=2424030000.0 pos=1249618526 pos_targ=13545090000 travel_distance=256234515
+mcs2axis::status_do_move elapsed time_usec=106711 vel=2424030000.0 pos=1505853041 pos_targ=13545090000 travel_distance=258670665
+mcs2axis::status_do_move elapsed time_usec=106331 vel=2424030000.0 pos=1764523706 pos_targ=13545090000 travel_distance=257749533
+mcs2axis::status_do_move elapsed time_usec=101720 vel=2424030000.0 pos=2022273239 pos_targ=13545090000 travel_distance=246572331
+mcs2axis::status_do_move elapsed time_usec=102297 vel=2424030000.0 pos=2268845570 pos_targ=13545090000 travel_distance=247970996
+mcs2axis::status_do_move elapsed time_usec=106224 vel=2424030000.0 pos=2516816566 pos_targ=13545090000 travel_distance=257490162
+mcs2axis::status_do_move elapsed time_usec=106246 vel=2424030000.0 pos=2774306728 pos_targ=13545090000 travel_distance=257543491
+mcs2axis::status_do_move elapsed time_usec=106551 vel=2424030000.0 pos=3031850219 pos_targ=13545090000 travel_distance=258282820
+mcs2axis::status_do_move elapsed time_usec=105923 vel=2424030000.0 pos=3290133039 pos_targ=13545090000 travel_distance=256760529
+mcs2axis::status_do_move elapsed time_usec=106463 vel=2424030000.0 pos=3546893568 pos_targ=13545090000 travel_distance=258069505
+mcs2axis::status_do_move elapsed time_usec=104489 vel=2424030000.0 pos=3804963073 pos_targ=13545090000 travel_distance=253284470
+mcs2axis::status_do_move elapsed time_usec=102904 vel=2424030000.0 pos=4058247543 pos_targ=13545090000 travel_distance=249442383
+mcs2axis::status_do_move elapsed time_usec=104813 vel=2424030000.0 pos=4307689926 pos_targ=13545090000 travel_distance=254069856
+mcs2axis::status_do_move elapsed time_usec=104585 vel=2424030000.0 pos=4561759782 pos_targ=13545090000 travel_distance=253517177
+mcs2axis::status_do_move elapsed time_usec=107515 vel=2424030000.0 pos=4815276959 pos_targ=13545090000 travel_distance=260619585
+mcs2axis::status_do_move elapsed time_usec=107351 vel=2424030000.0 pos=5075896544 pos_targ=13545090000 travel_distance=260222044
+mcs2axis::status_do_move elapsed time_usec=107111 vel=2424030000.0 pos=5336118588 pos_targ=13545090000 travel_distance=259640277
+mcs2axis::status_do_move elapsed time_usec=106311 vel=2424030000.0 pos=5595758865 pos_targ=13545090000 travel_distance=257701053
+mcs2axis::status_do_move elapsed time_usec=106963 vel=2424030000.0 pos=5853459918 pos_targ=13545090000 travel_distance=259281520
+mcs2axis::status_do_move elapsed time_usec=106744 vel=2424030000.0 pos=6112741438 pos_targ=13545090000 travel_distance=258750658
+mcs2axis::status_do_move elapsed time_usec=104686 vel=2424030000.0 pos=6371492096 pos_targ=13545090000 travel_distance=253762004
+mcs2axis::status_do_move elapsed time_usec=106379 vel=2424030000.0 pos=6625254100 pos_targ=13545090000 travel_distance=257865887
+mcs2axis::status_do_move elapsed time_usec=107955 vel=2424030000.0 pos=6883119987 pos_targ=13545090000 travel_distance=261686158
+mcs2axis::status_do_move elapsed time_usec=105408 vel=2424030000.0 pos=7144806145 pos_targ=13545090000 travel_distance=255512154
+mcs2axis::status_do_move elapsed time_usec=107448 vel=2424030000.0 pos=7400318299 pos_targ=13545090000 travel_distance=260457175
+mcs2axis::status_do_move elapsed time_usec=102509 vel=2424030000.0 pos=7660775474 pos_targ=13545090000 travel_distance=248484891
+mcs2axis::status_do_move elapsed time_usec=104531 vel=2424030000.0 pos=7909260365 pos_targ=13545090000 travel_distance=253386279
+mcs2axis::status_do_move elapsed time_usec=106247 vel=2424030000.0 pos=8162646644 pos_targ=13545090000 travel_distance=257545915
+mcs2axis::status_do_move elapsed time_usec=102539 vel=2424030000.0 pos=8420192559 pos_targ=13545090000 travel_distance=248557612
+mcs2axis::status_do_move elapsed time_usec=105817 vel=2424030000.0 pos=8668750171 pos_targ=13545090000 travel_distance=256503582
+mcs2axis::status_do_move elapsed time_usec=106769 vel=2424030000.0 pos=8925253753 pos_targ=13545090000 travel_distance=258811259
+mcs2axis::status_do_move elapsed time_usec=107638 vel=2424030000.0 pos=9184065012 pos_targ=13545090000 travel_distance=260917741
+mcs2axis::status_do_move elapsed time_usec=105496 vel=2424030000.0 pos=9444982753 pos_targ=13545090000 travel_distance=255725468
+mcs2axis::status_do_move elapsed time_usec=106274 vel=2424030000.0 pos=9700708221 pos_targ=13545090000 travel_distance=257611364
+mcs2axis::status_do_move elapsed time_usec=108297 vel=2424030000.0 pos=9958319585 pos_targ=13545090000 travel_distance=262515176
+mcs2axis::status_do_move elapsed time_usec=106989 vel=2424030000.0 pos=10220834761 pos_targ=13545090000 travel_distance=259344545
+mcs2axis::status_do_move elapsed time_usec=105052 vel=2424030000.0 pos=10480179306 pos_targ=13545090000 travel_distance=254649199
+mcs2axis::status_do_move elapsed time_usec=106537 vel=2424030000.0 pos=10734828505 pos_targ=13545090000 travel_distance=258248884
+mcs2axis::status_do_move elapsed time_usec=106623 vel=2424030000.0 pos=10993077389 pos_targ=13545090000 travel_distance=258457350
+mcs2axis::status_do_move elapsed time_usec=105431 vel=2424030000.0 pos=11251534739 pos_targ=13545090000 travel_distance=255567906
+mcs2axis::status_do_move elapsed time_usec=104371 vel=2424030000.0 pos=11507102645 pos_targ=13545090000 travel_distance=252998435
+mcs2axis::status_do_move elapsed time_usec=105706 vel=2424030000.0 pos=11760101080 pos_targ=13545090000 travel_distance=256234515
+mcs2axis::status_do_move elapsed time_usec=104824 vel=2424030000.0 pos=12016335595 pos_targ=13545090000 travel_distance=254096520
+mcs2axis::status_do_move elapsed time_usec=107025 vel=2424030000.0 pos=12270432115 pos_targ=13545090000 travel_distance=259431810
+mcs2axis::status_do_move elapsed time_usec=106822 vel=2424030000.0 pos=12529863925 pos_targ=13545090000 travel_distance=258939732
+mcs2axis::status_do_move elapsed time_usec=103442 vel=2424030000.0 pos=12788803657 pos_targ=13545090000 travel_distance=250746511
+mcs2axis::status_do_move elapsed time_usec=104958 vel=2424030000.0 pos=13039550168 pos_targ=13545090000 travel_distance=254421340
+mcs2axis::status_do_move elapsed time_usec=106177 vel=2424030000.0 pos=13293971508 pos_targ=13545090000 travel_distance=257376233
+mcs2axis::set_mmod1] old=4 new=4
+mcs2axis::set_step_freq[1] old=833 new=855
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=-9023
+mcs2axis::set_pos_targ[1] step mode new_pos=-9023
+mcs2axis::set_pos_targ[1] step mode steps=-9023 old_pos_targ=13545090000 new_pos_targ=-17133110000 step_freq=855 vel=2907000000
+mcs2axis::status_do_move elapsed time_usec=206 vel=2907000000.0 pos=13546090000 pos_targ=-17133110000 travel_distance=598842
+mcs2axis::status_do_move elapsed time_usec=104487 vel=2907000000.0 pos=13545491158 pos_targ=-17133110000 travel_distance=303743709
+mcs2axis::status_do_move elapsed time_usec=107008 vel=2907000000.0 pos=13241747449 pos_targ=-17133110000 travel_distance=311072256
+mcs2axis::status_do_move elapsed time_usec=106357 vel=2907000000.0 pos=12930675193 pos_targ=-17133110000 travel_distance=309179799
+mcs2axis::status_do_move elapsed time_usec=101979 vel=2907000000.0 pos=12621495394 pos_targ=-17133110000 travel_distance=296452953
+mcs2axis::status_do_move elapsed time_usec=107875 vel=2907000000.0 pos=12325042441 pos_targ=-17133110000 travel_distance=313592625
+mcs2axis::status_do_move elapsed time_usec=107121 vel=2907000000.0 pos=12011449816 pos_targ=-17133110000 travel_distance=311400747
+mcs2axis::status_do_move elapsed time_usec=107941 vel=2907000000.0 pos=11700049069 pos_targ=-17133110000 travel_distance=313784487
+mcs2axis::status_do_move elapsed time_usec=106911 vel=2907000000.0 pos=11386264582 pos_targ=-17133110000 travel_distance=310790277
+mcs2axis::status_do_move elapsed time_usec=108388 vel=2907000000.0 pos=11075474305 pos_targ=-17133110000 travel_distance=315083916
+mcs2axis::status_do_move elapsed time_usec=106176 vel=2907000000.0 pos=10760390389 pos_targ=-17133110000 travel_distance=308653632
+mcs2axis::status_do_move elapsed time_usec=102040 vel=2907000000.0 pos=10451736757 pos_targ=-17133110000 travel_distance=296630280
+mcs2axis::status_do_move elapsed time_usec=106200 vel=2907000000.0 pos=10155106477 pos_targ=-17133110000 travel_distance=308723400
+mcs2axis::status_do_move elapsed time_usec=107805 vel=2907000000.0 pos=9846383077 pos_targ=-17133110000 travel_distance=313389135
+mcs2axis::status_do_move elapsed time_usec=105281 vel=2907000000.0 pos=9532993942 pos_targ=-17133110000 travel_distance=306051867
+mcs2axis::status_do_move elapsed time_usec=104565 vel=2907000000.0 pos=9226942075 pos_targ=-17133110000 travel_distance=303970455
+mcs2axis::status_do_move elapsed time_usec=107173 vel=2907000000.0 pos=8922971620 pos_targ=-17133110000 travel_distance=311551911
+mcs2axis::status_do_move elapsed time_usec=104070 vel=2907000000.0 pos=8611419709 pos_targ=-17133110000 travel_distance=302531490
+mcs2axis::status_do_move elapsed time_usec=104580 vel=2907000000.0 pos=8308888219 pos_targ=-17133110000 travel_distance=304014060
+mcs2axis::status_do_move elapsed time_usec=107565 vel=2907000000.0 pos=8004874159 pos_targ=-17133110000 travel_distance=312691455
+mcs2axis::status_do_move elapsed time_usec=107276 vel=2907000000.0 pos=7692182704 pos_targ=-17133110000 travel_distance=311851332
+mcs2axis::status_do_move elapsed time_usec=108019 vel=2907000000.0 pos=7380331372 pos_targ=-17133110000 travel_distance=314011233
+mcs2axis::status_do_move elapsed time_usec=107709 vel=2907000000.0 pos=7066320139 pos_targ=-17133110000 travel_distance=313110063
+mcs2axis::status_do_move elapsed time_usec=107118 vel=2907000000.0 pos=6753210076 pos_targ=-17133110000 travel_distance=311392026
+mcs2axis::status_do_move elapsed time_usec=107690 vel=2907000000.0 pos=6441818050 pos_targ=-17133110000 travel_distance=313054830
+mcs2axis::status_do_move elapsed time_usec=106648 vel=2907000000.0 pos=6128763220 pos_targ=-17133110000 travel_distance=310025736
+mcs2axis::status_do_move elapsed time_usec=107131 vel=2907000000.0 pos=5818737484 pos_targ=-17133110000 travel_distance=311429817
+mcs2axis::status_do_move elapsed time_usec=106211 vel=2907000000.0 pos=5507307667 pos_targ=-17133110000 travel_distance=308755377
+mcs2axis::status_do_move elapsed time_usec=107133 vel=2907000000.0 pos=5198552290 pos_targ=-17133110000 travel_distance=311435631
+mcs2axis::status_do_move elapsed time_usec=106625 vel=2907000000.0 pos=4887116659 pos_targ=-17133110000 travel_distance=309958875
+mcs2axis::status_do_move elapsed time_usec=103825 vel=2907000000.0 pos=4577157784 pos_targ=-17133110000 travel_distance=301819275
+mcs2axis::status_do_move elapsed time_usec=107255 vel=2907000000.0 pos=4275338509 pos_targ=-17133110000 travel_distance=311790285
+mcs2axis::status_do_move elapsed time_usec=107268 vel=2907000000.0 pos=3963548224 pos_targ=-17133110000 travel_distance=311828076
+mcs2axis::status_do_move elapsed time_usec=102889 vel=2907000000.0 pos=3651720148 pos_targ=-17133110000 travel_distance=299098323
+mcs2axis::status_do_move elapsed time_usec=106998 vel=2907000000.0 pos=3352621825 pos_targ=-17133110000 travel_distance=311043186
+mcs2axis::status_do_move elapsed time_usec=106463 vel=2907000000.0 pos=3041578639 pos_targ=-17133110000 travel_distance=309487941
+mcs2axis::status_do_move elapsed time_usec=106889 vel=2907000000.0 pos=2732090698 pos_targ=-17133110000 travel_distance=310726323
+mcs2axis::status_do_move elapsed time_usec=107990 vel=2907000000.0 pos=2421364375 pos_targ=-17133110000 travel_distance=313926930
+mcs2axis::status_do_move elapsed time_usec=105049 vel=2907000000.0 pos=2107437445 pos_targ=-17133110000 travel_distance=305377443
+mcs2axis::status_do_move elapsed time_usec=106273 vel=2907000000.0 pos=1802060002 pos_targ=-17133110000 travel_distance=308935611
+mcs2axis::status_do_move elapsed time_usec=107073 vel=2907000000.0 pos=1493124391 pos_targ=-17133110000 travel_distance=311261211
+mcs2axis::status_do_move elapsed time_usec=106732 vel=2907000000.0 pos=1181863180 pos_targ=-17133110000 travel_distance=310269924
+mcs2axis::status_do_move elapsed time_usec=106085 vel=2907000000.0 pos=871593256 pos_targ=-17133110000 travel_distance=308389095
+mcs2axis::status_do_move elapsed time_usec=106997 vel=2907000000.0 pos=563204161 pos_targ=-17133110000 travel_distance=311040279
+mcs2axis::status_do_move elapsed time_usec=107564 vel=2907000000.0 pos=252163882 pos_targ=-17133110000 travel_distance=312688548
+mcs2axis::status_do_move elapsed time_usec=105454 vel=2907000000.0 pos=-60524666 pos_targ=-17133110000 travel_distance=306554778
+mcs2axis::status_do_move elapsed time_usec=107694 vel=2907000000.0 pos=-367079444 pos_targ=-17133110000 travel_distance=313066458
+mcs2axis::status_do_move elapsed time_usec=106846 vel=2907000000.0 pos=-680145902 pos_targ=-17133110000 travel_distance=310601322
+mcs2axis::status_do_move elapsed time_usec=106123 vel=2907000000.0 pos=-990747224 pos_targ=-17133110000 travel_distance=308499561
+mcs2axis::status_do_move elapsed time_usec=106107 vel=2907000000.0 pos=-1299246785 pos_targ=-17133110000 travel_distance=308453049
+mcs2axis::status_do_move elapsed time_usec=106653 vel=2907000000.0 pos=-1607699834 pos_targ=-17133110000 travel_distance=310040271
+mcs2axis::status_do_move elapsed time_usec=107979 vel=2907000000.0 pos=-1917740105 pos_targ=-17133110000 travel_distance=313894953
+mcs2axis::status_do_move elapsed time_usec=107167 vel=2907000000.0 pos=-2231635058 pos_targ=-17133110000 travel_distance=311534469
+mcs2axis::status_do_move elapsed time_usec=105904 vel=2907000000.0 pos=-2543169527 pos_targ=-17133110000 travel_distance=307862928
+mcs2axis::status_do_move elapsed time_usec=107590 vel=2907000000.0 pos=-2851032455 pos_targ=-17133110000 travel_distance=312764130
+mcs2axis::status_do_move elapsed time_usec=106194 vel=2907000000.0 pos=-3163796585 pos_targ=-17133110000 travel_distance=308705958
+mcs2axis::status_do_move elapsed time_usec=105424 vel=2907000000.0 pos=-3472502543 pos_targ=-17133110000 travel_distance=306467568
+mcs2axis::status_do_move elapsed time_usec=105601 vel=2907000000.0 pos=-3778970111 pos_targ=-17133110000 travel_distance=306982107
+mcs2axis::status_do_move elapsed time_usec=101238 vel=2907000000.0 pos=-4085952218 pos_targ=-17133110000 travel_distance=294298866
+mcs2axis::status_do_move elapsed time_usec=104680 vel=2907000000.0 pos=-4380251084 pos_targ=-17133110000 travel_distance=304304760
+mcs2axis::status_do_move elapsed time_usec=106246 vel=2907000000.0 pos=-4684555844 pos_targ=-17133110000 travel_distance=308857122
+mcs2axis::status_do_move elapsed time_usec=103787 vel=2907000000.0 pos=-4993412966 pos_targ=-17133110000 travel_distance=301708809
+mcs2axis::status_do_move elapsed time_usec=107038 vel=2907000000.0 pos=-5295121775 pos_targ=-17133110000 travel_distance=311159466
+mcs2axis::status_do_move elapsed time_usec=106033 vel=2907000000.0 pos=-5606281241 pos_targ=-17133110000 travel_distance=308237931
+mcs2axis::status_do_move elapsed time_usec=105717 vel=2907000000.0 pos=-5914519172 pos_targ=-17133110000 travel_distance=307319319
+mcs2axis::status_do_move elapsed time_usec=106157 vel=2907000000.0 pos=-6221838491 pos_targ=-17133110000 travel_distance=308598399
+mcs2axis::status_do_move elapsed time_usec=104614 vel=2907000000.0 pos=-6530436890 pos_targ=-17133110000 travel_distance=304112898
+mcs2axis::status_do_move elapsed time_usec=105374 vel=2907000000.0 pos=-6834549788 pos_targ=-17133110000 travel_distance=306322218
+mcs2axis::status_do_move elapsed time_usec=105884 vel=2907000000.0 pos=-7140872006 pos_targ=-17133110000 travel_distance=307804788
+mcs2axis::status_do_move elapsed time_usec=105304 vel=2907000000.0 pos=-7448676794 pos_targ=-17133110000 travel_distance=306118728
+mcs2axis::status_do_move elapsed time_usec=105038 vel=2907000000.0 pos=-7754795522 pos_targ=-17133110000 travel_distance=305345466
+mcs2axis::status_do_move elapsed time_usec=104408 vel=2907000000.0 pos=-8060140988 pos_targ=-17133110000 travel_distance=303514056
+mcs2axis::status_do_move elapsed time_usec=106412 vel=2907000000.0 pos=-8363655044 pos_targ=-17133110000 travel_distance=309339684
+mcs2axis::status_do_move elapsed time_usec=107245 vel=2907000000.0 pos=-8672994728 pos_targ=-17133110000 travel_distance=311761215
+mcs2axis::status_do_move elapsed time_usec=106843 vel=2907000000.0 pos=-8984755943 pos_targ=-17133110000 travel_distance=310592601
+mcs2axis::status_do_move elapsed time_usec=106523 vel=2907000000.0 pos=-9295348544 pos_targ=-17133110000 travel_distance=309662361
+mcs2axis::status_do_move elapsed time_usec=105761 vel=2907000000.0 pos=-9605010905 pos_targ=-17133110000 travel_distance=307447227
+mcs2axis::status_do_move elapsed time_usec=104105 vel=2907000000.0 pos=-9912458132 pos_targ=-17133110000 travel_distance=302633235
+mcs2axis::status_do_move elapsed time_usec=105987 vel=2907000000.0 pos=-10215091367 pos_targ=-17133110000 travel_distance=308104209
+mcs2axis::status_do_move elapsed time_usec=107907 vel=2907000000.0 pos=-10523195576 pos_targ=-17133110000 travel_distance=313685649
+mcs2axis::status_do_move elapsed time_usec=105734 vel=2907000000.0 pos=-10836881225 pos_targ=-17133110000 travel_distance=307368738
+mcs2axis::status_do_move elapsed time_usec=106323 vel=2907000000.0 pos=-11144249963 pos_targ=-17133110000 travel_distance=309080961
+mcs2axis::status_do_move elapsed time_usec=106898 vel=2907000000.0 pos=-11453330924 pos_targ=-17133110000 travel_distance=310752486
+mcs2axis::status_do_move elapsed time_usec=104674 vel=2907000000.0 pos=-11764083410 pos_targ=-17133110000 travel_distance=304287318
+mcs2axis::status_do_move elapsed time_usec=107004 vel=2907000000.0 pos=-12068370728 pos_targ=-17133110000 travel_distance=311060628
+mcs2axis::status_do_move elapsed time_usec=106006 vel=2907000000.0 pos=-12379431356 pos_targ=-17133110000 travel_distance=308159442
+RX122 not handled: re_cmd_axis_nr_match=true
+RX33: ch_no_asc="0" ch_cmd="STOP"
+mcs2axis::do_ref[1]
+mcs2axis::status_do_move elapsed time_usec=106216 vel=2907000000.0 pos=-12687590798 pos_targ=-17133110000 travel_distance=308769912
+mcs2axis::status_do_move elapsed time_usec=106533 vel=2907000000.0 pos=-12996360710 pos_targ=-17133110000 travel_distance=309691431
+mcs2axis::status_do_move elapsed time_usec=102601 vel=2907000000.0 pos=-13306052141 pos_targ=-17133110000 travel_distance=298261107
+mcs2axis::status_do_move elapsed time_usec=107875 vel=2907000000.0 pos=-13604313248 pos_targ=-17133110000 travel_distance=313592625
+mcs2axis::status_do_move elapsed time_usec=105430 vel=2907000000.0 pos=-13917905873 pos_targ=-17133110000 travel_distance=306485010
+mcs2axis::status_do_move elapsed time_usec=106555 vel=2907000000.0 pos=-14224390883 pos_targ=-17133110000 travel_distance=309755385
+mcs2axis::status_do_move elapsed time_usec=105752 vel=2907000000.0 pos=-14534146268 pos_targ=-17133110000 travel_distance=307421064
+mcs2axis::status_do_move elapsed time_usec=107221 vel=2907000000.0 pos=-14841567332 pos_targ=-17133110000 travel_distance=311691447
+mcs2axis::status_do_move elapsed time_usec=106802 vel=2907000000.0 pos=-15153258779 pos_targ=-17133110000 travel_distance=310473414
+mcs2axis::status_do_move elapsed time_usec=106756 vel=2907000000.0 pos=-15463732193 pos_targ=-17133110000 travel_distance=310339692
+mcs2axis::status_do_move elapsed time_usec=102687 vel=2907000000.0 pos=-15774071885 pos_targ=-17133110000 travel_distance=298511109
+mcs2axis::status_do_move elapsed time_usec=105987 vel=2907000000.0 pos=-16072582994 pos_targ=-17133110000 travel_distance=308104209
+mcs2axis::status_do_move elapsed time_usec=106132 vel=2907000000.0 pos=-16380687203 pos_targ=-17133110000 travel_distance=308525724
+mcs2axis::status_do_move elapsed time_usec=105883 vel=2907000000.0 pos=-16689212927 pos_targ=-17133110000 travel_distance=307801881
+mcs2axis::status_do_move elapsed time_usec=106704 vel=2907000000.0 pos=-16997014808 pos_targ=-17133110000 travel_distance=310188528
+RX0: read_len=0
+handle_client: finished Ok(())
+Accepted: TcpStream { addr: 127.0.0.1:55551, peer: 127.0.0.1:52134, fd: 4 }
+mcs2axis::set_hold_time[1] old=-1 new=-1
+mcs2axis::set_mclf[1] old=5000 new=5000
+mcs2axis::set_hold_time[1] old=-1 new=-1
+mcs2axis::set_mmod1] old=4 new=0
+mcs2axis::set_acc[1] old=10000000000 new=10000000000
+mcs2axis::set_vel[1] old=1000000000 new=1000000000
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=-18133110000
+mcs2axis::set_pos_targ[1] old=-17133110000 new=-18133110000
+mcs2axis::status_do_move elapsed time_usec=269 vel=1000000000.0 pos=-17134110000 pos_targ=-18133110000 travel_distance=269000
+mcs2axis::status_do_move elapsed time_usec=103253 vel=1000000000.0 pos=-17134379000 pos_targ=-18133110000 travel_distance=103253000
+mcs2axis::status_do_move elapsed time_usec=102224 vel=1000000000.0 pos=-17237632000 pos_targ=-18133110000 travel_distance=102224000
+mcs2axis::status_do_move elapsed time_usec=105582 vel=1000000000.0 pos=-17339856000 pos_targ=-18133110000 travel_distance=105582000
+mcs2axis::status_do_move elapsed time_usec=105983 vel=1000000000.0 pos=-17445438000 pos_targ=-18133110000 travel_distance=105983000
+mcs2axis::status_do_move elapsed time_usec=102347 vel=1000000000.0 pos=-17551421000 pos_targ=-18133110000 travel_distance=102347000
+mcs2axis::status_do_move elapsed time_usec=106226 vel=1000000000.0 pos=-17653768000 pos_targ=-18133110000 travel_distance=106226000
+mcs2axis::status_do_move elapsed time_usec=103019 vel=1000000000.0 pos=-17759994000 pos_targ=-18133110000 travel_distance=103019000
+mcs2axis::status_do_move elapsed time_usec=104899 vel=1000000000.0 pos=-17863013000 pos_targ=-18133110000 travel_distance=104899000
+mcs2axis::status_do_move elapsed time_usec=103210 vel=1000000000.0 pos=-17967912000 pos_targ=-18133110000 travel_distance=103210000
+mcs2axis::status_do_move elapsed time_usec=102274 vel=1000000000.0 pos=-18071122000 pos_targ=-18133110000 travel_distance=102274000
+mcs2axis::set_mmod1] old=0 new=0
+mcs2axis::set_acc[1] old=10000000000 new=10000000000
+mcs2axis::set_vel[1] old=1000000000 new=1000000000
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=0
+mcs2axis::set_pos_targ[1] old=-18133110000 new=0
+mcs2axis::status_do_move elapsed time_usec=270 vel=1000000000.0 pos=-18134110000 pos_targ=0 travel_distance=270000
+mcs2axis::status_do_move elapsed time_usec=104596 vel=1000000000.0 pos=-18133840000 pos_targ=0 travel_distance=104596000
+mcs2axis::status_do_move elapsed time_usec=106623 vel=1000000000.0 pos=-18029244000 pos_targ=0 travel_distance=106623000
+mcs2axis::status_do_move elapsed time_usec=106010 vel=1000000000.0 pos=-17922621000 pos_targ=0 travel_distance=106010000
+mcs2axis::status_do_move elapsed time_usec=103557 vel=1000000000.0 pos=-17816611000 pos_targ=0 travel_distance=103557000
+mcs2axis::status_do_move elapsed time_usec=106999 vel=1000000000.0 pos=-17713054000 pos_targ=0 travel_distance=106999000
+mcs2axis::status_do_move elapsed time_usec=104946 vel=1000000000.0 pos=-17606055000 pos_targ=0 travel_distance=104946000
+mcs2axis::status_do_move elapsed time_usec=102227 vel=1000000000.0 pos=-17501109000 pos_targ=0 travel_distance=102227000
+mcs2axis::status_do_move elapsed time_usec=106252 vel=1000000000.0 pos=-17398882000 pos_targ=0 travel_distance=106252000
+mcs2axis::status_do_move elapsed time_usec=105985 vel=1000000000.0 pos=-17292630000 pos_targ=0 travel_distance=105985000
+mcs2axis::status_do_move elapsed time_usec=104950 vel=1000000000.0 pos=-17186645000 pos_targ=0 travel_distance=104950000
+mcs2axis::status_do_move elapsed time_usec=104494 vel=1000000000.0 pos=-17081695000 pos_targ=0 travel_distance=104494000
+mcs2axis::status_do_move elapsed time_usec=106155 vel=1000000000.0 pos=-16977201000 pos_targ=0 travel_distance=106155000
+mcs2axis::status_do_move elapsed time_usec=105426 vel=1000000000.0 pos=-16871046000 pos_targ=0 travel_distance=105426000
+mcs2axis::status_do_move elapsed time_usec=102596 vel=1000000000.0 pos=-16765620000 pos_targ=0 travel_distance=102596000
+mcs2axis::status_do_move elapsed time_usec=103184 vel=1000000000.0 pos=-16663024000 pos_targ=0 travel_distance=103184000
+mcs2axis::status_do_move elapsed time_usec=104195 vel=1000000000.0 pos=-16559840000 pos_targ=0 travel_distance=104195000
+mcs2axis::status_do_move elapsed time_usec=101241 vel=1000000000.0 pos=-16455645000 pos_targ=0 travel_distance=101241000
+mcs2axis::status_do_move elapsed time_usec=105321 vel=1000000000.0 pos=-16354404000 pos_targ=0 travel_distance=105321000
+mcs2axis::status_do_move elapsed time_usec=104399 vel=1000000000.0 pos=-16249083000 pos_targ=0 travel_distance=104399000
+mcs2axis::status_do_move elapsed time_usec=105992 vel=1000000000.0 pos=-16144684000 pos_targ=0 travel_distance=105992000
+mcs2axis::status_do_move elapsed time_usec=105460 vel=1000000000.0 pos=-16038692000 pos_targ=0 travel_distance=105460000
+mcs2axis::status_do_move elapsed time_usec=107350 vel=1000000000.0 pos=-15933232000 pos_targ=0 travel_distance=107350000
+mcs2axis::status_do_move elapsed time_usec=106192 vel=1000000000.0 pos=-15825882000 pos_targ=0 travel_distance=106192000
+mcs2axis::status_do_move elapsed time_usec=107599 vel=1000000000.0 pos=-15719690000 pos_targ=0 travel_distance=107599000
+mcs2axis::status_do_move elapsed time_usec=103550 vel=1000000000.0 pos=-15612091000 pos_targ=0 travel_distance=103550000
+mcs2axis::status_do_move elapsed time_usec=103409 vel=1000000000.0 pos=-15508541000 pos_targ=0 travel_distance=103409000
+mcs2axis::status_do_move elapsed time_usec=105938 vel=1000000000.0 pos=-15405132000 pos_targ=0 travel_distance=105938000
+mcs2axis::status_do_move elapsed time_usec=106199 vel=1000000000.0 pos=-15299194000 pos_targ=0 travel_distance=106199000
+mcs2axis::status_do_move elapsed time_usec=104365 vel=1000000000.0 pos=-15192995000 pos_targ=0 travel_distance=104365000
+mcs2axis::status_do_move elapsed time_usec=106583 vel=1000000000.0 pos=-15088630000 pos_targ=0 travel_distance=106583000
+mcs2axis::status_do_move elapsed time_usec=104209 vel=1000000000.0 pos=-14982047000 pos_targ=0 travel_distance=104209000
+mcs2axis::status_do_move elapsed time_usec=105619 vel=1000000000.0 pos=-14877838000 pos_targ=0 travel_distance=105619000
+mcs2axis::status_do_move elapsed time_usec=105879 vel=1000000000.0 pos=-14772219000 pos_targ=0 travel_distance=105879000
+mcs2axis::status_do_move elapsed time_usec=103318 vel=1000000000.0 pos=-14666340000 pos_targ=0 travel_distance=103318000
+mcs2axis::status_do_move elapsed time_usec=102511 vel=1000000000.0 pos=-14563022000 pos_targ=0 travel_distance=102511000
+mcs2axis::status_do_move elapsed time_usec=106083 vel=1000000000.0 pos=-14460511000 pos_targ=0 travel_distance=106083000
+mcs2axis::status_do_move elapsed time_usec=105920 vel=1000000000.0 pos=-14354428000 pos_targ=0 travel_distance=105920000
+mcs2axis::status_do_move elapsed time_usec=105556 vel=1000000000.0 pos=-14248508000 pos_targ=0 travel_distance=105556000
+mcs2axis::status_do_move elapsed time_usec=103867 vel=1000000000.0 pos=-14142952000 pos_targ=0 travel_distance=103867000
+mcs2axis::status_do_move elapsed time_usec=106103 vel=1000000000.0 pos=-14039085000 pos_targ=0 travel_distance=106103000
+mcs2axis::status_do_move elapsed time_usec=104915 vel=1000000000.0 pos=-13932982000 pos_targ=0 travel_distance=104915000
+mcs2axis::status_do_move elapsed time_usec=106379 vel=1000000000.0 pos=-13828067000 pos_targ=0 travel_distance=106379000
+mcs2axis::status_do_move elapsed time_usec=105064 vel=1000000000.0 pos=-13721688000 pos_targ=0 travel_distance=105064000
+mcs2axis::status_do_move elapsed time_usec=103841 vel=1000000000.0 pos=-13616624000 pos_targ=0 travel_distance=103841000
+mcs2axis::status_do_move elapsed time_usec=106184 vel=1000000000.0 pos=-13512783000 pos_targ=0 travel_distance=106184000
+mcs2axis::status_do_move elapsed time_usec=105381 vel=1000000000.0 pos=-13406599000 pos_targ=0 travel_distance=105381000
+mcs2axis::status_do_move elapsed time_usec=103021 vel=1000000000.0 pos=-13301218000 pos_targ=0 travel_distance=103021000
+mcs2axis::status_do_move elapsed time_usec=105354 vel=1000000000.0 pos=-13198197000 pos_targ=0 travel_distance=105354000
+mcs2axis::status_do_move elapsed time_usec=103081 vel=1000000000.0 pos=-13092843000 pos_targ=0 travel_distance=103081000
+mcs2axis::status_do_move elapsed time_usec=106622 vel=1000000000.0 pos=-12989762000 pos_targ=0 travel_distance=106622000
+mcs2axis::status_do_move elapsed time_usec=104921 vel=1000000000.0 pos=-12883140000 pos_targ=0 travel_distance=104921000
+mcs2axis::status_do_move elapsed time_usec=104556 vel=1000000000.0 pos=-12778219000 pos_targ=0 travel_distance=104556000
+mcs2axis::status_do_move elapsed time_usec=105084 vel=1000000000.0 pos=-12673663000 pos_targ=0 travel_distance=105084000
+mcs2axis::status_do_move elapsed time_usec=104849 vel=1000000000.0 pos=-12568579000 pos_targ=0 travel_distance=104849000
+mcs2axis::status_do_move elapsed time_usec=106069 vel=1000000000.0 pos=-12463730000 pos_targ=0 travel_distance=106069000
+mcs2axis::status_do_move elapsed time_usec=103689 vel=1000000000.0 pos=-12357661000 pos_targ=0 travel_distance=103689000
+mcs2axis::status_do_move elapsed time_usec=105774 vel=1000000000.0 pos=-12253972000 pos_targ=0 travel_distance=105774000
+mcs2axis::status_do_move elapsed time_usec=103952 vel=1000000000.0 pos=-12148198000 pos_targ=0 travel_distance=103952000
+mcs2axis::status_do_move elapsed time_usec=104426 vel=1000000000.0 pos=-12044246000 pos_targ=0 travel_distance=104426000
+mcs2axis::status_do_move elapsed time_usec=105423 vel=1000000000.0 pos=-11939820000 pos_targ=0 travel_distance=105423000
+mcs2axis::status_do_move elapsed time_usec=106011 vel=1000000000.0 pos=-11834397000 pos_targ=0 travel_distance=106011000
+mcs2axis::status_do_move elapsed time_usec=104175 vel=1000000000.0 pos=-11728386000 pos_targ=0 travel_distance=104175000
+mcs2axis::status_do_move elapsed time_usec=106586 vel=1000000000.0 pos=-11624211000 pos_targ=0 travel_distance=106586000
+mcs2axis::status_do_move elapsed time_usec=105017 vel=1000000000.0 pos=-11517625000 pos_targ=0 travel_distance=105017000
+mcs2axis::status_do_move elapsed time_usec=105006 vel=1000000000.0 pos=-11412608000 pos_targ=0 travel_distance=105006000
+mcs2axis::status_do_move elapsed time_usec=104069 vel=1000000000.0 pos=-11307602000 pos_targ=0 travel_distance=104069000
+mcs2axis::status_do_move elapsed time_usec=104818 vel=1000000000.0 pos=-11203533000 pos_targ=0 travel_distance=104818000
+mcs2axis::status_do_move elapsed time_usec=103127 vel=1000000000.0 pos=-11098715000 pos_targ=0 travel_distance=103127000
+mcs2axis::status_do_move elapsed time_usec=103392 vel=1000000000.0 pos=-10995588000 pos_targ=0 travel_distance=103392000
+mcs2axis::status_do_move elapsed time_usec=103967 vel=1000000000.0 pos=-10892196000 pos_targ=0 travel_distance=103967000
+mcs2axis::status_do_move elapsed time_usec=103974 vel=1000000000.0 pos=-10788229000 pos_targ=0 travel_distance=103974000
+mcs2axis::status_do_move elapsed time_usec=105530 vel=1000000000.0 pos=-10684255000 pos_targ=0 travel_distance=105530000
+mcs2axis::status_do_move elapsed time_usec=105630 vel=1000000000.0 pos=-10578725000 pos_targ=0 travel_distance=105630000
+mcs2axis::status_do_move elapsed time_usec=103871 vel=1000000000.0 pos=-10473095000 pos_targ=0 travel_distance=103871000
+mcs2axis::status_do_move elapsed time_usec=104924 vel=1000000000.0 pos=-10369224000 pos_targ=0 travel_distance=104924000
+mcs2axis::status_do_move elapsed time_usec=105787 vel=1000000000.0 pos=-10264300000 pos_targ=0 travel_distance=105787000
+mcs2axis::status_do_move elapsed time_usec=105237 vel=1000000000.0 pos=-10158513000 pos_targ=0 travel_distance=105237000
+mcs2axis::status_do_move elapsed time_usec=104421 vel=1000000000.0 pos=-10053276000 pos_targ=0 travel_distance=104421000
+mcs2axis::status_do_move elapsed time_usec=104475 vel=1000000000.0 pos=-9948855000 pos_targ=0 travel_distance=104475000
+mcs2axis::status_do_move elapsed time_usec=104034 vel=1000000000.0 pos=-9844380000 pos_targ=0 travel_distance=104034000
+mcs2axis::status_do_move elapsed time_usec=104172 vel=1000000000.0 pos=-9740346000 pos_targ=0 travel_distance=104172000
+mcs2axis::status_do_move elapsed time_usec=103067 vel=1000000000.0 pos=-9636174000 pos_targ=0 travel_distance=103067000
+mcs2axis::status_do_move elapsed time_usec=105835 vel=1000000000.0 pos=-9533107000 pos_targ=0 travel_distance=105835000
+mcs2axis::status_do_move elapsed time_usec=106207 vel=1000000000.0 pos=-9427272000 pos_targ=0 travel_distance=106207000
+mcs2axis::status_do_move elapsed time_usec=106821 vel=1000000000.0 pos=-9321065000 pos_targ=0 travel_distance=106821000
+mcs2axis::status_do_move elapsed time_usec=105172 vel=1000000000.0 pos=-9214244000 pos_targ=0 travel_distance=105172000
+mcs2axis::status_do_move elapsed time_usec=104814 vel=1000000000.0 pos=-9109072000 pos_targ=0 travel_distance=104814000
+mcs2axis::status_do_move elapsed time_usec=105233 vel=1000000000.0 pos=-9004258000 pos_targ=0 travel_distance=105233000
+mcs2axis::status_do_move elapsed time_usec=105348 vel=1000000000.0 pos=-8899025000 pos_targ=0 travel_distance=105348000
+mcs2axis::status_do_move elapsed time_usec=106182 vel=1000000000.0 pos=-8793677000 pos_targ=0 travel_distance=106182000
+mcs2axis::status_do_move elapsed time_usec=105584 vel=1000000000.0 pos=-8687495000 pos_targ=0 travel_distance=105584000
+mcs2axis::status_do_move elapsed time_usec=105931 vel=1000000000.0 pos=-8581911000 pos_targ=0 travel_distance=105931000
+mcs2axis::status_do_move elapsed time_usec=104438 vel=1000000000.0 pos=-8475980000 pos_targ=0 travel_distance=104438000
+mcs2axis::status_do_move elapsed time_usec=105673 vel=1000000000.0 pos=-8371542000 pos_targ=0 travel_distance=105673000
+mcs2axis::status_do_move elapsed time_usec=105309 vel=1000000000.0 pos=-8265869000 pos_targ=0 travel_distance=105309000
+mcs2axis::status_do_move elapsed time_usec=102679 vel=1000000000.0 pos=-8160560000 pos_targ=0 travel_distance=102679000
+mcs2axis::status_do_move elapsed time_usec=101971 vel=1000000000.0 pos=-8057881000 pos_targ=0 travel_distance=101971000
+mcs2axis::status_do_move elapsed time_usec=106863 vel=1000000000.0 pos=-7955910000 pos_targ=0 travel_distance=106863000
+mcs2axis::status_do_move elapsed time_usec=106559 vel=1000000000.0 pos=-7849047000 pos_targ=0 travel_distance=106559000
+mcs2axis::status_do_move elapsed time_usec=106626 vel=1000000000.0 pos=-7742488000 pos_targ=0 travel_distance=106626000
+mcs2axis::status_do_move elapsed time_usec=106701 vel=1000000000.0 pos=-7635862000 pos_targ=0 travel_distance=106701000
+mcs2axis::status_do_move elapsed time_usec=106925 vel=1000000000.0 pos=-7529161000 pos_targ=0 travel_distance=106925000
+mcs2axis::status_do_move elapsed time_usec=105570 vel=1000000000.0 pos=-7422236000 pos_targ=0 travel_distance=105570000
+mcs2axis::status_do_move elapsed time_usec=105403 vel=1000000000.0 pos=-7316666000 pos_targ=0 travel_distance=105403000
+mcs2axis::status_do_move elapsed time_usec=105025 vel=1000000000.0 pos=-7211263000 pos_targ=0 travel_distance=105025000
+mcs2axis::status_do_move elapsed time_usec=105002 vel=1000000000.0 pos=-7106238000 pos_targ=0 travel_distance=105002000
+mcs2axis::status_do_move elapsed time_usec=105231 vel=1000000000.0 pos=-7001236000 pos_targ=0 travel_distance=105231000
+mcs2axis::status_do_move elapsed time_usec=104828 vel=1000000000.0 pos=-6896005000 pos_targ=0 travel_distance=104828000
+mcs2axis::status_do_move elapsed time_usec=104916 vel=1000000000.0 pos=-6791177000 pos_targ=0 travel_distance=104916000
+mcs2axis::status_do_move elapsed time_usec=101541 vel=1000000000.0 pos=-6686261000 pos_targ=0 travel_distance=101541000
+mcs2axis::status_do_move elapsed time_usec=105276 vel=1000000000.0 pos=-6584720000 pos_targ=0 travel_distance=105276000
+mcs2axis::status_do_move elapsed time_usec=103861 vel=1000000000.0 pos=-6479444000 pos_targ=0 travel_distance=103861000
+mcs2axis::status_do_move elapsed time_usec=105083 vel=1000000000.0 pos=-6375583000 pos_targ=0 travel_distance=105083000
+mcs2axis::status_do_move elapsed time_usec=101940 vel=1000000000.0 pos=-6270500000 pos_targ=0 travel_distance=101940000
+mcs2axis::status_do_move elapsed time_usec=104936 vel=1000000000.0 pos=-6168560000 pos_targ=0 travel_distance=104936000
+mcs2axis::status_do_move elapsed time_usec=104611 vel=1000000000.0 pos=-6063624000 pos_targ=0 travel_distance=104611000
+mcs2axis::status_do_move elapsed time_usec=103990 vel=1000000000.0 pos=-5959013000 pos_targ=0 travel_distance=103990000
+mcs2axis::status_do_move elapsed time_usec=105504 vel=1000000000.0 pos=-5855023000 pos_targ=0 travel_distance=105504000
+mcs2axis::status_do_move elapsed time_usec=105684 vel=1000000000.0 pos=-5749519000 pos_targ=0 travel_distance=105684000
+mcs2axis::status_do_move elapsed time_usec=106429 vel=1000000000.0 pos=-5643835000 pos_targ=0 travel_distance=106429000
+mcs2axis::status_do_move elapsed time_usec=105702 vel=1000000000.0 pos=-5537406000 pos_targ=0 travel_distance=105702000
+mcs2axis::status_do_move elapsed time_usec=105056 vel=1000000000.0 pos=-5431704000 pos_targ=0 travel_distance=105056000
+mcs2axis::status_do_move elapsed time_usec=104587 vel=1000000000.0 pos=-5326648000 pos_targ=0 travel_distance=104587000
+mcs2axis::status_do_move elapsed time_usec=104209 vel=1000000000.0 pos=-5222061000 pos_targ=0 travel_distance=104209000
+mcs2axis::status_do_move elapsed time_usec=105728 vel=1000000000.0 pos=-5117852000 pos_targ=0 travel_distance=105728000
+mcs2axis::status_do_move elapsed time_usec=106155 vel=1000000000.0 pos=-5012124000 pos_targ=0 travel_distance=106155000
+mcs2axis::status_do_move elapsed time_usec=106161 vel=1000000000.0 pos=-4905969000 pos_targ=0 travel_distance=106161000
+mcs2axis::status_do_move elapsed time_usec=103628 vel=1000000000.0 pos=-4799808000 pos_targ=0 travel_distance=103628000
+mcs2axis::status_do_move elapsed time_usec=104302 vel=1000000000.0 pos=-4696180000 pos_targ=0 travel_distance=104302000
+mcs2axis::status_do_move elapsed time_usec=105214 vel=1000000000.0 pos=-4591878000 pos_targ=0 travel_distance=105214000
+mcs2axis::status_do_move elapsed time_usec=102812 vel=1000000000.0 pos=-4486664000 pos_targ=0 travel_distance=102812000
+mcs2axis::status_do_move elapsed time_usec=104625 vel=1000000000.0 pos=-4383852000 pos_targ=0 travel_distance=104625000
+mcs2axis::status_do_move elapsed time_usec=105776 vel=1000000000.0 pos=-4279227000 pos_targ=0 travel_distance=105776000
+mcs2axis::status_do_move elapsed time_usec=105793 vel=1000000000.0 pos=-4173451000 pos_targ=0 travel_distance=105793000
+mcs2axis::status_do_move elapsed time_usec=106218 vel=1000000000.0 pos=-4067658000 pos_targ=0 travel_distance=106218000
+mcs2axis::status_do_move elapsed time_usec=102044 vel=1000000000.0 pos=-3961440000 pos_targ=0 travel_distance=102044000
+mcs2axis::status_do_move elapsed time_usec=105192 vel=1000000000.0 pos=-3859396000 pos_targ=0 travel_distance=105192000
+mcs2axis::status_do_move elapsed time_usec=106577 vel=1000000000.0 pos=-3754204000 pos_targ=0 travel_distance=106577000
+mcs2axis::status_do_move elapsed time_usec=102261 vel=1000000000.0 pos=-3647627000 pos_targ=0 travel_distance=102261000
+mcs2axis::status_do_move elapsed time_usec=105733 vel=1000000000.0 pos=-3545366000 pos_targ=0 travel_distance=105733000
+mcs2axis::status_do_move elapsed time_usec=102520 vel=1000000000.0 pos=-3439633000 pos_targ=0 travel_distance=102520000
+mcs2axis::status_do_move elapsed time_usec=105871 vel=1000000000.0 pos=-3337113000 pos_targ=0 travel_distance=105871000
+mcs2axis::status_do_move elapsed time_usec=106692 vel=1000000000.0 pos=-3231242000 pos_targ=0 travel_distance=106692000
+mcs2axis::status_do_move elapsed time_usec=104377 vel=1000000000.0 pos=-3124550000 pos_targ=0 travel_distance=104377000
+mcs2axis::status_do_move elapsed time_usec=103213 vel=1000000000.0 pos=-3020173000 pos_targ=0 travel_distance=103213000
+mcs2axis::status_do_move elapsed time_usec=104439 vel=1000000000.0 pos=-2916960000 pos_targ=0 travel_distance=104439000
+mcs2axis::status_do_move elapsed time_usec=106258 vel=1000000000.0 pos=-2812521000 pos_targ=0 travel_distance=106258000
+mcs2axis::status_do_move elapsed time_usec=106050 vel=1000000000.0 pos=-2706263000 pos_targ=0 travel_distance=106050000
+mcs2axis::status_do_move elapsed time_usec=105579 vel=1000000000.0 pos=-2600213000 pos_targ=0 travel_distance=105579000
+mcs2axis::status_do_move elapsed time_usec=102253 vel=1000000000.0 pos=-2494634000 pos_targ=0 travel_distance=102253000
+mcs2axis::status_do_move elapsed time_usec=104095 vel=1000000000.0 pos=-2392381000 pos_targ=0 travel_distance=104095000
+mcs2axis::status_do_move elapsed time_usec=102022 vel=1000000000.0 pos=-2288286000 pos_targ=0 travel_distance=102022000
+mcs2axis::status_do_move elapsed time_usec=106368 vel=1000000000.0 pos=-2186264000 pos_targ=0 travel_distance=106368000
+mcs2axis::status_do_move elapsed time_usec=107164 vel=1000000000.0 pos=-2079896000 pos_targ=0 travel_distance=107164000
+mcs2axis::status_do_move elapsed time_usec=106265 vel=1000000000.0 pos=-1972732000 pos_targ=0 travel_distance=106265000
+mcs2axis::status_do_move elapsed time_usec=106238 vel=1000000000.0 pos=-1866467000 pos_targ=0 travel_distance=106238000
+mcs2axis::status_do_move elapsed time_usec=104823 vel=1000000000.0 pos=-1760229000 pos_targ=0 travel_distance=104823000
+mcs2axis::status_do_move elapsed time_usec=104802 vel=1000000000.0 pos=-1655406000 pos_targ=0 travel_distance=104802000
+mcs2axis::status_do_move elapsed time_usec=105745 vel=1000000000.0 pos=-1550604000 pos_targ=0 travel_distance=105745000
+mcs2axis::status_do_move elapsed time_usec=106403 vel=1000000000.0 pos=-1444859000 pos_targ=0 travel_distance=106403000
+mcs2axis::status_do_move elapsed time_usec=105950 vel=1000000000.0 pos=-1338456000 pos_targ=0 travel_distance=105950000
+mcs2axis::status_do_move elapsed time_usec=101974 vel=1000000000.0 pos=-1232506000 pos_targ=0 travel_distance=101974000
+mcs2axis::status_do_move elapsed time_usec=104488 vel=1000000000.0 pos=-1130532000 pos_targ=0 travel_distance=104488000
+mcs2axis::status_do_move elapsed time_usec=103115 vel=1000000000.0 pos=-1026044000 pos_targ=0 travel_distance=103115000
+mcs2axis::status_do_move elapsed time_usec=106060 vel=1000000000.0 pos=-922929000 pos_targ=0 travel_distance=106060000
+mcs2axis::status_do_move elapsed time_usec=106287 vel=1000000000.0 pos=-816869000 pos_targ=0 travel_distance=106287000
+mcs2axis::status_do_move elapsed time_usec=102789 vel=1000000000.0 pos=-710582000 pos_targ=0 travel_distance=102789000
+mcs2axis::status_do_move elapsed time_usec=106143 vel=1000000000.0 pos=-607793000 pos_targ=0 travel_distance=106143000
+mcs2axis::status_do_move elapsed time_usec=103891 vel=1000000000.0 pos=-501650000 pos_targ=0 travel_distance=103891000
+mcs2axis::status_do_move elapsed time_usec=103592 vel=1000000000.0 pos=-397759000 pos_targ=0 travel_distance=103592000
+mcs2axis::status_do_move elapsed time_usec=102247 vel=1000000000.0 pos=-294167000 pos_targ=0 travel_distance=102247000
+mcs2axis::status_do_move elapsed time_usec=105541 vel=1000000000.0 pos=-191920000 pos_targ=0 travel_distance=105541000
+mcs2axis::status_do_move elapsed time_usec=105423 vel=1000000000.0 pos=-86379000 pos_targ=0 travel_distance=105423000
+RX0: read_len=0
+handle_client: finished Ok(())
+Accepted: TcpStream { addr: 127.0.0.1:55551, peer: 127.0.0.1:52562, fd: 4 }
+mcs2axis::set_hold_time[1] old=-1 new=-1
+mcs2axis::set_mclf[1] old=5000 new=5000
+mcs2axis::set_hold_time[1] old=-1 new=-1
+mcs2axis::set_mmod1] old=0 new=0
+mcs2axis::set_acc[1] old=10000000000 new=10000000000
+mcs2axis::set_vel[1] old=1000000000 new=1000000000
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=10000000000
+mcs2axis::set_pos_targ[1] old=0 new=10000000000
+mcs2axis::status_do_move elapsed time_usec=71 vel=1000000000.0 pos=1000000 pos_targ=10000000000 travel_distance=71000
+mcs2axis::status_do_move elapsed time_usec=105465 vel=1000000000.0 pos=1071000 pos_targ=10000000000 travel_distance=105465000
+mcs2axis::status_do_move elapsed time_usec=104667 vel=1000000000.0 pos=106536000 pos_targ=10000000000 travel_distance=104667000
+mcs2axis::status_do_move elapsed time_usec=104331 vel=1000000000.0 pos=211203000 pos_targ=10000000000 travel_distance=104331000
+mcs2axis::status_do_move elapsed time_usec=104588 vel=1000000000.0 pos=315534000 pos_targ=10000000000 travel_distance=104588000
+mcs2axis::status_do_move elapsed time_usec=105775 vel=1000000000.0 pos=420122000 pos_targ=10000000000 travel_distance=105775000
+mcs2axis::status_do_move elapsed time_usec=102545 vel=1000000000.0 pos=525897000 pos_targ=10000000000 travel_distance=102545000
+mcs2axis::status_do_move elapsed time_usec=103455 vel=1000000000.0 pos=628442000 pos_targ=10000000000 travel_distance=103455000
+mcs2axis::status_do_move elapsed time_usec=105492 vel=1000000000.0 pos=731897000 pos_targ=10000000000 travel_distance=105492000
+mcs2axis::status_do_move elapsed time_usec=103735 vel=1000000000.0 pos=837389000 pos_targ=10000000000 travel_distance=103735000
+mcs2axis::status_do_move elapsed time_usec=104450 vel=1000000000.0 pos=941124000 pos_targ=10000000000 travel_distance=104450000
+mcs2axis::status_do_move elapsed time_usec=102906 vel=1000000000.0 pos=1045574000 pos_targ=10000000000 travel_distance=102906000
+mcs2axis::status_do_move elapsed time_usec=103934 vel=1000000000.0 pos=1148480000 pos_targ=10000000000 travel_distance=103934000
+mcs2axis::status_do_move elapsed time_usec=103986 vel=1000000000.0 pos=1252414000 pos_targ=10000000000 travel_distance=103986000
+mcs2axis::status_do_move elapsed time_usec=129332 vel=1000000000.0 pos=1356400000 pos_targ=10000000000 travel_distance=129332000
+mcs2axis::status_do_move elapsed time_usec=113148 vel=1000000000.0 pos=1485732000 pos_targ=10000000000 travel_distance=113148000
+mcs2axis::status_do_move elapsed time_usec=102792 vel=1000000000.0 pos=1598880000 pos_targ=10000000000 travel_distance=102792000
+mcs2axis::status_do_move elapsed time_usec=104111 vel=1000000000.0 pos=1701672000 pos_targ=10000000000 travel_distance=104111000
+mcs2axis::status_do_move elapsed time_usec=102649 vel=1000000000.0 pos=1805783000 pos_targ=10000000000 travel_distance=102649000
+mcs2axis::status_do_move elapsed time_usec=103251 vel=1000000000.0 pos=1908432000 pos_targ=10000000000 travel_distance=103251000
+mcs2axis::status_do_move elapsed time_usec=104252 vel=1000000000.0 pos=2011683000 pos_targ=10000000000 travel_distance=104252000
+mcs2axis::status_do_move elapsed time_usec=104815 vel=1000000000.0 pos=2115935000 pos_targ=10000000000 travel_distance=104815000
+mcs2axis::status_do_move elapsed time_usec=103190 vel=1000000000.0 pos=2220750000 pos_targ=10000000000 travel_distance=103190000
+mcs2axis::status_do_move elapsed time_usec=101302 vel=1000000000.0 pos=2323940000 pos_targ=10000000000 travel_distance=101302000
+mcs2axis::status_do_move elapsed time_usec=100863 vel=1000000000.0 pos=2425242000 pos_targ=10000000000 travel_distance=100863000
+mcs2axis::status_do_move elapsed time_usec=100846 vel=1000000000.0 pos=2526105000 pos_targ=10000000000 travel_distance=100846000
+mcs2axis::status_do_move elapsed time_usec=104479 vel=1000000000.0 pos=2626951000 pos_targ=10000000000 travel_distance=104479000
+mcs2axis::status_do_move elapsed time_usec=104807 vel=1000000000.0 pos=2731430000 pos_targ=10000000000 travel_distance=104807000
+mcs2axis::status_do_move elapsed time_usec=103131 vel=1000000000.0 pos=2836237000 pos_targ=10000000000 travel_distance=103131000
+mcs2axis::status_do_move elapsed time_usec=105528 vel=1000000000.0 pos=2939368000 pos_targ=10000000000 travel_distance=105528000
+mcs2axis::status_do_move elapsed time_usec=102161 vel=1000000000.0 pos=3044896000 pos_targ=10000000000 travel_distance=102161000
+mcs2axis::status_do_move elapsed time_usec=104787 vel=1000000000.0 pos=3147057000 pos_targ=10000000000 travel_distance=104787000
+mcs2axis::status_do_move elapsed time_usec=103056 vel=1000000000.0 pos=3251844000 pos_targ=10000000000 travel_distance=103056000
+mcs2axis::status_do_move elapsed time_usec=104116 vel=1000000000.0 pos=3354900000 pos_targ=10000000000 travel_distance=104116000
+mcs2axis::status_do_move elapsed time_usec=105078 vel=1000000000.0 pos=3459016000 pos_targ=10000000000 travel_distance=105078000
+mcs2axis::status_do_move elapsed time_usec=104326 vel=1000000000.0 pos=3564094000 pos_targ=10000000000 travel_distance=104326000
+mcs2axis::status_do_move elapsed time_usec=106418 vel=1000000000.0 pos=3668420000 pos_targ=10000000000 travel_distance=106418000
+mcs2axis::status_do_move elapsed time_usec=106928 vel=1000000000.0 pos=3774838000 pos_targ=10000000000 travel_distance=106928000
+mcs2axis::status_do_move elapsed time_usec=101526 vel=1000000000.0 pos=3881766000 pos_targ=10000000000 travel_distance=101526000
+mcs2axis::status_do_move elapsed time_usec=106126 vel=1000000000.0 pos=3983292000 pos_targ=10000000000 travel_distance=106126000
+mcs2axis::status_do_move elapsed time_usec=104125 vel=1000000000.0 pos=4089418000 pos_targ=10000000000 travel_distance=104125000
+mcs2axis::status_do_move elapsed time_usec=106552 vel=1000000000.0 pos=4193543000 pos_targ=10000000000 travel_distance=106552000
+mcs2axis::status_do_move elapsed time_usec=107382 vel=1000000000.0 pos=4300095000 pos_targ=10000000000 travel_distance=107382000
+mcs2axis::status_do_move elapsed time_usec=105520 vel=1000000000.0 pos=4407477000 pos_targ=10000000000 travel_distance=105520000
+mcs2axis::status_do_move elapsed time_usec=104737 vel=1000000000.0 pos=4512997000 pos_targ=10000000000 travel_distance=104737000
+mcs2axis::status_do_move elapsed time_usec=100910 vel=1000000000.0 pos=4617734000 pos_targ=10000000000 travel_distance=100910000
+mcs2axis::status_do_move elapsed time_usec=101578 vel=1000000000.0 pos=4718644000 pos_targ=10000000000 travel_distance=101578000
+mcs2axis::status_do_move elapsed time_usec=106593 vel=1000000000.0 pos=4820222000 pos_targ=10000000000 travel_distance=106593000
+mcs2axis::status_do_move elapsed time_usec=106001 vel=1000000000.0 pos=4926815000 pos_targ=10000000000 travel_distance=106001000
+mcs2axis::status_do_move elapsed time_usec=106281 vel=1000000000.0 pos=5032816000 pos_targ=10000000000 travel_distance=106281000
+mcs2axis::status_do_move elapsed time_usec=105769 vel=1000000000.0 pos=5139097000 pos_targ=10000000000 travel_distance=105769000
+mcs2axis::status_do_move elapsed time_usec=105437 vel=1000000000.0 pos=5244866000 pos_targ=10000000000 travel_distance=105437000
+mcs2axis::status_do_move elapsed time_usec=104994 vel=1000000000.0 pos=5350303000 pos_targ=10000000000 travel_distance=104994000
+mcs2axis::status_do_move elapsed time_usec=105638 vel=1000000000.0 pos=5455297000 pos_targ=10000000000 travel_distance=105638000
+mcs2axis::status_do_move elapsed time_usec=106410 vel=1000000000.0 pos=5560935000 pos_targ=10000000000 travel_distance=106410000
+mcs2axis::status_do_move elapsed time_usec=102498 vel=1000000000.0 pos=5667345000 pos_targ=10000000000 travel_distance=102498000
+mcs2axis::status_do_move elapsed time_usec=107117 vel=1000000000.0 pos=5769843000 pos_targ=10000000000 travel_distance=107117000
+mcs2axis::status_do_move elapsed time_usec=105571 vel=1000000000.0 pos=5876960000 pos_targ=10000000000 travel_distance=105571000
+mcs2axis::status_do_move elapsed time_usec=106409 vel=1000000000.0 pos=5982531000 pos_targ=10000000000 travel_distance=106409000
+mcs2axis::status_do_move elapsed time_usec=106579 vel=1000000000.0 pos=6088940000 pos_targ=10000000000 travel_distance=106579000
+mcs2axis::status_do_move elapsed time_usec=106073 vel=1000000000.0 pos=6195519000 pos_targ=10000000000 travel_distance=106073000
+mcs2axis::status_do_move elapsed time_usec=103480 vel=1000000000.0 pos=6301592000 pos_targ=10000000000 travel_distance=103480000
+mcs2axis::status_do_move elapsed time_usec=105082 vel=1000000000.0 pos=6405072000 pos_targ=10000000000 travel_distance=105082000
+mcs2axis::status_do_move elapsed time_usec=105974 vel=1000000000.0 pos=6510154000 pos_targ=10000000000 travel_distance=105974000
+mcs2axis::status_do_move elapsed time_usec=104706 vel=1000000000.0 pos=6616128000 pos_targ=10000000000 travel_distance=104706000
+mcs2axis::status_do_move elapsed time_usec=103687 vel=1000000000.0 pos=6720834000 pos_targ=10000000000 travel_distance=103687000
+mcs2axis::status_do_move elapsed time_usec=105396 vel=1000000000.0 pos=6824521000 pos_targ=10000000000 travel_distance=105396000
+mcs2axis::status_do_move elapsed time_usec=103722 vel=1000000000.0 pos=6929917000 pos_targ=10000000000 travel_distance=103722000
+mcs2axis::status_do_move elapsed time_usec=105227 vel=1000000000.0 pos=7033639000 pos_targ=10000000000 travel_distance=105227000
+mcs2axis::status_do_move elapsed time_usec=104862 vel=1000000000.0 pos=7138866000 pos_targ=10000000000 travel_distance=104862000
+mcs2axis::status_do_move elapsed time_usec=107879 vel=1000000000.0 pos=7243728000 pos_targ=10000000000 travel_distance=107879000
+mcs2axis::status_do_move elapsed time_usec=102853 vel=1000000000.0 pos=7351607000 pos_targ=10000000000 travel_distance=102853000
+mcs2axis::status_do_move elapsed time_usec=103207 vel=1000000000.0 pos=7454460000 pos_targ=10000000000 travel_distance=103207000
+mcs2axis::status_do_move elapsed time_usec=104883 vel=1000000000.0 pos=7557667000 pos_targ=10000000000 travel_distance=104883000
+mcs2axis::status_do_move elapsed time_usec=104356 vel=1000000000.0 pos=7662550000 pos_targ=10000000000 travel_distance=104356000
+mcs2axis::status_do_move elapsed time_usec=103630 vel=1000000000.0 pos=7766906000 pos_targ=10000000000 travel_distance=103630000
+mcs2axis::status_do_move elapsed time_usec=106029 vel=1000000000.0 pos=7870536000 pos_targ=10000000000 travel_distance=106029000
+mcs2axis::status_do_move elapsed time_usec=105240 vel=1000000000.0 pos=7976565000 pos_targ=10000000000 travel_distance=105240000
+mcs2axis::status_do_move elapsed time_usec=103264 vel=1000000000.0 pos=8081805000 pos_targ=10000000000 travel_distance=103264000
+mcs2axis::status_do_move elapsed time_usec=105000 vel=1000000000.0 pos=8185069000 pos_targ=10000000000 travel_distance=105000000
+mcs2axis::status_do_move elapsed time_usec=104194 vel=1000000000.0 pos=8290069000 pos_targ=10000000000 travel_distance=104194000
+mcs2axis::status_do_move elapsed time_usec=105309 vel=1000000000.0 pos=8394263000 pos_targ=10000000000 travel_distance=105309000
+mcs2axis::status_do_move elapsed time_usec=106264 vel=1000000000.0 pos=8499572000 pos_targ=10000000000 travel_distance=106264000
+mcs2axis::status_do_move elapsed time_usec=106052 vel=1000000000.0 pos=8605836000 pos_targ=10000000000 travel_distance=106052000
+mcs2axis::status_do_move elapsed time_usec=102475 vel=1000000000.0 pos=8711888000 pos_targ=10000000000 travel_distance=102475000
+mcs2axis::status_do_move elapsed time_usec=103401 vel=1000000000.0 pos=8814363000 pos_targ=10000000000 travel_distance=103401000
+mcs2axis::status_do_move elapsed time_usec=103615 vel=1000000000.0 pos=8917764000 pos_targ=10000000000 travel_distance=103615000
+mcs2axis::status_do_move elapsed time_usec=105029 vel=1000000000.0 pos=9021379000 pos_targ=10000000000 travel_distance=105029000
+mcs2axis::status_do_move elapsed time_usec=104037 vel=1000000000.0 pos=9126408000 pos_targ=10000000000 travel_distance=104037000
+mcs2axis::status_do_move elapsed time_usec=104783 vel=1000000000.0 pos=9230445000 pos_targ=10000000000 travel_distance=104783000
+mcs2axis::status_do_move elapsed time_usec=104527 vel=1000000000.0 pos=9335228000 pos_targ=10000000000 travel_distance=104527000
+mcs2axis::status_do_move elapsed time_usec=104161 vel=1000000000.0 pos=9439755000 pos_targ=10000000000 travel_distance=104161000
+mcs2axis::status_do_move elapsed time_usec=106293 vel=1000000000.0 pos=9543916000 pos_targ=10000000000 travel_distance=106293000
+mcs2axis::status_do_move elapsed time_usec=106099 vel=1000000000.0 pos=9650209000 pos_targ=10000000000 travel_distance=106099000
+mcs2axis::status_do_move elapsed time_usec=104792 vel=1000000000.0 pos=9756308000 pos_targ=10000000000 travel_distance=104792000
+mcs2axis::status_do_move elapsed time_usec=104345 vel=1000000000.0 pos=9861100000 pos_targ=10000000000 travel_distance=104345000
+mcs2axis::status_do_move elapsed time_usec=103937 vel=1000000000.0 pos=9965445000 pos_targ=10000000000 travel_distance=103937000
+mcs2axis::set_mmod1] old=0 new=4
+mcs2axis::set_step_freq[1] old=855 new=294
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=-2941
+mcs2axis::set_pos_targ[1] step mode new_pos=-2941
+mcs2axis::set_pos_targ[1] step mode steps=-2941 old_pos_targ=10000000000 new_pos_targ=600000 step_freq=294 vel=999600000
+mcs2axis::status_do_move elapsed time_usec=213 vel=999600000.0 pos=10001000000 pos_targ=600000 travel_distance=212914
+mcs2axis::status_do_move elapsed time_usec=103897 vel=999600000.0 pos=10000787086 pos_targ=600000 travel_distance=103855441
+mcs2axis::status_do_move elapsed time_usec=105195 vel=999600000.0 pos=9896931645 pos_targ=600000 travel_distance=105152922
+mcs2axis::status_do_move elapsed time_usec=106136 vel=999600000.0 pos=9791778723 pos_targ=600000 travel_distance=106093545
+mcs2axis::status_do_move elapsed time_usec=106464 vel=999600000.0 pos=9685685178 pos_targ=600000 travel_distance=106421414
+mcs2axis::status_do_move elapsed time_usec=109159 vel=999600000.0 pos=9579263764 pos_targ=600000 travel_distance=109115336
+mcs2axis::status_do_move elapsed time_usec=105831 vel=999600000.0 pos=9470148428 pos_targ=600000 travel_distance=105788667
+mcs2axis::status_do_move elapsed time_usec=106157 vel=999600000.0 pos=9364359761 pos_targ=600000 travel_distance=106114537
+mcs2axis::status_do_move elapsed time_usec=107356 vel=999600000.0 pos=9258245224 pos_targ=600000 travel_distance=107313057
+mcs2axis::status_do_move elapsed time_usec=104776 vel=999600000.0 pos=9150932167 pos_targ=600000 travel_distance=104734089
+mcs2axis::status_do_move elapsed time_usec=105579 vel=999600000.0 pos=9046198078 pos_targ=600000 travel_distance=105536768
+mcs2axis::status_do_move elapsed time_usec=104275 vel=999600000.0 pos=8940661310 pos_targ=600000 travel_distance=104233290
+mcs2axis::status_do_move elapsed time_usec=105382 vel=999600000.0 pos=8836428020 pos_targ=600000 travel_distance=105339847
+mcs2axis::status_do_move elapsed time_usec=106150 vel=999600000.0 pos=8731088173 pos_targ=600000 travel_distance=106107540
+mcs2axis::status_do_move elapsed time_usec=105534 vel=999600000.0 pos=8624980633 pos_targ=600000 travel_distance=105491786
+mcs2axis::status_do_move elapsed time_usec=106463 vel=999600000.0 pos=8519488847 pos_targ=600000 travel_distance=106420414
+mcs2axis::status_do_move elapsed time_usec=104466 vel=999600000.0 pos=8413068433 pos_targ=600000 travel_distance=104424213
+mcs2axis::status_do_move elapsed time_usec=104780 vel=999600000.0 pos=8308644220 pos_targ=600000 travel_distance=104738088
+mcs2axis::status_do_move elapsed time_usec=109863 vel=999600000.0 pos=8203906132 pos_targ=600000 travel_distance=109819054
+mcs2axis::status_do_move elapsed time_usec=106875 vel=999600000.0 pos=8094087078 pos_targ=600000 travel_distance=106832250
+mcs2axis::status_do_move elapsed time_usec=104155 vel=999600000.0 pos=7987254828 pos_targ=600000 travel_distance=104113338
+mcs2axis::status_do_move elapsed time_usec=105704 vel=999600000.0 pos=7883141490 pos_targ=600000 travel_distance=105661718
+mcs2axis::status_do_move elapsed time_usec=105617 vel=999600000.0 pos=7777479772 pos_targ=600000 travel_distance=105574753
+mcs2axis::status_do_move elapsed time_usec=104235 vel=999600000.0 pos=7671905019 pos_targ=600000 travel_distance=104193306
+mcs2axis::status_do_move elapsed time_usec=104685 vel=999600000.0 pos=7567711713 pos_targ=600000 travel_distance=104643126
+mcs2axis::status_do_move elapsed time_usec=104197 vel=999600000.0 pos=7463068587 pos_targ=600000 travel_distance=104155321
+mcs2axis::status_do_move elapsed time_usec=103871 vel=999600000.0 pos=7358913266 pos_targ=600000 travel_distance=103829451
+mcs2axis::status_do_move elapsed time_usec=106159 vel=999600000.0 pos=7255083815 pos_targ=600000 travel_distance=106116536
+mcs2axis::status_do_move elapsed time_usec=106360 vel=999600000.0 pos=7148967279 pos_targ=600000 travel_distance=106317456
+mcs2axis::status_do_move elapsed time_usec=104881 vel=999600000.0 pos=7042649823 pos_targ=600000 travel_distance=104839047
+mcs2axis::status_do_move elapsed time_usec=103555 vel=999600000.0 pos=6937810776 pos_targ=600000 travel_distance=103513578
+mcs2axis::status_do_move elapsed time_usec=102222 vel=999600000.0 pos=6834297198 pos_targ=600000 travel_distance=102181111
+mcs2axis::status_do_move elapsed time_usec=105529 vel=999600000.0 pos=6732116087 pos_targ=600000 travel_distance=105486788
+mcs2axis::status_do_move elapsed time_usec=105408 vel=999600000.0 pos=6626629299 pos_targ=600000 travel_distance=105365836
+mcs2axis::status_do_move elapsed time_usec=105299 vel=999600000.0 pos=6521263463 pos_targ=600000 travel_distance=105256880
+mcs2axis::status_do_move elapsed time_usec=104452 vel=999600000.0 pos=6416006583 pos_targ=600000 travel_distance=104410219
+mcs2axis::status_do_move elapsed time_usec=101486 vel=999600000.0 pos=6311596364 pos_targ=600000 travel_distance=101445405
+mcs2axis::status_do_move elapsed time_usec=105176 vel=999600000.0 pos=6210150959 pos_targ=600000 travel_distance=105133929
+mcs2axis::status_do_move elapsed time_usec=101201 vel=999600000.0 pos=6105017030 pos_targ=600000 travel_distance=101160519
+mcs2axis::status_do_move elapsed time_usec=104870 vel=999600000.0 pos=6003856511 pos_targ=600000 travel_distance=104828052
+mcs2axis::status_do_move elapsed time_usec=105567 vel=999600000.0 pos=5899028459 pos_targ=600000 travel_distance=105524773
+mcs2axis::status_do_move elapsed time_usec=105618 vel=999600000.0 pos=5793503686 pos_targ=600000 travel_distance=105575752
+mcs2axis::status_do_move elapsed time_usec=104858 vel=999600000.0 pos=5687927934 pos_targ=600000 travel_distance=104816056
+mcs2axis::status_do_move elapsed time_usec=108290 vel=999600000.0 pos=5583111878 pos_targ=600000 travel_distance=108246684
+mcs2axis::status_do_move elapsed time_usec=105457 vel=999600000.0 pos=5474865194 pos_targ=600000 travel_distance=105414817
+mcs2axis::status_do_move elapsed time_usec=106070 vel=999600000.0 pos=5369450377 pos_targ=600000 travel_distance=106027572
+mcs2axis::status_do_move elapsed time_usec=103354 vel=999600000.0 pos=5263422805 pos_targ=600000 travel_distance=103312658
+mcs2axis::status_do_move elapsed time_usec=106248 vel=999600000.0 pos=5160110147 pos_targ=600000 travel_distance=106205500
+mcs2axis::status_do_move elapsed time_usec=105189 vel=999600000.0 pos=5053904647 pos_targ=600000 travel_distance=105146924
+mcs2axis::status_do_move elapsed time_usec=105937 vel=999600000.0 pos=4948757723 pos_targ=600000 travel_distance=105894625
+mcs2axis::status_do_move elapsed time_usec=103612 vel=999600000.0 pos=4842863098 pos_targ=600000 travel_distance=103570555
+mcs2axis::status_do_move elapsed time_usec=106519 vel=999600000.0 pos=4739292543 pos_targ=600000 travel_distance=106476392
+mcs2axis::status_do_move elapsed time_usec=106449 vel=999600000.0 pos=4632816151 pos_targ=600000 travel_distance=106406420
+mcs2axis::status_do_move elapsed time_usec=103576 vel=999600000.0 pos=4526409731 pos_targ=600000 travel_distance=103534569
+mcs2axis::status_do_move elapsed time_usec=105746 vel=999600000.0 pos=4422875162 pos_targ=600000 travel_distance=105703701
+mcs2axis::status_do_move elapsed time_usec=105330 vel=999600000.0 pos=4317171461 pos_targ=600000 travel_distance=105287868
+mcs2axis::status_do_move elapsed time_usec=106579 vel=999600000.0 pos=4211883593 pos_targ=600000 travel_distance=106536368
+mcs2axis::status_do_move elapsed time_usec=106802 vel=999600000.0 pos=4105347225 pos_targ=600000 travel_distance=106759279
+mcs2axis::status_do_move elapsed time_usec=106942 vel=999600000.0 pos=3998587946 pos_targ=600000 travel_distance=106899223
+mcs2axis::status_do_move elapsed time_usec=106550 vel=999600000.0 pos=3891688723 pos_targ=600000 travel_distance=106507380
+mcs2axis::status_do_move elapsed time_usec=105780 vel=999600000.0 pos=3785181343 pos_targ=600000 travel_distance=105737688
+mcs2axis::status_do_move elapsed time_usec=102897 vel=999600000.0 pos=3679443655 pos_targ=600000 travel_distance=102855841
+mcs2axis::status_do_move elapsed time_usec=104854 vel=999600000.0 pos=3576587814 pos_targ=600000 travel_distance=104812058
+mcs2axis::status_do_move elapsed time_usec=103886 vel=999600000.0 pos=3471775756 pos_targ=600000 travel_distance=103844445
+mcs2axis::status_do_move elapsed time_usec=104406 vel=999600000.0 pos=3367931311 pos_targ=600000 travel_distance=104364237
+mcs2axis::status_do_move elapsed time_usec=101859 vel=999600000.0 pos=3263567074 pos_targ=600000 travel_distance=101818256
+mcs2axis::status_do_move elapsed time_usec=114073 vel=999600000.0 pos=3161748818 pos_targ=600000 travel_distance=114027370
+mcs2axis::status_do_move elapsed time_usec=104647 vel=999600000.0 pos=3047721448 pos_targ=600000 travel_distance=104605141
+mcs2axis::status_do_move elapsed time_usec=101802 vel=999600000.0 pos=2943116307 pos_targ=600000 travel_distance=101761279
+mcs2axis::status_do_move elapsed time_usec=121965 vel=999600000.0 pos=2841355028 pos_targ=600000 travel_distance=121916214
+mcs2axis::status_do_move elapsed time_usec=112561 vel=999600000.0 pos=2719438814 pos_targ=600000 travel_distance=112515975
+mcs2axis::status_do_move elapsed time_usec=105428 vel=999600000.0 pos=2606922839 pos_targ=600000 travel_distance=105385828
+mcs2axis::status_do_move elapsed time_usec=106703 vel=999600000.0 pos=2501537011 pos_targ=600000 travel_distance=106660318
+mcs2axis::status_do_move elapsed time_usec=105015 vel=999600000.0 pos=2394876693 pos_targ=600000 travel_distance=104972994
+mcs2axis::status_do_move elapsed time_usec=104566 vel=999600000.0 pos=2289903699 pos_targ=600000 travel_distance=104524173
+mcs2axis::status_do_move elapsed time_usec=106609 vel=999600000.0 pos=2185379526 pos_targ=600000 travel_distance=106566356
+mcs2axis::status_do_move elapsed time_usec=104703 vel=999600000.0 pos=2078813170 pos_targ=600000 travel_distance=104661118
+mcs2axis::status_do_move elapsed time_usec=105458 vel=999600000.0 pos=1974152052 pos_targ=600000 travel_distance=105415816
+mcs2axis::status_do_move elapsed time_usec=103360 vel=999600000.0 pos=1868736236 pos_targ=600000 travel_distance=103318656
+mcs2axis::status_do_move elapsed time_usec=102308 vel=999600000.0 pos=1765417580 pos_targ=600000 travel_distance=102267076
+mcs2axis::status_do_move elapsed time_usec=105755 vel=999600000.0 pos=1663150504 pos_targ=600000 travel_distance=105712698
+mcs2axis::status_do_move elapsed time_usec=102774 vel=999600000.0 pos=1557437806 pos_targ=600000 travel_distance=102732890
+mcs2axis::status_do_move elapsed time_usec=105646 vel=999600000.0 pos=1454704916 pos_targ=600000 travel_distance=105603741
+mcs2axis::status_do_move elapsed time_usec=105222 vel=999600000.0 pos=1349101175 pos_targ=600000 travel_distance=105179911
+mcs2axis::status_do_move elapsed time_usec=104223 vel=999600000.0 pos=1243921264 pos_targ=600000 travel_distance=104181310
+mcs2axis::status_do_move elapsed time_usec=108051 vel=999600000.0 pos=1139739954 pos_targ=600000 travel_distance=108007779
+mcs2axis::status_do_move elapsed time_usec=103967 vel=999600000.0 pos=1031732175 pos_targ=600000 travel_distance=103925413
+mcs2axis::status_do_move elapsed time_usec=106021 vel=999600000.0 pos=927806762 pos_targ=600000 travel_distance=105978591
+mcs2axis::status_do_move elapsed time_usec=106565 vel=999600000.0 pos=821828171 pos_targ=600000 travel_distance=106522374
+mcs2axis::status_do_move elapsed time_usec=103355 vel=999600000.0 pos=715305797 pos_targ=600000 travel_distance=103313658
+mcs2axis::status_do_move elapsed time_usec=120792 vel=999600000.0 pos=611992139 pos_targ=600000 travel_distance=120743683
+mcs2axis::status_do_move elapsed time_usec=105404 vel=999600000.0 pos=491248456 pos_targ=600000 travel_distance=105361838
+mcs2axis::status_do_move elapsed time_usec=107800 vel=999600000.0 pos=385886618 pos_targ=600000 travel_distance=107756880
+mcs2axis::status_do_move elapsed time_usec=106555 vel=999600000.0 pos=278129738 pos_targ=600000 travel_distance=106512378
+mcs2axis::status_do_move elapsed time_usec=104545 vel=999600000.0 pos=171617360 pos_targ=600000 travel_distance=104503182
+mcs2axis::status_do_move elapsed time_usec=104029 vel=999600000.0 pos=67114178 pos_targ=600000 travel_distance=103987388
+mcs2axis::set_mmod1] old=4 new=4
+mcs2axis::set_step_freq[1] old=294 new=343
+RX122 not handled: re_cmd_axis_nr_match=false
+RX34: ch_cmd="MOVE" ch_no_asc="0" ch_pos_asc=343
+mcs2axis::set_pos_targ[1] step mode new_pos=343
+mcs2axis::set_pos_targ[1] step mode steps=343 old_pos_targ=600000 new_pos_targ=998730000 step_freq=343 vel=998130000
+mcs2axis::status_do_move elapsed time_usec=322 vel=998130000.0 pos=-400000 pos_targ=998730000 travel_distance=321397
+mcs2axis::status_do_move elapsed time_usec=107105 vel=998130000.0 pos=-78603 pos_targ=998730000 travel_distance=106904713
+mcs2axis::status_do_move elapsed time_usec=105697 vel=998130000.0 pos=106826110 pos_targ=998730000 travel_distance=105499346
+mcs2axis::status_do_move elapsed time_usec=104729 vel=998130000.0 pos=212325456 pos_targ=998730000 travel_distance=104533156
+mcs2axis::status_do_move elapsed time_usec=103021 vel=998130000.0 pos=316858612 pos_targ=998730000 travel_distance=102828350
+mcs2axis::status_do_move elapsed time_usec=104083 vel=998130000.0 pos=419686962 pos_targ=998730000 travel_distance=103888364
+mcs2axis::status_do_move elapsed time_usec=105022 vel=998130000.0 pos=523575326 pos_targ=998730000 travel_distance=104825608
+mcs2axis::status_do_move elapsed time_usec=106301 vel=998130000.0 pos=628400934 pos_targ=998730000 travel_distance=106102217
+mcs2axis::status_do_move elapsed time_usec=105836 vel=998130000.0 pos=734503151 pos_targ=998730000 travel_distance=105638086
+mcs2axis::status_do_move elapsed time_usec=102952 vel=998130000.0 pos=840141237 pos_targ=998730000 travel_distance=102759479
+mcs2axis::status_do_move elapsed time_usec=105052 vel=998130000.0 pos=942900716 pos_targ=998730000 travel_distance=104855552
