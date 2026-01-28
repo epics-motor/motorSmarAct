@@ -8,14 +8,14 @@ Jan 19, 2019
 
 Note:
 The MCS2 controller uses 64-bit int for the encoder and target positions. The motor record is limited
-to 32 bit int for RMP (https://github.com/epics-modules/motor/issues/8, 
+to 32 bit int for RMP (https://github.com/epics-modules/motor/issues/8,
 https://epics.anl.gov/tech-talk/2018/msg00087.php) which effectively limits the travel
-range to +/- 2.1mm. 
+range to +/- 2.1mm.
 Since it doesn't seem the motor record will update to using 64bit int the choices I can see are:
 * 1 - using a non-standard motor support
 * 2 - rescaling the minimum resolution to 1nm to effectively increase the range to 2.1m
 
-I chose option 2. 
+I chose option 2.
 1 step = 1nm
 
 Someone with more experience may have a better solution.
@@ -37,8 +37,6 @@ The two that may be of significant interest are:
  * rot: controller ndeg --> driver udeg. Because of this the user can use the positioner for deg ranges
  * If this scaling was not implemented the maximum range would be ~2.147 mm/deg, now it's ~2147 mm/deg */
 #define PULSES_PER_STEP 1000
-
-typedef long long PositionType;
 
 /** MCS2 Axis status flags **/
 const unsigned short ACTIVELY_MOVING         = 0x0001;
@@ -65,16 +63,12 @@ const unsigned short   ABORT_ON_END_STOP       = 0x0008;
 const unsigned short   CONTINUE_ON_REF_FOUND   = 0x0010;
 const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 
-/** MCS2 Axis constants **/
-#define HOLD_FOREVER 0xffffffff
-#define MAX_FREQUENCY 20000
-
 /** drvInfo strings for extra parameters that the MCS2 controller supports */
-#define MCS2MclfString "MCLF"
 #define MCS2PtypString "PTYP"
 #define MCS2PtypRbString "PTYP_RB"
 #define MCS2PstatString "PSTAT"
-#define MCS2RefString "REF"
+#define MCS2MclfString "MCLF"
+#define MCS2HoldString "HOLD"
 #define MCS2CalString "CAL"
 
 class epicsShareClass MCS2Axis : public asynMotorAxis
@@ -90,17 +84,15 @@ public:
   asynStatus setPosition(double position);
 
 private:
-  MCS2Controller *pC_;      /**< Pointer to the asynMotorController to which this axis belongs.
-                                *   Abbreviated because it is used very frequently */
+  MCS2Controller *pC_; /**< Pointer to the asynMotorController to which this axis belongs.
+                        *   Abbreviated because it is used very frequently */
   int channel_;
-  int sensorPresent_;
-  PositionType stepTarget_ = 0;
-  asynStatus comStatus_;
 
-friend class MCS2Controller;
+  friend class MCS2Controller;
 };
 
-class epicsShareClass MCS2Controller : public asynMotorController {
+class epicsShareClass MCS2Controller : public asynMotorController
+{
 public:
   MCS2Controller(const char *portName, const char *MCS2PortName, int numAxes, double movingPollPeriod, double idlePollPeriod, int unusedMask = 0);
   virtual asynStatus clearErrors();
@@ -110,20 +102,19 @@ public:
 
   /* These are the methods that we override from asynMotorDriver */
   void report(FILE *fp, int level);
-  MCS2Axis* getAxis(asynUser *pasynUser);
-  MCS2Axis* getAxis(int axisNo);
+  MCS2Axis *getAxis(asynUser *pasynUser);
+  MCS2Axis *getAxis(int axisNo);
 
 protected:
-  int mclf_; /**< MCL frequency */
-#define FIRST_MCS2_PARAM mclf_
-  int ptyp_; /**< positioner type */
-  int ptyprb_; /**< positioner type readback */
+  int ptyp_;    /**< positioner type */
+#define FIRST_MCS2_PARAM ptyp_
+  int ptyprb_;  /**< positioner type readback */
   int pstatrb_; /**< positoner status word readback */
-  int ref_;  /**< reference command */ 
-  int cal_;  /**< calibration command */
+  int mclf_;    /**< MCL frequency */
+  int hold_;    /**< hold time */
+  int cal_;     /**< calibration command */
 #define LAST_MCS2_PARAM cal_
 #define NUM_MCS2_PARAMS (&LAST_MCS2_PARAM - &FIRST_MCS2_PARAM + 1)
-  
-friend class MCS2Axis;
-};
 
+  friend class MCS2Axis;
+};
