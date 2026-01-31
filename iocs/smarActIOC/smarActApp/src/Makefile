@@ -61,7 +61,7 @@ smarAct_DBD += devIocStats.dbd iocAdmin.dbd
 smarAct_LIBS += devIocStats
 endif
 ifdef AUTOSAVE
-smarAct_DBD += asSupport.dbd as.dbd
+smarAct_DBD += asSupport.dbd
 smarAct_LIBS += autosave
 endif
 

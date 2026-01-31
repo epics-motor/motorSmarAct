@@ -1,5 +1,24 @@
 # motorSmarAct Releases
 
+## __R2-1-1 (2026-01-28)__
+R2-1-1 is a release based on the master branch.
+
+### Changes since R2-1
+
+#### New features
+* None
+
+#### Modifications to existing features
+* None
+
+#### Bug fixes
+* Pull request [#24](https://github.com/epics-motor/motorSmarAct/pull/24): [Thierry Zamofing](https://github.com/ganymede42) removed unused variables and improved code formatting
+* Pull request [#27](https://github.com/epics-motor/motorSmarAct/pull/27): Removed as.dbd from the example IOC to avoid build problems with newer versions of autosave
+* Pull request [#29](https://github.com/epics-motor/motorSmarAct/pull/29): Split the EXAMPLE_RELEASE.local file into two files, one for each approach to specifying required modules
+
+#### Continuous integration
+* Upgraded ci-scripts (v3.4.1)
+
 ## __R2-1 (2023-09-06)__
 R2-1 is a release based on the master branch.
 
