@@ -578,8 +578,10 @@ SmarActMCSAxis::move(double position, int relative, double min_vel, double max_v
   if ((comStatus_ = setSpeed(max_vel)))
     goto bail;
 
-  rpos = lround(position);
-
+  /* VxWorks 6.9.4 doesn't have lround() */
+  //rpos = lround(position);
+  rpos = static_cast<long int>(round(position));
+  
   c_p_->getIntegerParam(axisNo_, c_p_->holdTime_, &holdTime);
 
   if (isRot_) {
