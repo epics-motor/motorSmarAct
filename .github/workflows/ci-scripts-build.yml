@@ -11,18 +11,20 @@ name: "GHA build"
 on:
   push:
     paths-ignore:
-      - 'documentation/*'
+      - 'docs/*'
       - '**/*.html'
       - '**/*.md'
       - '.github/workflows/ci-scripts-build-full.yml'
+      - 'LICENSE'
     branches:
       - master
   pull_request:
     paths-ignore:
-      - 'documentation/*'
+      - 'docs/*'
       - '**/*.html'
       - '**/*.md'
       - '.github/workflows/ci-scripts-build-full.yml'
+      - 'LICENSE'
 
 env:
   SETUP_PATH: .ci-local:.ci
