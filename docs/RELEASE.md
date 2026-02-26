@@ -1,5 +1,13 @@
 # motorSmarAct Releases
 
+## __R2-1-2 (2026-02-26)__
+R2-1-2 is a release based on the master branch.
+
+### Changes since R2-1-1
+
+#### Bug fixes
+* Pull request [#32](https://github.com/epics-motor/motorSmarAct/pull/32): Fixed compile error for VxWorks
+
 ## __R2-1-1 (2026-01-28)__
 R2-1-1 is a release based on the master branch.
 
