@@ -39,21 +39,27 @@ The two that may be of significant interest are:
 #define PULSES_PER_STEP 1000
 
 /** MCS2 Axis status flags **/
-const unsigned short ACTIVELY_MOVING         = 0x0001;
-const unsigned short CLOSED_LOOP_ACTIVE      = 0x0002;
-const unsigned short CALIBRATING             = 0x0004;
-const unsigned short REFERENCING             = 0x0008;
-const unsigned short MOVE_DELAYED            = 0x0010;
-const unsigned short SENSOR_PRESENT          = 0x0020;
-const unsigned short IS_CALIBRATED           = 0x0040;
-const unsigned short IS_REFERENCED           = 0x0080;
-const unsigned short END_STOP_REACHED        = 0x0100;
-const unsigned short RANGE_LIMIT_REACHED     = 0x0200;
-const unsigned short FOLLOWING_LIMIT_REACHED = 0x0400;
-const unsigned short MOVEMENT_FAILED         = 0x0800;
-const unsigned short STREAMING               = 0x1000;
-const unsigned short OVERTEMP                = 0x4000;
-const unsigned short REFERENCE_MARK          = 0x8000;
+#define CH_STATE_ACTIVELY_MOVING         0x0001
+#define CH_STATE_CLOSED_LOOP_ACTIVE      0x0002
+#define CH_STATE_CALIBRATING             0x0004
+#define CH_STATE_REFERENCING             0x0008
+#define CH_STATE_MOVE_DELAYED            0x0010
+#define CH_STATE_SENSOR_PRESENT          0x0020
+#define CH_STATE_IS_CALIBRATED           0x0040
+#define CH_STATE_IS_REFERENCED           0x0080
+#define CH_STATE_END_STOP_REACHED        0x0100
+#define CH_STATE_RANGE_LIMIT_REACHED     0x0200
+#define CH_STATE_FOLLOWING_LIMIT_REACHED 0x0400
+#define CH_STATE_MOVEMENT_FAILED         0x0800
+#define CH_STATE_STREAMING               0x1000
+#define CH_STATE_POSITIONER_OVERLOAD     0x2000
+#define CH_STATE_OVERTEMP                0x4000
+#define CH_STATE_REFERENCE_MARK          0x8000
+#define CH_STATE_IS_PHASED           0x00010000
+#define CH_STATE_POSITIONER_FAULT    0x00020000
+#define CH_STATE_AMPLIFIER_ENABLED   0x00040000
+#define CH_STATE_IN_POSITION         0x00080000
+#define CH_STATE_BRAKE_ENABLED       0x00100000
 
 /** MCS2 Axis reference options **/
 const unsigned short   START_DIRECTION         = 0x0001;
@@ -63,13 +69,26 @@ const unsigned short   ABORT_ON_END_STOP       = 0x0008;
 const unsigned short   CONTINUE_ON_REF_FOUND   = 0x0010;
 const unsigned short   STOP_ON_REF_FOUND       = 0x0020;
 
+/** MCS2 Axis constants **/
+#define HOLD_FOREVER 0xffffffff
+#define MAX_FREQUENCY 20000
+
 /** drvInfo strings for extra parameters that the MCS2 controller supports */
-#define MCS2PtypString "PTYP"
-#define MCS2PtypRbString "PTYP_RB"
-#define MCS2PstatString "PSTAT"
 #define MCS2MclfString "MCLF"
-#define MCS2HoldString "HOLD"
+#define MCS2PtypString "PTYP"
+#define MCS2PstatString "PSTAT"
+#define MCS2RefString "REF"
 #define MCS2CalString "CAL"
+#define MCS2FReadbackString "FREADBACK"
+#define MCS2OpenloopString "OPENLOOP"
+#define MCS2STEPFREQString "STEPFREQ"
+#define MCS2STEPCNTString "STEPCNT"
+#define MCS2STEPSIZEFString "STEPSIZEF"
+#define MCS2STEPSIZERString "STEPSIZER"
+#define MCS2SensorPowerModeString "SensorPowerMode"
+#define MCS2SensorDelayString "SensorDelay"
+#define MCS2MotorPosWhenDoneString "MotorPosWhenDone"
+#define MCS2HoldString "HOLD"
 
 class epicsShareClass MCS2Axis : public asynMotorAxis
 {
@@ -82,39 +101,66 @@ public:
   asynStatus home(double min_velocity, double max_velocity, double acceleration, int forwards);
   asynStatus stop(double acceleration);
   asynStatus setPosition(double position);
+  asynStatus setClosedLoop(bool closedLoop);
+  asynStatus setIntegerParam(int function, epicsInt32 value);
+  asynStatus setDoubleParam(int function, double value);
+
 
 private:
-  MCS2Controller *pC_; /**< Pointer to the asynMotorController to which this axis belongs.
-                        *   Abbreviated because it is used very frequently */
-  int channel_;
+  MCS2Controller *pC_;      /**< Pointer to the asynMotorController to which this axis belongs.
+                                *   Abbreviated because it is used very frequently */
+  int sensorPresent_;
+  //asynStatus comStatus_;
+  int initialPollDone_;
+  int openLoop_;
+  int sensorIsDisabled_;
+  double stepsizef_;
+  double stepsizer_;
+  asynStatus initialPoll(void);
+  asynStatus reportHelperCheckError(const char *scpi_leaf, char *input, size_t maxChars);
+#define REPORTHELPERCHECKERROR(a,b) reportHelperCheckError(a,b,sizeof(b))
+  asynStatus reportHelperInteger(const char *scpi_leaf, int *pResult);
+  asynStatus reportHelperDouble(const char *scpi_leaf, double *pResult);
 
-  friend class MCS2Controller;
+friend class MCS2Controller;
 };
 
-class epicsShareClass MCS2Controller : public asynMotorController
-{
+class epicsShareClass MCS2Controller : public asynMotorController {
 public:
   MCS2Controller(const char *portName, const char *MCS2PortName, int numAxes, double movingPollPeriod, double idlePollPeriod, int unusedMask = 0);
-  virtual asynStatus clearErrors();
-
-  /* These are the methods that we override from asynMotorDriver */
-  asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value);
+  void handleStatusChange(asynStatus status);
+  asynStatus writeReadHandleDisconnect(void);
+  virtual asynStatus clearErrors(void);
+  virtual void printOneError(int errorCode);
 
   /* These are the methods that we override from asynMotorDriver */
   void report(FILE *fp, int level);
-  MCS2Axis *getAxis(asynUser *pasynUser);
-  MCS2Axis *getAxis(int axisNo);
+  MCS2Axis* getAxis(asynUser *pasynUser);
+  MCS2Axis* getAxis(int axisNo);
 
 protected:
-  int ptyp_;    /**< positioner type */
-#define FIRST_MCS2_PARAM ptyp_
-  int ptyprb_;  /**< positioner type readback */
+  asynStatus oldStatus_;
+  int mclf_; /**< MCL frequency */
+#define FIRST_MCS2_PARAM mclf_
+  int ptyp_; /**< positioner type */
   int pstatrb_; /**< positoner status word readback */
-  int mclf_;    /**< MCL frequency */
-  int hold_;    /**< hold time */
-  int cal_;     /**< calibration command */
-#define LAST_MCS2_PARAM cal_
+  int ref_;  /**< reference command */
+  int cal_;  /**< calibration command */
+  int freadback_; /** readback in picometer as floating point*/
+  int openLoop_;
+  int sensorIsDisabled_ ;
+  int stepfreq_; /** step frequency */ /* 1 .. 20000 */
+  int stepcnt_;  /** step count (to move) */ /* -100000 .. + 100000 */
+  int stepsizef_; /** size of an open loop step, forward, in pm */
+  int stepsizer_; /** size of an open loop step, reverse==backward, in pm */
+  int sensorPowerMode_; /** Sensor power mode */
+  int sensorDelay_; /** Sensor power save delay */
+  int motorPosWhenDone_;  /** Theoretical position in open loop, step mode */
+  int hold_; /** hold time */
+
+#define LAST_MCS2_PARAM hold_
 #define NUM_MCS2_PARAMS (&LAST_MCS2_PARAM - &FIRST_MCS2_PARAM + 1)
 
-  friend class MCS2Axis;
+friend class MCS2Axis;
 };
+

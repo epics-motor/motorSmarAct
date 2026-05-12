@@ -15,6 +15,14 @@ record(longout, "$(P)$(M)setMclFreq") {
     field(PINI,"YES")
 }
 
+record(longout, "$(P)$(M)hold") {
+    field(DESC,"hold time")
+    field(DTYP,"asynInt32")
+    field(OUT, "@asyn($(PORT),$(ADDR),$(TIMEOUT))HOLD")
+    field(VAL, "-1")
+    field(PINI,"YES")
+}
+
 record(mbbo, "$(P)$(M)setPositionerType"){
   field(DESC, "set positioner type")
   field(DTYP, "asynInt32")
@@ -46,13 +54,19 @@ record(mbbo, "$(P)$(M)setPositionerType"){
   field(TVST, "LC")
   field(TTST, "L")
   field(VAL,  "0")
+  info(asyn:READBACK,"1")
+  info(asyn:INITIAL_READBACK,"1")
 }
 
+#
+# This record is not really needed.
+# If you set READBACK in the record above
+#
 record(mbbi, "$(P)$(M)positionerTypeRb"){
   field(DESC, "get positioner type")
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PTYP_RB")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PTYP")
   field(NOBT, "11")
   field(ZRVL, "300")
   field(ONVL, "312")

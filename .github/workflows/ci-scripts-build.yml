@@ -59,7 +59,6 @@ jobs:
             base: "7.0"
             set: modules
             name: "7.0 Ub-24 gcc-13"
-        
           - os: macos-latest
             cmp: clang
             configuration: default
@@ -109,3 +108,7 @@ jobs:
         path: '**/O.*/*.tap'
     - name: Collect and show test results
       run: python .ci/cue.py test-results
+    - name: check whitespace damage
+      run: |
+        ./checkws.sh
+      if: matrix.checkws

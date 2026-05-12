@@ -29,6 +29,24 @@ smarAct_DBD += devSmarActMCSMotor.dbd
 smarAct_DBD += devSmarActMCS2Motor.dbd
 smarAct_DBD += devSmarActSCUMotor.dbd
 
+ifdef PVXS_MAJOR_VERSION
+smarAct_LIBS += pvxsIoc
+smarAct_LIBS += pvxs
+smarAct_DBD  += pvxsIoc.dbd
+else
+  ifdef BASE_7_0
+    smarAct_LIBS += qsrv
+    smarAct_LIBS += pvDatabase
+    smarAct_LIBS += $(EPICS_BASE_PVA_CORE_LIBS)
+    smarAct_DBD += PVAServerRegister.dbd
+    smarAct_DBD += PVACommonRegister.dbd
+    smarAct_DBD += softIocPVA.dbd
+    smarAct_DBD += registerChannelProviderLocal.dbd
+  endif
+endif
+
+
+
 # Add all the support libraries needed by this IOC
 smarAct_LIBS += smarActMotor
 smarAct_LIBS += motor
