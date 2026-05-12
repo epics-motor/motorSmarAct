@@ -213,7 +213,7 @@ impl Netcommand {
                     buf[..len].copy_from_slice(string.as_bytes());
                     return len;
                 } else if ch_cmd == "POS?" {
-                    let string = &self.mcs2axes[ch_no].get_pos().to_string();
+                    let string = &self.mcs2axes[ch_no].get_pos_act().to_string();
                     let len = string.len();
                     buf[..len].copy_from_slice(string.as_bytes());
                     return len;

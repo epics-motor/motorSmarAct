@@ -60,7 +60,7 @@ pub struct Mcs2axis {
     internal_mmod: i32,
     ref_opt: i32,
     step_freq: i32,
-    pos: i64,      // (actual) position
+    pos_act: i64,  // (actual) position
     pos_targ: i64, // target position (commanded from host)
     time_pos_targ_started: SystemTime,
     in_target_window: i64, // Need a better name ?
@@ -106,7 +106,7 @@ impl Mcs2axis {
             internal_mmod: -1,
             ref_opt: 0,
             step_freq: 0,
-            pos: 0,
+            pos_act: 0,
             pos_targ: 0,
             time_pos_targ_started: SystemTime::now(),
             in_target_window: 1_000_000, // 1 µm
@@ -189,8 +189,8 @@ impl Mcs2axis {
     pub fn get_mclf(&self) -> i32 {
         self.mclf
     }
-    pub fn get_pos(&self) -> i64 {
-        self.pos
+    pub fn get_pos_act(&self) -> i64 {
+        self.pos_act
     }
     pub fn get_pos_targ(&self) -> i64 {
         self.pos_targ
@@ -277,25 +277,25 @@ impl Mcs2axis {
                 let travel_distance = (self.internal_vel as u128 * time_usec) / 1_000_000;
                 println!(
                     "mcs2axis::status_do_move elapsed time_usec={:?} vel={:?} pos={:?} pos_targ={:?} travel_distance={:?}",
-                    time_usec, self.internal_vel, self.pos, self.pos_targ, travel_distance
+                    time_usec, self.internal_vel, self.pos_act, self.pos_targ, travel_distance
                 );
-                if self.pos_targ > (self.pos - self.in_target_window) {
+                if self.pos_targ > (self.pos_act - self.in_target_window) {
                     // need to move forward
-                    self.pos += travel_distance as i64;
-                    if self.pos > (self.pos_targ + self.in_target_window) {
+                    self.pos_act += travel_distance as i64;
+                    if self.pos_act > (self.pos_targ + self.in_target_window) {
                         // We are there
-                        self.pos = self.pos_targ + self.in_target_window;
+                        self.pos_act = self.pos_targ + self.in_target_window;
                         self.internal_mmod = -1;
                     } else {
                         self.time_pos_targ_started = SystemTime::now();
                         ret += CH_STATE_ACTIVELY_MOVING;
                     }
-                } else if self.pos_targ < (self.pos + self.in_target_window) {
+                } else if self.pos_targ < (self.pos_act + self.in_target_window) {
                     // need to move backard
-                    self.pos -= travel_distance as i64;
-                    if self.pos < (self.pos_targ - self.in_target_window) {
+                    self.pos_act -= travel_distance as i64;
+                    if self.pos_act < (self.pos_targ - self.in_target_window) {
                         // We are there
-                        self.pos = self.pos_targ - self.in_target_window;
+                        self.pos_act = self.pos_targ - self.in_target_window;
                         self.internal_mmod = -1;
                     } else {
                         self.time_pos_targ_started = SystemTime::now();
