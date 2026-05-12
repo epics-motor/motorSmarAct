@@ -60,8 +60,9 @@ pub struct Mcs2axis {
     internal_mmod: i32,
     ref_opt: i32,
     step_freq: i32,
-    pos_act: i64,  // (actual) position
-    pos_targ: i64, // target position (commanded from host)
+    pos_targ: i64,   // target position (commanded from host)
+    pos_act: i64,    // (actual) position
+    pos_sensor: i64, // position that the sensor has recorded
     time_pos_targ_started: SystemTime,
     in_target_window: i64, // Need a better name ?
     external_vel: f64,     // velocity as commanded from host
@@ -106,8 +107,9 @@ impl Mcs2axis {
             internal_mmod: -1,
             ref_opt: 0,
             step_freq: 0,
-            pos_act: 0,
             pos_targ: 0,
+            pos_act: 0,
+            pos_sensor: 0,
             time_pos_targ_started: SystemTime::now(),
             in_target_window: 1_000_000, // 1 µm
             external_vel: 0.0,
@@ -189,8 +191,8 @@ impl Mcs2axis {
     pub fn get_mclf(&self) -> i32 {
         self.mclf
     }
-    pub fn get_pos_act(&self) -> i64 {
-        self.pos_act
+    pub fn get_pos_sensor(&self) -> i64 {
+        self.pos_sensor
     }
     pub fn get_pos_targ(&self) -> i64 {
         self.pos_targ
@@ -260,6 +262,8 @@ impl Mcs2axis {
             } else {
                 // referencing just succeeded
                 self.state_is_referenced = true;
+                // sensor position is up to date
+                self.pos_sensor = self.pos_act;
             }
         }
         ret
@@ -304,6 +308,9 @@ impl Mcs2axis {
                 } else {
                     // inside the tolerance window
                     self.internal_mmod = -1;
+                }
+                if self.state_is_referenced {
+                    self.pos_sensor = self.pos_act;
                 }
             }
             Err(e) => {
@@ -460,6 +467,9 @@ impl Mcs2axis {
         //if new_sens_mode >= 0 && new_sens_mode <= 2 {
         if (0..=2).contains(&new_sens_mode) {
             self.sens_mode = new_sens_mode;
+            if new_sens_mode == 0 {
+                self.state_is_referenced = false
+            }
             return true;
         }
         false
